@@ -18,7 +18,7 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).
 | Rakip | Kural tabanlı bot (jam). Jev ve iki kişilik mod sonra **[K]** |
 | Maç süresi | Tur sınırı yok **[K]**. **Short match** varsayılan, hedef **12–15 dakika** (15–20 tur) **[K]**. Long match 25–40 dakika |
 | Jam | Epic MegaJam 2026. Teslim **16 Kasım 04:59 TR**. Build zip'i **1 GB altı [K]** |
-| Takım | Kullanıcı (tasarım), **maybeno2906** (Unreal yapımı) **[K]** |
+| Takım | **Arfdev [K]**: kullanıcı (tasarım), **maybeno2906** (Unreal yapımı) **[K]** |
 
 **Oyunun özü:** köyü büyütmek değil, dengede tutmak. Her metriğin hem altında hem üstünde bir ölüm var. Zayıf ordu saldırı yer, güçlü ordu darbe yapar.
 
@@ -158,6 +158,20 @@ Tek ekran, 16:9. **[Ö]**
 - Her tur bir **satış oranı** seçilir (0, 20, 40, 60, 80, 100%). Hasadın o kadarı satılır, kalanı ambara girer. Varsayılan %40.
 - **Odun satışı:** "Sell wood" düğmesi, **2 wood = 1 six**. Erken oyunda para kazanmanın tek güvenli yolu bu. Olmazsa ilk turlarda açlık sarmalı oluşuyor.
 - **Gıda alımı:** "Buy food" düğmesi, **1 food = 1.25 six**. Ayrıca gıda tur sonunda yetmezse pazar eksik kısmı kendiliğinden **satın alır** (6 six tohum parası her zaman kesede kalır). Bu olmadan nakit ekinler (pancar, safran) anlamsızdı: zengin ama aç köyler ölüyordu.
+
+### Vergi **[K]**
+
+"**Collect taxes**" düğmesi. Paranın üçüncü kaynağı (satış ve odunun yanında).
+
+| | Değer **[Ö]** |
+|---|---|
+| Gelir | Yetişkin başına **1 six** (askerler hariç) |
+| Bedel | Köy psikolojisi **-5** |
+| Sınır | **Üst üste iki tur toplanamaz** |
+| Plough yolu | Vergi geliri +%20 (tüccar köy) |
+
+- Sadece gıda eken köyün parasızlıktan darbe yemesine karşı çıkış yolu: maaşı vergiyle ödersin, bedelini psikolojiyle.
+- Psikoloji zaten düşükse vergi isyanı hızlandırır. Arayüz psikoloji 35'in altındaysa uyarır: "They will not pay quietly."
 
 ### Depo **[Ö]**
 
@@ -447,7 +461,23 @@ Psikolojiyi korumanın her yolu başka bir tehlikeyi besler: sıkıyönetim ordu
 
 - **Asker almak:** Barracks şart. Tur başına en fazla 2. Asker başına **3 six**. Köylü işinden çıkar ve asker olur.
 - **Maaş:** asker başına **1 six/tur**. Gıda 1.5/tur.
+- **Eğitim süresi [Ö]:** alınan asker **1 tur** eğitilir. Alındığı tur ne saldırır ne savunur.
 - **Saldırı:** "Attack" sayısı seçilir. Giden askerler o tur savunmaya katılmaz.
+- **Dinlenme [Ö]:** saldıran askerler bir sonraki tur yorgundur ve normalde tekrar saldıramaz.
+
+### Sınırları zorlamak **[K: savaşta askerler sınırlarını zorlayabilsin]**
+
+Savaş anında kurallar esneyebilir, ama her esnetmenin bir bedeli var:
+
+| Hamle | Ne yapar | Bedeli **[Ö]** |
+|---|---|---|
+| **Forced March** | Yorgun askerler dinlenmeden tekrar saldırır | Saldırı gücü **-%25**, ordu nüfuzu **+5**, köy psikolojisi **-3** |
+| **Raw Recruits** | Bu tur alınan askerler eğitimsiz savaşır (saldırı ya da savunma) | Güçleri **%50**, kayıp oranları iki katı |
+| **Levy** (seferberlik çağrısı) | Saldırı altındayken çiftçi ve oduncular da savunmaya katılır | Her biri %40 güçle savaşır, **o tur üretim yapmazlar**, ölen her köylü psikoloji -2 |
+
+- Üçü de arayüzde sadece mümkün oldukları anda çıkar (Forced March saldırıdan sonraki tur, Levy sadece rakip saldırısı görüldüğünde ya da casusla öğrenildiğinde).
+- Bu hamleler ordu nüfuzunu ve psikolojiyi yer, yani "kazanmak için her şeyi göze almak" darbe ve isyan riskini büyütür. İki yönlü ölüm kuralı savaşta da geçerli.
+- **Levy** için teknik not: rakibin saldırısı tur çözülmeden görünmediği için Levy, oyuncu "savunmaya hazırlan" emri verdiğinde tetiklenir ve saldırı gelmezse o tur üretim boşa gider. Kumar budur.
 
 **Formüller [Ö]:**
 - Asker gücü = Military verimi × (1 + 0.1 × Barracks sayısı)
@@ -546,6 +576,26 @@ Tarikat nüfuzu eşiğe ulaştığında bir sonraki turun başında açılır pe
 | Winter | Ekim yok, gıda tüketimi +%25, ısınma odunu |
 
 **Kara Yıllar [K: tur sınırı yok, biri düşene kadar]:** Short match'te 9. turdan itibaren yıllık %15 (bkz. 2c). Long match'te 29. turdan (8. yılın başı) itibaren her yıl birikimli olarak hasat **-%5**, tüketim **+%5** (ilk taslakta %10'du, simülasyonda fazla sert çıktı). Ekranda "The Lean Years" yazısı çıkar. Maçın sonsuza uzamasını engeller.
+
+### Olaylar **[K: 3 olay, bir tur önceden duyurulur]**
+
+Satranç hissini bozmamak için olaylar sürpriz değildir: **bir tur önceden** tur raporunda ve ekranın üstünde duyurulur, oyuncu hazırlanır. Olay **iki köyü birden** etkiler (aynı dünya), ama hazırlıklı olan daha az zarar görür.
+
+| | Short match | Long match |
+|---|---|---|
+| İlk olay | 5. tur (4. turda duyurulur) | 7. tur |
+| Sıklık | 4 turda bir (5, 9, 13, 17...) | 6 turda bir |
+| Hangisi | Rastgele, aynı olay üst üste gelmez | Aynı |
+
+| Olay | Duyuru (oyunda) | Etkisi **[Ö]** | Hazırlık / karşı hamle |
+|---|---|---|---|
+| **Drought** (kuraklık) | "The wells are low. Next season will be dry." | O tur bütün hasatlar **-%30**, orman yenilenmez | **Potato etkilenmez** (kökler derinde). Gıda almak, satışı azaltmak |
+| **Plague** (salgın) | "A cough travels the road from Nine." (Nine'da: "...from Six.") | Her yetişkin %15 ihtimalle hastalanır: **2 tur çalışmaz**. Gıda eksikse hasta ölür | **Remedy** bir hastayı anında iyileştirir. Apothecary'si olan Book yolu avantajlı |
+| **Wandering Merchant** (gezgin tüccar) | "A merchant's cart is on the road. He haggles badly." | O tur satış fiyatları **+%50**, gıda alış fiyatı **1 six**, Remedy **5 six**, köpek **4 six** | Satılacak stok biriktirmek. Nakit ekin eken köy kazanır |
+
+- Hasta köylüler haritada gri ve oturur halde görünür.
+- Bot da duyuruyu görür: kuraklıkta satışı keser, salgında Remedy alır, tüccarda satışı %80'e çıkarır.
+- Katman: **E** (cila). Zaman kalmazsa ilk kesilecek şeylerden biri.
 
 ### Simülasyonun gösterdiği denge **[Ö]**
 
@@ -646,6 +696,9 @@ Ortak kurallar:
 | Yol | "How will Six be ruled?" · "The Plough" · "The Sword" · "The Book" · "Change path" |
 | Savunma | "Buy Remedy" · "Cure (1 Remedy)" · "Buy Guard Dog" · "Yes-Men's Guild" · "Nine's vine is choking your Saffron." · "Your coin looks... upside down." · "The dog caught Nine's spy. He talked." · "Your Yes-Men drowned out Nine's gossip. Everyone agrees with you. Loudly." |
 | Özel binalar | "Seed Barn" · "Fire Brigade" · "Apothecary" |
+| Vergi | "Collect taxes" · "They will not pay quietly." |
+| Savaş | "Forced March" · "Raw Recruits" · "Levy" · "Prepare to defend" |
+| Olaylar | "Drought" · "Plague" · "Wandering Merchant" · "The wells are low. Next season will be dry." · "A cough travels the road from Nine." · "A merchant's cart is on the road. He haggles badly." |
 | Uyarılar | "Unrest 2/3" · "The army grows restless." · "The Lean Years have begun." · "The granary overflowed." |
 | Rakip | "High" · "Medium" · "Low" |
 
@@ -676,6 +729,7 @@ Referans: 9 Kings, **sadece ilham** (okunaklı küçük krallık, net siluetler)
 | Cübbeli tarikat üyesi | 16×24 | |
 | Muhtar (animasyonlar için) | 24×32 | Sadece bitişlerde |
 | Düğün (fenerler ve uzun masa, muhtarlık önünde) | 64×32 | Düğün turunda görünür |
+| Kuru tarla örtüsü, hasta köylü (oturan, gri), tüccar arabası | 64×48 / 16×24 / 48×32 | Olaylar için |
 | Arayüz ikonları (kaynaklar, metrikler, kartlar) | 16×16 | |
 | Kart çerçevesi | 64×96 | 3 tür rengi |
 
@@ -728,7 +782,7 @@ Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
 - Hedef zip **400 MB altı**. Starter Content yok, gereksiz eklentiler kapalı.
 - Paketleme: Use Pak File, Create compressed cooked packages, Exclude editor content when cooking.
 - Sadece oyun haritası paketlenir. **Development build** (jam e-postası bunu öneriyor). Development build Shipping'den biraz büyüktür, 1 GB bütçesinde sorun değil.
-- Zip adı: `TeamName_VillageHeadman`.
+- Zip adı: **`Arfdev_VillageHeadman.zip`**.
 
 ---
 
@@ -739,10 +793,10 @@ Bir katman bitmeden sonrakine geçilmez. Hangi saatte durulursa durulsun elde oy
 | Katman | İçerik | Bitince |
 |---|---|---|
 | **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **Short match kuralları**, **yol seçimi (sadece bonuslar)**, **pazar (Sell wood, Buy food, satış oranı)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
-| **B** | Psikoloji, **düğün**, tempo, ordu nüfuzu, Barracks ve asker, savaş, can barları, Repair hall, 5 bitiş | Kazanıp kaybedilebiliyor |
+| **B** | Psikoloji, **düğün**, **vergi**, tempo, ordu nüfuzu, Barracks ve asker (eğitim süresi, dinlenme), savaş, can barları, Repair hall, 5 bitiş | Kazanıp kaybedilebiliyor |
 | **C** | 10 rastgele köylü, yatkınlık, karakter, "Let the elders decide", iş sayısı paneli | Liyakat teması oyunda |
 | **D** | Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
-| **E** | Açılış sahnesi, Director's Cut, muhtar animasyonları, ses | Jüri için cila |
+| **E** | Açılış sahnesi, Director's Cut, muhtar animasyonları, ses, **3 olay**, **sınırları zorlama hamleleri** (Forced March, Raw Recruits, Levy) | Jüri için cila |
 | **F** | Tek tek köylü atama, Doubter'ın kaçması | Tam liyakat |
 | **G** | Pazar, olaylar, suikast, Jev, iki kişilik mod | Jam sonrası |
 
@@ -772,10 +826,10 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 - **Video (30–60 sn):** ilk 5 saniyede bir bitiş anı ("The General's Hat"), sonra para ve kardeşler (3 sn), sonra hızlı oynanış: inşa, hasat, kart, saldırı, Director's Cut ekranı.
 - **itch sayfası:** tek cümlelik özet ("Two brothers found a coin. One says six. One says nine. Run your half of the village without starving, revolting, or getting couped."), 3 ekran görüntüsü, kontroller, takım, kullanılan araçlar ve asset listesi.
 - **Dev log (Glass Box ödülü için):** tasarımın yapay zekayla nasıl kurulduğu, bot simülasyonunun bulduğu hatalar (ölüm sarmalı, çok sık kartlar), kesilen özellikler.
-- **Form:** takım adı, iki üyenin adı ve Epic hesabı e-postası, oyun adı, video linki.
+- **Form:** takım adı **Arfdev**, iki üyenin adı ve Epic hesabı e-postası, oyun adı **Village Headman**, video linki.
 - **Opsiyonel ama ödül için gerekli:** dev log linki (Glass Box), "Tools you used" listesi (Hyper3D ödül havuzu için). Kullanılan araçları gece boyunca bir yere not edin: Claude, Unreal Engine 5, sprite ve ses için ne kullanıldıysa.
 - **Son teslim:** 15 Kasım 17:59 PST = **16 Kasım 04:59 TR**. Geç teslim kabul edilmiyor. Yükleme için zaman bırakın.
-- **Yükleme sırası:** paketle, zip'i `TeamName_VillageHeadman` olarak adlandır, kendi itch.io hesabına yükle, sonra jam'e gönder.
+- **Yükleme sırası:** paketle, zip'i **`Arfdev_VillageHeadman.zip`** olarak adlandır, kendi itch.io hesabına yükle, sonra jam'e gönder.
 
 ---
 
@@ -785,7 +839,7 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 |---|---|---|---|
 | 1 | **Sprite'ları kim çizecek / nereden gelecek?** Seçenekler: (a) **fal** kredisiyle görsel modeller, (b) **Scenario skills** (Claude Code'a bağlanır, Scenario hesabı ve kredisi ister), (c) **gpt-image-2d-assets** (Codex ve GPT-image ister). Üçü de yapay zeka çıktısı verir, pixel art'ı oyuna girmeden önce temizlemek gerekir (bkz. 24.4). Ya da lisanslı hazır pixel art paketi | Karar lazım | **Evet, A katmanı için zemin ve tarla şart** |
 | 2 | Ses dosyaları. Seçenek: jam partneri **WeLoveIndies** ücretsiz ses ve müzik (sadece ticari olmayan kullanım, oyun satılırsa lisans gerekir) | Kullanıcı | E katmanına kadar hayır |
-| 3 | Takım adı | Karar lazım | Teslimde evet |
+| 3 | ~~Takım adı~~ **Arfdev** | Karar verildi | |
 | 4 | maybeno2906'nın GitHub erişimi | Sonra | Hayır |
 | 5 | Yeni ekonominin denge testi (odun, köylüler) | Oynanarak | Hayır, sayılar tabloda değiştirilebilir |
 | 6 | Tarikat talep metinlerinin onayı | Kullanıcı | Hayır |
