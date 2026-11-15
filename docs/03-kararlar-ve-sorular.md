@@ -4,7 +4,9 @@
 
 | Konu | Karar |
 |---|---|
-| Hedef | Epic MegaJam 2026'ya yetiştirmek istendi (bkz. teknik kısıtlar) |
+| Oyunun adı | **Village Headman** |
+| Hedef | Epic MegaJam 2026'ya girilmeyecek (Unreal kurulamadı). Oyun jam baskısı olmadan yapılacak |
+| Teknoloji | **Three.js** (web), modeller **Tripo AI** ile. İzometrik görünüm ortografik kamera ile |
 | Rakip | Yapay zeka (ucuz LLM, oyuncu başına 1 ücretsiz hak, sonra kendi API anahtarı) + kural tabanlı bot |
 | İki kişilik mod | Zaman kalırsa en son |
 | Savaş | Basit, üstte can barları |
@@ -35,10 +37,10 @@
 
 ## Açık sorular
 
-- [ ] Hangi seçenekle ilerlenecek (yukarıdaki 1, 2 veya 3)?
+- [x] Hangi seçenekle ilerlenecek? Jam yok, Three.js ile web.
+- [x] Oyunun adı: Village Headman.
 - [ ] "jev" ile kastedilen model / sağlayıcı hangisi?
-- [ ] Muhtar nasıl ölür: ordu muhtarlığa ulaşınca mı, suikast kartıyla mı, ya da ikisiyle de mi?
-- [ ] Tarikat mekaniğinin detayı: tarikat ne ister, nasıl ele geçirir?
+- [ ] Muhtar nasıl ölür? (öneri: 04 dosyasında)
+- [ ] Tarikat mekaniğinin detayı (öneri: 04 dosyasında)
 - [ ] Düşmanlığın hikayesi (kullanıcı yazacak).
 - [ ] Köylülerin istek ve yetenek seçimi oyunun başında mı, yoksa her doğumda da mı?
-- [ ] Oyunun adı.

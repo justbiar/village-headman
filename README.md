@@ -1,7 +1,9 @@
-# Muhtarlar (çalışma adı)
+# Village Headman
 
-İki düşman köyün karşı karşıya geldiği, 2D izometrik, tur bazlı bir strateji ve köy yönetimi oyunu.
+İki düşman köyün karşı karşıya geldiği, izometrik görünümlü, tur bazlı bir strateji ve köy yönetimi oyunu.
 Oyunun özü: **köyü büyütmek değil, köyü dengede tutmak.** Ton ciddi ve karanlık.
+
+Teknoloji: tarayıcıda çalışan **Three.js** (ortografik izometrik kamera), modeller **Tripo AI** ile.
 
 Bu repo şimdilik sadece tasarım notlarını içeriyor. Kodlamaya tasarım netleşince başlanacak.
 
@@ -12,6 +14,7 @@ Bu repo şimdilik sadece tasarım notlarını içeriyor. Kodlamaya tasarım netl
 | [docs/01-jam-analizi.md](docs/01-jam-analizi.md) | Epic MegaJam 2026 kuralları, takvim, puanlama, ödüller |
 | [docs/02-oyun-tasarimi.md](docs/02-oyun-tasarimi.md) | Çekirdek oyun mimarisi: kaynaklar, denge metrikleri, mahsuller, nüfus, köylüler, kartlar |
 | [docs/03-kararlar-ve-sorular.md](docs/03-kararlar-ve-sorular.md) | Verilen kararlar, teknik kısıtlar, açık sorular |
+| [docs/04-acik-konular-onerileri.md](docs/04-acik-konular-onerileri.md) | Eksik kalan sistemler için somut öneriler: tur akışı, formüller, tarikat, savaş, pazar, LLM rakip |
 | [docs/00-orijinal-fikir.md](docs/00-orijinal-fikir.md) | Fikrin ilk hali, olduğu gibi |
 
 ## Kısa özet
