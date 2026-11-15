@@ -65,6 +65,29 @@ Sabit sıra önemli: oyuncu "kartım savaştan önce çözülür" diye plan yapa
 
 ---
 
+## 2b. İlk 5 dakika **[K: önce tarla, sonra yol seçimi]**
+
+Jüri oyunu birkaç dakika oynayacak. Oyun ilk kararları adım adım, tek satırlık ipuçlarıyla öğretir. İpuçları ekranın altında çıkar, tıklayınca kapanır. Ana menüde "Skip tutorial" seçeneği var.
+
+| Tur | Ne olur | İpucu metni (oyunda) |
+|---|---|---|
+| Açılış | Para sahnesi (3 kare) | |
+| 1 · Spring | Kamera köye iner. 10 köylü yürüyerek gelir. Sadece slotlar parlar | "Ten souls followed you here. Feed them first." |
+| 1 | Oyuncu slota tıklar, sadece **Field** seçilebilir, ekin olarak Wheat önerilir | "Wheat grows fast and feeds many. It sells for almost nothing." |
+| 1 | Orman parlar | "Idle hands can cut wood. Wood builds, warms, and sells." |
+| 1 | End Turn parlar | "End the turn. Nine is doing the same." |
+| 2 | Tarla biter, ekim başlar. **Yol seçimi penceresi** açılır | "How will Six be ruled?" |
+| 2 | Seçimden sonra | "You can change your path. Not forever." |
+| 3 · Autumn | Kış uyarısı | "Winter is coming. Nothing grows in winter, and people eat more." |
+| 4 · Winter | İlk hasat ve ilk kart seçimi | "Every few seasons, fate offers you a card. Choose one." |
+| 5 | Metrik çubukları açıklanır | "Keep the people calm, the army loyal, and the hooded ones small." |
+| 6+ | İpuçları sadece ilk kez olan olaylarda çıkar (ilk sarmaşık, ilk tarikat talebi, ilk saldırı) | |
+
+- **Botun ilk 6 turu yumuşak:** saldırmaz, sabotaj kartı oynamaz. Oyuncu sistemi öğrenirken cezalandırılmaz.
+- İlk turdan sonraki her şey (ikinci tarla, odun satışı, okul) serbest. Oyun sadece ilk tarlayı ve yol seçimini zorunlu tutar.
+
+---
+
 ## 3. Ekran düzeni
 
 Tek ekran, 16:9. **[Ö]**
@@ -152,6 +175,14 @@ Her bina bir slot kaplar. **Tarlalar da slotlara dahil [K].** Maliyet ve sürele
 | **Barracks** | 20 | 25 | 5 | 2 tur | 0 | **Asker almayı açar** (tur başına en fazla 2), savaş gücü +%10 |
 | **Shrine** | 15 | 15 | 5 | 2 tur | 1 rahip | Psikoloji +4/tur, tarikat +3/tur |
 
+### Yola özel binalar (bkz. 6b. Yol seçimi)
+
+| Bina | Yol | six | wood | EP | Süre | İşçi | Etkisi |
+|---|---|---|---|---|---|---|---|
+| **Seed Barn** | Plough | 12 | 15 | 0 | 1 tur | 0 | Tohum yarı fiyatına. Safran 1 tur daha geç çürür |
+| **Fire Brigade** (itfaiye) **[K]** | Sword | 15 | 20 | 5 | 2 tur | 1 asker | Granary Fire'ın etkisi %25'ten %5'e düşer **[K: sadece savaş yolu]** |
+| **Apothecary** (ilaç merkezi) **[K]** | Book | 15 | 15 | 8 | 2 tur | 1 eczacı | 2 turda bir **Remedy** üretir (verimle). Eczacı Education yatkınlığını kullanır **[K: eğitim kolunda]** |
+
 - İnşaat sırasında slotta iskele görünür, bina çalışmaz.
 - **Her bina tamamlandığında +2 EP [K].**
 - Bina yıkılabilir ("Demolish"), maliyetin yarısı geri gelir.
@@ -166,6 +197,34 @@ Her bina bir slot kaplar. **Tarlalar da slotlara dahil [K].** Maliyet ve sürele
 | 4 | 60 | 60 | 45 | 3 | 9 | 3 | 20 |
 
 Seviye atlayınca **+5 EP** ve can barı **+20** (en fazla 100).
+
+---
+
+## 6b. Yol seçimi **[K]**
+
+Köye 10 kişi gelir. **Önce tarla kurulur, sonra köyün nasıl yönetileceğine karar verilir:** tarım mı, savaş mı, eğitim mi.
+
+İlk tarla tamamlandığı turda (normalde 2. tur) bir pencere açılır: **"How will Six be ruled?"**
+
+| Yol | Ad (oyunda) | Bonus | Açtığı özel bina | Tek cümle (oyunda) |
+|---|---|---|---|---|
+| **Tarım** | **The Plough** | Bütün hasatlar +%15 | Seed Barn | "Full bellies never started a war. Probably." |
+| **Savaş** | **The Sword** | Barracks %30 ucuz, askerler +%10 güçlü | Fire Brigade | "Peace is a six. Strength is a nine. Or the other way." |
+| **Eğitim** | **The Book** | Her bina tamamlanınca +3 EP (normalde 2), School %30 ucuz | Apothecary | "Learn enough and you'll know which way is up." |
+
+İnanç bir yol değil. Shrine her yolda kurulabilir, çünkü inanç bir yönetim tercihi değil bir kriz cevabıdır.
+
+### Yol değiştirmek: belli bir noktaya kadar **[K]**
+
+| Muhtarlık seviyesi | Yol değiştirme bedeli **[Ö]** |
+|---|---|
+| 1 | 15 six + 10 EP |
+| 2 | 30 six + 25 EP |
+| 3 ve üstü | **Kilitli.** Köy artık ne olduysa o |
+
+- Yol değişince eski yolun bonusu gider, eski yolun özel binası **durur** (yıkılmaz, ama çalışmaz). Geri dönülürse tekrar çalışır.
+- Arayüzde: muhtarlığa tıklayınca "Change path" düğmesi ve bedeli. 3. seviyede düğme kilit ikonuyla gri.
+- Bot da maç başında kişiliğine göre bir yol seçer (Farmer: Plough, Warlord: Sword, Zealot: Book).
 
 ---
 
@@ -212,7 +271,7 @@ Hiçbir ekin bir başkasını her açıdan ezmiyor. Tasarım masası bunu her de
 | **Farming** | Çiftçi, Oduncu |
 | **Management** | Konsey üyesi (Elder) |
 | **Military** | Asker |
-| **Education** | Öğretmen, Rahip |
+| **Education** | Öğretmen, Rahip, Eczacı |
 
 - Her biri 1–5, **4'ünün toplamı 10 [Ö]**. "Her şeyi iyi yapan" köylü çıkmaz.
 - **Verim = 0.55 + 0.15 × yatkınlık [Ö]**: 1 → %70, 3 → %100, 5 → %130.
@@ -232,7 +291,7 @@ Her köylüye rastgele 1 karakter **[Ö]**:
 
 ### İşler
 
-Çiftçi (tarla başına 2), Oduncu (sınırsız), Öğretmen (okul başına 2), Rahip (shrine başına 1), Asker (Barracks şart), Konsey (muhtarlık koltukları), Boşta.
+Çiftçi (tarla başına 2), Oduncu (sınırsız), Öğretmen (okul başına 2), Rahip (shrine başına 1), Eczacı (Apothecary başına 1), İtfaiyeci (Fire Brigade'de 1 asker), Asker (Barracks şart), Konsey (muhtarlık koltukları), Boşta.
 
 ### Kişisel psikoloji
 
@@ -379,16 +438,31 @@ Psikolojiyi korumanın her yolu başka bir tehlikeyi besler: sıkıyönetim ordu
 ## 11. Kartlar
 
 - **3 turda bir** 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
+- **Her kartın bir karşı hamlesi var.** Böylece kartlar şans değil, hazırlık meselesi olur.
 
-| Kart | Tür | Bedel | Etkisi |
-|---|---|---|---|
-| **Vine** | Sabotaj | Yok | Rakibin en değerli ekili tarlasını sarar, bir sonraki hasadı yok olur |
-| **Gossip** | Karanlık | Yok | Rakibin köy psikolojisi -10 |
-| **Granary Fire** | Sabotaj | Yok | Rakibin gıdasının dörtte biri yanar |
-| **Tax Relief** | Yönetim | 8 six | Kendi psikolojin +10 |
-| **Mobilize** | Yönetim | Yok | Bu tur 3 ek savaşçı (saldırı ya da savunma), ordu nüfuzu +5 |
-| **Sermon** | Karanlık | Yok | Psikoloji +6, ordu nüfuzu -10, tarikat +8 |
-| **Upside Down** | Karanlık | 4 six | Rakibin parasını ters çevirir: bu tur rakibin satışları yarı fiyatına gider **[Ö, hikayeden]** |
+| Kart | Tür | Bedel | Etkisi | Karşı hamle |
+|---|---|---|---|---|
+| **Vine** | Sabotaj | Yok | Rakibin en değerli ekili tarlasını sarar, bir sonraki hasadı yok olur | **Remedy** (ilaç) **[K]**, bkz. aşağısı |
+| **Gossip** | Karanlık | Yok | Rakibin köy psikolojisi -10 | Psikoloji 75'in üstündeyse etkisi yarıya iner |
+| **Granary Fire** | Sabotaj | Yok | Rakibin gıdasının dörtte biri yanar | **Fire Brigade** (sadece Sword yolu) **[K]**: kayıp %5'e iner. Diğer yollar için: gıdayı fazla biriktirmemek, satmak |
+| **Tax Relief** | Yönetim | 8 six | Kendi psikolojin +10 | Yok (kendine oynanır) |
+| **Mobilize** | Yönetim | Yok | Bu tur 3 ek savaşçı (saldırı ya da savunma), ordu nüfuzu +5 | Rakip saldırıyı görünce bu tur saldırmamak. Sur seviyesi |
+| **Sermon** | Karanlık | Yok | Psikoloji +6, ordu nüfuzu -10, tarikat +8 | Yok (kendine oynanır, bedeli tarikat) |
+| **Upside Down** | Karanlık | 4 six | Rakibin parasını ters çevirir: bu tur rakibin satışları yarı fiyatına gider **[Ö, hikayeden]** | Satış oranını o tur 0 yapmak (kart oynandığında satışlar henüz yapılmamışsa uyarı çıkar: "Your coin looks... upside down.") |
+
+### Remedy (ilaç) **[K]**
+
+Sarmaşığın karşılığı. Bir eşya, ambarda sayılır (depo sınırı yok).
+
+| Nereden | Nasıl |
+|---|---|
+| **Pazardan satın al** | **8 six** bir tane. Her yol satın alabilir **[K]** |
+| **Apothecary** (sadece Book yolu) | 1 eczacıyla 2 turda bir 1 Remedy × verim **[K: eğitim kolunda]** |
+
+- Sarmaşık sarılan tarla haritada yeşil sarmaşıkla görünür ve tur raporunda yazar: "Nine's vine is choking your Saffron."
+- Oyuncu tarlaya tıklar, **"Cure (1 Remedy)"** der. Sarmaşık hasattan önce temizlenirse hasat kurtulur.
+- Remedy yoksa hasat kaybolur.
+- Böylece Book yolu sabotaja karşı ucuz bir kalkan kazanır, Sword yolu yangına karşı, Plough yolu ise kaybı kaldırabilecek kadar çok üretir. Her yolun kendi savunma dili var.
 
 ---
 
@@ -483,7 +557,10 @@ Bot da aynı kurallarla oynar, sadece görünür bilgiyi kullanır (oyuncunun bi
 | **Warlord** | Field, Field, School, Barracks, Hall 2 | Asker %30, rakipten 1.5 kat fazla askeri olunca saldırır, Mobilize sever |
 | **Zealot** | Field, Field, School, Shrine, Hall 2 | Tarikat taleplerini kabul eder, Sermon ve Gossip sever |
 
+Yol seçimi: Farmer → Plough, Warlord → Sword, Zealot → Book. İlk 6 tur saldırmaz ve sabotaj oynamaz (bkz. 2b).
+
 Ortak kurallar:
+- Tarlası sarılırsa ve Remedy'si varsa kullanır. Yoksa ve parası 20'nin üstündeyse satın alır.
 - Atamaları her tur "en uygun işe koy" mantığıyla yapar (iyi konsey gibi).
 - Gıda stoku 3 turluk tüketimin altına düşerse yeni tarla önceliklidir.
 - Odun 15'in altındaysa en az 3 oduncu tutar.
@@ -506,6 +583,9 @@ Ortak kurallar:
 | Politika | "Tempo" · "Light" · "Normal" · "Heavy" · "Sell" · "Sell wood" · "Buy food" · "Martial law" |
 | Düğün | "Hold a Wedding" · "The village is still celebrating. Work suffers." · "The village works with a song." |
 | Ordu | "Recruit" · "Attack" |
+| Yol | "How will Six be ruled?" · "The Plough" · "The Sword" · "The Book" · "Change path" |
+| Savunma | "Buy Remedy" · "Cure (1 Remedy)" · "Nine's vine is choking your Saffron." · "Your coin looks... upside down." |
+| Özel binalar | "Seed Barn" · "Fire Brigade" · "Apothecary" |
 | Uyarılar | "Unrest 2/3" · "The army grows restless." · "The Lean Years have begun." · "The granary overflowed." |
 | Rakip | "High" · "Medium" · "Low" |
 
@@ -523,6 +603,9 @@ Referans: 9 Kings, **sadece ilham** (okunaklı küçük krallık, net siluetler)
 | Muhtarlık (4 seviye) | 96×96 | Six ve Nine için iki renk varyantı |
 | Field (boş, ekili, olgun × 4 ekin) | 64×48 | Wheat, Potato, Beet, Saffron. Sarmaşıklı hali de |
 | Granary, School, Barracks, Shrine | 64×64 | İnşaat iskelesi ortak |
+| Seed Barn, Fire Brigade, Apothecary | 64×64 | Yola özel binalar |
+| Remedy şişesi, sarmaşık örtüsü (tarlanın üstüne) | 16×16 / 64×48 | |
+| Yol seçimi kartları (Plough, Sword, Book) | 96×128 | Açılış penceresi |
 | Ağaç kümesi ve kütük | 32×48 | |
 | Para (ortadaki taşın üstünde) | 32×32 | Büyük ve parlak, sahnenin odağı |
 | Köylü (yürüme 2 kare) | 16×24 | İş rengine göre şapka |
@@ -592,10 +675,10 @@ Bir katman bitmeden sonrakine geçilmez. Hangi saatte durulursa durulsun elde oy
 
 | Katman | İçerik | Bitince |
 |---|---|---|
-| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot | Köy kurulup yaşatılabiliyor |
+| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **yol seçimi (sadece bonuslar)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
 | **B** | Psikoloji, ordu nüfuzu, Barracks ve asker, savaş, can barları, 5 bitiş | Kazanıp kaybedilebiliyor |
 | **C** | 10 rastgele köylü, yatkınlık, karakter, "Let the elders decide", iş sayısı paneli | Liyakat teması oyunda |
-| **D** | Kartlar, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
+| **D** | Kartlar ve karşı hamleleri (Remedy, Fire Brigade), yola özel binalar, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
 | **E** | Açılış sahnesi, Director's Cut, muhtar animasyonları, ses | Jüri için cila |
 | **F** | Tek tek köylü atama, Doubter'ın kaçması | Tam liyakat |
 | **G** | Pazar, olaylar, suikast, Jev, iki kişilik mod | Jam sonrası |
