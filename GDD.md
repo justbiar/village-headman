@@ -291,7 +291,7 @@ Her köylüye rastgele 1 karakter **[Ö]**:
 
 ### İşler
 
-Çiftçi (tarla başına 2), Oduncu (sınırsız), Öğretmen (okul başına 2), Rahip (shrine başına 1), Eczacı (Apothecary başına 1), İtfaiyeci (Fire Brigade'de 1 asker), Asker (Barracks şart), Konsey (muhtarlık koltukları), Boşta.
+Çiftçi (tarla başına 2), Oduncu (sınırsız), Öğretmen (okul başına 2), Rahip (shrine başına 1), Eczacı (Apothecary başına 1), İtfaiyeci (Fire Brigade'de 1 asker), Asker (Barracks şart), Konsey (muhtarlık koltukları), Yandaş (Yes-Men's Guild'de 1, Management), Boşta.
 
 ### Kişisel psikoloji
 
@@ -437,13 +437,14 @@ Psikolojiyi korumanın her yolu başka bir tehlikeyi besler: sıkıyönetim ordu
 
 ## 11. Kartlar
 
-- **3 turda bir** 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
+- **8 kart.** **3 turda bir** 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
 - **Her kartın bir karşı hamlesi var.** Böylece kartlar şans değil, hazırlık meselesi olur.
 
 | Kart | Tür | Bedel | Etkisi | Karşı hamle |
 |---|---|---|---|---|
 | **Vine** | Sabotaj | Yok | Rakibin en değerli ekili tarlasını sarar, bir sonraki hasadı yok olur | **Remedy** (ilaç) **[K]**, bkz. aşağısı |
-| **Gossip** | Karanlık | Yok | Rakibin köy psikolojisi -10 | Psikoloji 75'in üstündeyse etkisi yarıya iner |
+| **Gossip** | Karanlık | Yok | Rakibin köy psikolojisi -10 | **Yes-Men's Guild** (yancılar birliği) **[K]**: dedikoduyu tamamen durdurur ve geri teper. Guild yoksa: psikoloji 75'in üstündeyse etkisi yarıya iner |
+| **Spy** (casus) | Yönetim | 5 six | 2 tur boyunca rakibin kesin metriklerini, stoklarını ve **bu turki gizli emrini** (saldırı sayısı, oynayacağı kart) gösterir | **Guard Dog** (köpek) **[K]**: casusu yakalar, bkz. aşağısı |
 | **Granary Fire** | Sabotaj | Yok | Rakibin gıdasının dörtte biri yanar | **Fire Brigade** (sadece Sword yolu) **[K]**: kayıp %5'e iner. Diğer yollar için: gıdayı fazla biriktirmemek, satmak |
 | **Tax Relief** | Yönetim | 8 six | Kendi psikolojin +10 | Yok (kendine oynanır) |
 | **Mobilize** | Yönetim | Yok | Bu tur 3 ek savaşçı (saldırı ya da savunma), ordu nüfuzu +5 | Rakip saldırıyı görünce bu tur saldırmamak. Sur seviyesi |
@@ -463,6 +464,38 @@ Sarmaşığın karşılığı. Bir eşya, ambarda sayılır (depo sınırı yok)
 - Oyuncu tarlaya tıklar, **"Cure (1 Remedy)"** der. Sarmaşık hasattan önce temizlenirse hasat kurtulur.
 - Remedy yoksa hasat kaybolur.
 - Böylece Book yolu sabotaja karşı ucuz bir kalkan kazanır, Sword yolu yangına karşı, Plough yolu ise kaybı kaldırabilecek kadar çok üretir. Her yolun kendi savunma dili var.
+
+**Teknik not (Spy için):** bot emirlerini turun **başında** belirlemeli, End Turn'de değil. Yoksa casus gösterecek bir "gizli emir" bulamaz.
+
+### Guard Dog (köpek) **[K: casusa karşı]**
+
+Pazardan satın alınır, her yol alabilir. Maliyetler **[Ö]**:
+
+| | Değer |
+|---|---|
+| Fiyat | **6 six** |
+| Bakım | **0.5 food/tur** (köpek de yer) |
+| En fazla | 2 köpek |
+| Etkisi | Rakip Spy oynarsa: 1 köpekle **%70**, 2 köpekle **%90** ihtimalle casus yakalanır |
+| Casus yakalanırsa | Kart boşa gider, rakip hiçbir şey öğrenmez. Üstüne, yakalanan casus konuşur: **sen 1 tur boyunca rakibin kesin metriklerini görürsün** |
+
+Tur raporunda: "The dog caught Nine's spy. He talked." Haritada muhtarlığın önünde küçük bir köpek sprite'ı yatar.
+
+### Yes-Men's Guild (yancılar birliği) **[K: dedikoduya karşı]**
+
+Muhtarın yandaşları. Köyde "her şey yolunda" söylentisini yayarlar. Bir bina, bir slot kaplar, her yol kurabilir. Maliyetler **[Ö]**:
+
+| | Değer |
+|---|---|
+| Maliyet | **10 six + 10 wood**, 1 tur |
+| İşçi | 1 kişi (Management yatkınlığı) |
+| Bakım | **1 six/tur** (yandaşlar ücretsiz yaranmaz) |
+| Etkisi | Rakibin Gossip kartı **hiç işlemez** ve **geri teper**: rakibin kendi psikolojisi -3 |
+| Bakım ödenemezse | Guild o tur çalışmaz |
+
+Tur raporunda: "Your Yes-Men drowned out Nine's gossip. Everyone agrees with you. Loudly."
+
+Seçim: bir slotu ve her tur parayı, belki hiç gelmeyecek bir dedikoduya mı harcarsın? Bot Gossip seven bir Zealot'sa evet.
 
 ---
 
@@ -561,6 +594,8 @@ Yol seçimi: Farmer → Plough, Warlord → Sword, Zealot → Book. İlk 6 tur s
 
 Ortak kurallar:
 - Tarlası sarılırsa ve Remedy'si varsa kullanır. Yoksa ve parası 20'nin üstündeyse satın alır.
+- Oyuncu 2 kez Spy oynadıysa bir köpek alır. Oyuncu 2 kez Gossip oynadıysa ve boş slotu varsa Yes-Men's Guild kurar.
+- Spy kartını oyuncuya saldırmadan bir tur önce oynar (Warlord).
 - Atamaları her tur "en uygun işe koy" mantığıyla yapar (iyi konsey gibi).
 - Gıda stoku 3 turluk tüketimin altına düşerse yeni tarla önceliklidir.
 - Odun 15'in altındaysa en az 3 oduncu tutar.
@@ -584,7 +619,7 @@ Ortak kurallar:
 | Düğün | "Hold a Wedding" · "The village is still celebrating. Work suffers." · "The village works with a song." |
 | Ordu | "Recruit" · "Attack" |
 | Yol | "How will Six be ruled?" · "The Plough" · "The Sword" · "The Book" · "Change path" |
-| Savunma | "Buy Remedy" · "Cure (1 Remedy)" · "Nine's vine is choking your Saffron." · "Your coin looks... upside down." |
+| Savunma | "Buy Remedy" · "Cure (1 Remedy)" · "Buy Guard Dog" · "Yes-Men's Guild" · "Nine's vine is choking your Saffron." · "Your coin looks... upside down." · "The dog caught Nine's spy. He talked." · "Your Yes-Men drowned out Nine's gossip. Everyone agrees with you. Loudly." |
 | Özel binalar | "Seed Barn" · "Fire Brigade" · "Apothecary" |
 | Uyarılar | "Unrest 2/3" · "The army grows restless." · "The Lean Years have begun." · "The granary overflowed." |
 | Rakip | "High" · "Medium" · "Low" |
@@ -605,6 +640,9 @@ Referans: 9 Kings, **sadece ilham** (okunaklı küçük krallık, net siluetler)
 | Granary, School, Barracks, Shrine | 64×64 | İnşaat iskelesi ortak |
 | Seed Barn, Fire Brigade, Apothecary | 64×64 | Yola özel binalar |
 | Remedy şişesi, sarmaşık örtüsü (tarlanın üstüne) | 16×16 / 64×48 | |
+| Guard Dog (yatan ve havlayan, 2 kare) | 16×16 | Muhtarlığın önünde |
+| Yes-Men's Guild binası | 64×64 | Bayraklı, alkışlayan iki figürle |
+| Casus (pelerinli, gece) | 16×24 | Yakalanma anı için |
 | Yol seçimi kartları (Plough, Sword, Book) | 96×128 | Açılış penceresi |
 | Ağaç kümesi ve kütük | 32×48 | |
 | Para (ortadaki taşın üstünde) | 32×32 | Büyük ve parlak, sahnenin odağı |
