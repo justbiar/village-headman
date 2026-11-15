@@ -102,6 +102,17 @@ Jüri 5–10 dakika oynayacak. Oyunun en güçlü anları (bitiş animasyonu, ka
 | Kart seçimi | **3. turda başlar, 2 turda bir** | 4. turda başlar, 3 turda bir |
 
 - Ana menü: **"Short match"** büyük ve önde, "Long match" küçük ve altta.
+
+### Zorluk **[K]**
+
+| | **Easy** | **Normal** (varsayılan) | **Hard** |
+|---|---|---|---|
+| Bot kişiliği | Hep Farmer | Rastgele | Hep Warlord |
+| Yumuşak dönem | 6 tur | 4 tur | 2 tur |
+| Bot saldırı eşiği | Askeri oyuncununkinin 2 katıysa | Oyuncununkinden 2 fazlaysa | Oyuncununkinden fazlaysa |
+| Botun sabotaj kartı | Oynamaz | Oynar | Oynar, Spy'ı saldırıdan önce mutlaka kullanır |
+
+- Menüde Short/Long seçiminin altında: "Easy · Normal · Hard". Jüri için önerilen yazı: "First time? Try Easy."
 - İpuçları (2b) Short match'te de aynı, sadece tur numaraları erkene kayar.
 - **Simülasyon [Ö]:** Short match kurallarıyla rakipsiz, büyümeyen 4 tarlalı bir köy 25. turda düşüyor. Rakip baskısı ve kartlarla maçların 15–20 turda bitmesi bekleniyor. Turlar 40–50 saniye sürerse bu 12–15 dakika eder. İlk denemede maç 25 turu geçiyorsa Kara Yıllar 7. tura çekilir.
 
@@ -261,6 +272,22 @@ Köye 10 kişi gelir. **Önce tarla kurulur, sonra köyün nasıl yönetileceği
 - Arayüzde: muhtarlığa tıklayınca "Change path" düğmesi ve bedeli. 3. seviyede düğme kilit ikonuyla gri.
 - Bot da maç başında kişiliğine göre bir yol seçer (Farmer: Plough, Warlord: Sword, Zealot: Book).
 
+### Ustalık projesi: yolun son seviyesi **[K: barış sonları için]**
+
+Her yolun en üst basamağı, tek bir büyük projedir. Bitiren köy o yolda **ustalaşmış** sayılır.
+
+| Yol | Proje | six | wood | EP | Süre | Şart | Tek başına bonus **[Ö]** |
+|---|---|---|---|---|---|---|---|
+| Plough | **Granary of Plenty** | 40 | 40 | 15 | 3 tur | Muhtarlık 2 + Seed Barn | Gıda bozulması durur, hasat +%10 ek |
+| Sword | **War College** | 40 | 40 | 20 | 3 tur | Muhtarlık 2 + Barracks + Fire Brigade | Askerler +%20 güçlü, ordu nüfuzu artışı yarıya iner |
+| Book | **The Academy** | 30 | 40 | 30 | 3 tur | Muhtarlık 2 + School + Apothecary | EP üretimi ikiye katlanır |
+
+- Bir slot kaplar. Yol değiştirilirse proje durur (diğer yola özel binalar gibi).
+- Rakip bir ustalık projesine başladığında tur raporunda duyurulur: "Nine has begun building The Academy." Projeler haritada iskeleyle görünür.
+- Short match'te kabaca 10–14. turda bitirilebilecek şekilde fiyatlandı. Bot, muhtarlık 2'den sonra kendi yolunun projesine başlar.
+
+**Neden önemli:** iki köy **aynı yolun** projesini bitirirse **barış** gelir (bkz. 14b). Oyuncu rakibin yolunu görür ve karar verir: kardeşini taklit edip barışı mı arayacak, yoksa başka bir yolla onu yenmeye mi çalışacak?
+
 ---
 
 ## 7. Ekinler
@@ -340,12 +367,22 @@ Her köylüye rastgele 1 karakter **[Ö]**:
 ### Konsey ve "Let the elders decide"
 
 - Konsey koltukları muhtarlık seviyesine bağlı (1, 2, 3).
+- **Konseyi muhtar seçer [K]**, yani oyuncu. Muhtarlığa tıklayınca "Council" paneli: koltuğa bir köylü atanır. Kimi seçeceğin, yatkınlıklarını ve karakterini görerek senin kararın. Kötü seçimin bedeli de senin.
+- **Konsey üyesi çalışmaya devam edebilir [K].** Bu bir tercih:
+
+| | Sadece yönetir | Hem yönetir hem çalışır **[Ö]** |
+|---|---|---|
+| Üretim | Yok | Kendi işinde normal üretir |
+| Yönetim etkisi | Tam | **Yarısı** (vakti bölünür) |
+| Halkla ilişki **[K]** | Normal | **Köy psikolojisi +1/tur** her çalışan konsey üyesi için ("halk, muhtarın adamlarını tarlada görür") |
+
+- Bu seçim de konsey panelinde, her üye için bir anahtar: "Governs" / "Governs and works".
 - **Konseyin ortalama Management'ı** bütün köyün verimini etkiler: 1 → -%10, 3 → 0, 5 → +%10.
 - **"Let the elders decide"** atamaları konseye yaptırır:
   - Yönetim 4–5: herkesi en uygun işe koyar.
   - Yönetim 3: çoğunu doğru, her turda 1–2 hata.
   - Yönetim 1–2: neredeyse rastgele.
-- Oyuncu her zaman elle de atayabilir (F katmanı). C katmanında atama sadece bu düğme ve iş sayısı panelinden yapılır.
+- Oyuncu her zaman elle de atayabilir (F katmanı). C katmanında atama sadece bu düğme ve iş sayısı panelinden yapılır. Konsey seçimi C katmanındadır (oyuncu konseyi her zaman kendi seçer).
 
 ### Nüfus
 
@@ -639,6 +676,52 @@ Rakip düşerse kazanırsın. İkisi aynı tur düşerse berabere: "Both brother
 
 ---
 
+## 14b. Barış sonları **[K]**
+
+**Barışın tek yolu:** iki köy de **aynı yolun ustalık projesini** bitirir. Başka barış yok **[K]**. Barış, iki köyün birlikte kazandığı bir sondur.
+
+- İkinci köy projeyi bitirdiği turun sonunda tetiklenir. İlk bitiren sadece bekler (ve bonusunu kullanır).
+- Barış, o tur başka bir bitişle çakışırsa (biri aynı tur düşerse) **düşüş önce gelir**.
+- Muhtarlar burada ilk ve son kez birlikte görünür.
+
+### Eğitim barışı: "The Angle" **[K: doğru baktığın açıya göre değişir]**
+
+**Animasyon:** iki köyün âlimleri ortadaki taşın başında buluşur. Biri parayı eline alır ve yavaşça çevirir. Six'ten bakınca 6, Nine'dan bakınca 9. Âlimler birbirine bakar, sonra iki muhtara.
+
+> "The scholars of Six and Nine studied the coin for a year.
+> Their finding was short: it depends on where you stand.
+> Peace was declared on both sides of the stone."
+
+Kardeşler: **Six:** "So I was right." **Nine:** "So was I."
+
+### Tarım barışı: "Full Bellies" **[K: herkes kendi işine odaklandı, tokluk ve huzur]**
+
+**Animasyon:** iki köyün tarlaları ortaya doğru uzanır, hasat arabaları yolda birbirine selam verir. Taşın başında uzun bir sofra kurulur.
+
+> "Both villages were too busy harvesting to argue.
+> Full granaries. Quiet nights. Children who had never been hungry.
+> Somewhere in the third autumn, nobody could remember what the fight was about."
+
+Kardeşler: **Six:** "Pass the bread." **Nine:** "It's my bread." **Six:** "..." **Nine:** "Fine. Take it."
+
+### Askeri barış: "The Soldiers' Truce" **[K: askerler iki muhtar için savaşmayacaklarını söyledi]**
+
+**Animasyon:** iki ordu, iki köyün yetiştirdiği en iyi askerler, taşın başında karşı karşıya dizilir. Uzun bir sessizlik. Bir çavuş kılıcını yere bırakır, sonra hepsi bırakır. İki ordu birlikte arkalarını döner ve muhtarlıklara doğru yürür.
+
+> "The two finest armies the valley had ever trained met at the coin stone.
+> They looked at each other. Then at the coin.
+> 'We are not dying for two old men and a number,' said a sergeant from Six.
+> 'Agreed,' said a sergeant from Nine.
+> The armies went home together. The headmen were informed later."
+
+Kardeşler: **Six:** "They can't just decide that." **Nine:** "They have swords, brother. They can."
+
+### Barış ve Director's Cut
+
+Barış sonunda Director's Cut başlığı **"Director's Cut: The Tale of Six and Nine"** olur ve 3 sahnenin sonuncusu her zaman barış anıdır. Kazanma ekranındaki "History will remember it as a six" yerine: **"History remembers it as both."**
+
+---
+
 ## 15. Director's Cut ekranı **[K]**
 
 Maç sonunda, bitiş animasyonundan sonra gelir. Temayla bağı burada kurulur: muhtar köyün yönetmeniydi, bu onun filmi.
@@ -668,6 +751,8 @@ Bot da aynı kurallarla oynar, sadece görünür bilgiyi kullanır (oyuncunun bi
 Yol seçimi: Farmer → Plough, Warlord → Sword, Zealot → Book. Short match'te ilk 4 tur, Long match'te ilk 6 tur saldırmaz ve sabotaj oynamaz. Short match'te 8. turdan sonra askeri oyuncununkinden 2 fazlaysa saldırır (bkz. 2c).
 
 Ortak kurallar:
+- Muhtarlık 2'ye çıkınca kendi yolunun ustalık projesine başlar. Oyuncu aynı yolun projesine başladıysa projeyi **yavaşlatmaz**: barış her iki taraf için de bir çıkış.
+- Konseyine en yüksek Management'lı köylüyü koyar. Psikoloji 45'in altındaysa konsey üyesi çalışır da.
 - Tarlası sarılırsa ve Remedy'si varsa kullanır. Yoksa ve parası 20'nin üstündeyse satın alır.
 - Oyuncu 2 kez Spy oynadıysa bir köpek alır. Oyuncu 2 kez Gossip oynadıysa ve boş slotu varsa Yes-Men's Guild kurar.
 - Spy kartını oyuncuya saldırmadan bir tur önce oynar (Warlord).
@@ -694,6 +779,10 @@ Ortak kurallar:
 | Düğün | "Hold a Wedding" · "The village is still celebrating. Work suffers." · "The village works with a song." |
 | Ordu | "Recruit" · "Attack" |
 | Yol | "How will Six be ruled?" · "The Plough" · "The Sword" · "The Book" · "Change path" |
+| Ustalık | "Granary of Plenty" · "War College" · "The Academy" · "Nine has begun building The Academy." |
+| Konsey | "Council" · "Governs" · "Governs and works" |
+| Zorluk | "Easy" · "Normal" · "Hard" · "First time? Try Easy." |
+| Barış | "The Angle" · "Full Bellies" · "The Soldiers' Truce" · "History remembers it as both." |
 | Savunma | "Buy Remedy" · "Cure (1 Remedy)" · "Buy Guard Dog" · "Yes-Men's Guild" · "Nine's vine is choking your Saffron." · "Your coin looks... upside down." · "The dog caught Nine's spy. He talked." · "Your Yes-Men drowned out Nine's gossip. Everyone agrees with you. Loudly." |
 | Özel binalar | "Seed Barn" · "Fire Brigade" · "Apothecary" |
 | Vergi | "Collect taxes" · "They will not pay quietly." |
@@ -810,11 +899,11 @@ Bir katman bitmeden sonrakine geçilmez. Hangi saatte durulursa durulsun elde oy
 
 | Katman | İçerik | Bitince |
 |---|---|---|
-| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **Short match kuralları**, **yol seçimi (sadece bonuslar)**, **pazar (Sell wood, Buy food, satış oranı)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
+| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **Short match kuralları, zorluk seçimi**, **yol seçimi (sadece bonuslar)**, **pazar (Sell wood, Buy food, satış oranı)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
 | **B** | Psikoloji, **düğün**, **vergi**, tempo, ordu nüfuzu, Barracks ve asker (eğitim süresi, dinlenme), savaş, can barları, Repair hall, 5 bitiş | Kazanıp kaybedilebiliyor |
 | **C** | 10 rastgele köylü, yatkınlık, karakter, "Let the elders decide", iş sayısı paneli | Liyakat teması oyunda |
-| **D** | Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
-| **E** | Açılış sahnesi, Director's Cut, muhtar animasyonları, ses, **3 olay**, **sınırları zorlama hamleleri** (Forced March, Raw Recruits, Levy) | Jüri için cila |
+| **D** | Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, **ustalık projeleri ve barış sonları (metin ekranı)**, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
+| **E** | Açılış sahnesi, Director's Cut, muhtar animasyonları, **barış animasyonları**, ses, **3 olay**, **sınırları zorlama hamleleri** (Forced March, Raw Recruits, Levy) | Jüri için cila |
 | **F** | Tek tek köylü atama, Doubter'ın kaçması | Tam liyakat |
 | **G** | Pazar, olaylar, suikast, Jev, iki kişilik mod | Jam sonrası |
 
@@ -864,9 +953,9 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 | 14 | itch.io sayfası metni, dev log (Glass Box), "Tools you used" listesi, video senaryosu | Claude hazırlayabilir | Teslimde evet |
 | 15 | Saat planı (19:50'de başlıyordu) yapımcının gerçek başlangıç saatine göre güncellenmeli | Yapımcı | Evet |
 | 16 | `core/` C++ çekirdeği GDD'nin gerisinde (odun, köylü, vergi, olay yok) | Yapımcı GDD'yi esas alır | Hayır |
-| 6 | Tarikat talep metinlerinin onayı | Kullanıcı | Hayır |
-| 7 | Bitiş sözlerinin onayı | Kullanıcı | Hayır |
-| 8 | Hangi köyü oyuncu yönetiyor (öneri: Six) | Kullanıcı | Hayır |
+| 6 | ~~Tarikat talep metinleri~~ Onaylandı **[K]** | Karar verildi | |
+| 7 | ~~Bitiş sözleri~~ Onaylandı **[K]** | Karar verildi | |
+| 8 | Oyuncu Nine'ı da seçebilsin mi? (Şu an hep Six, öneri: başta "Which brother are you?") | Kullanıcı | Hayır |
 | 9 | Jev, iki kişilik mod, pazar, suikast | Jam sonrası | Hayır |
 | 10 | ~~Dal seviye ağacı~~ Jam'de sadece yol seçimi, seviye ağacı M1 **[K]** | Karar verildi | |
 | 11 | ~~Ek rakip etkileşimi~~ Jam'de yok (savaş, kartlar, Doubter yeterli), sınır tarlaları ve su jam sonrası **[K]** | Karar verildi | |

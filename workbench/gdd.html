@@ -73,7 +73,7 @@ pre code { background: none; padding: 0; }
       <dt>Takım</dt><dd>Arfdev</dd>
       <dt>Motor</dt><dd>Unreal Engine 5</dd>
       <dt>Teslim</dt><dd>16.11.2026 04:59 TR</dd>
-      <dt>Güncelleme</dt><dd>15.11.2026 21:48</dd>
+      <dt>Güncelleme</dt><dd>15.11.2026 22:00</dd>
     </dl>
   </header>
   <div class="legend">
@@ -101,6 +101,7 @@ pre code { background: none; padding: 0; }
 <li><a href="#12-tarikat-talepleri">12. Tarikat talepleri</a></li>
 <li><a href="#13-mevsimler-ve-kara-y-llar">13. Mevsimler ve Kara Yıllar</a></li>
 <li><a href="#14-biti-ler">14. Bitişler</a></li>
+<li><a href="#14b-bar-sonlar-k">14b. Barış sonları</a></li>
 <li><a href="#15-director-s-cut-ekran-k">15. Director's Cut ekranı</a></li>
 <li><a href="#16-bot">16. Bot</a></li>
 <li><a href="#17-aray-z-metinleri-i-ngilizce">17. Arayüz metinleri (İngilizce)</a></li>
@@ -316,6 +317,46 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 </table></div>
 <ul>
 <li>Ana menü: <strong>"Short match"</strong> büyük ve önde, "Long match" küçük ve altta.</li>
+</ul>
+<h3 id="zorluk-k">Zorluk <span class="tag k">Karar</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Easy</strong></th>
+<th><strong>Normal</strong> (varsayılan)</th>
+<th><strong>Hard</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bot kişiliği</td>
+<td>Hep Farmer</td>
+<td>Rastgele</td>
+<td>Hep Warlord</td>
+</tr>
+<tr>
+<td>Yumuşak dönem</td>
+<td>6 tur</td>
+<td>4 tur</td>
+<td>2 tur</td>
+</tr>
+<tr>
+<td>Bot saldırı eşiği</td>
+<td>Askeri oyuncununkinin 2 katıysa</td>
+<td>Oyuncununkinden 2 fazlaysa</td>
+<td>Oyuncununkinden fazlaysa</td>
+</tr>
+<tr>
+<td>Botun sabotaj kartı</td>
+<td>Oynamaz</td>
+<td>Oynar</td>
+<td>Oynar, Spy'ı saldırıdan önce mutlaka kullanır</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Menüde Short/Long seçiminin altında: "Easy · Normal · Hard". Jüri için önerilen yazı: "First time? Try Easy."</li>
 <li>İpuçları (2b) Short match'te de aynı, sadece tur numaraları erkene kayar.</li>
 <li><strong>Simülasyon [Ö]:</strong> Short match kurallarıyla rakipsiz, büyümeyen 4 tarlalı bir köy 25. turda düşüyor. Rakip baskısı ve kartlarla maçların 15–20 turda bitmesi bekleniyor. Turlar 40–50 saniye sürerse bu 12–15 dakika eder. İlk denemede maç 25 turu geçiyorsa Kara Yıllar 7. tura çekilir.</li>
 </ul>
@@ -722,6 +763,60 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <li>Arayüzde: muhtarlığa tıklayınca "Change path" düğmesi ve bedeli. 3. seviyede düğme kilit ikonuyla gri.</li>
 <li>Bot da maç başında kişiliğine göre bir yol seçer (Farmer: Plough, Warlord: Sword, Zealot: Book).</li>
 </ul>
+<h3 id="ustal-k-projesi-yolun-son-seviyesi-k-bar-sonlar-i-in">Ustalık projesi: yolun son seviyesi <span class="tag k">Karar</span><span class="tag-note">barış sonları için</span></h3>
+<p>Her yolun en üst basamağı, tek bir büyük projedir. Bitiren köy o yolda <strong>ustalaşmış</strong> sayılır.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Yol</th>
+<th>Proje</th>
+<th>six</th>
+<th>wood</th>
+<th>EP</th>
+<th>Süre</th>
+<th>Şart</th>
+<th>Tek başına bonus <span class="tag o">Öneri</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plough</td>
+<td><strong>Granary of Plenty</strong></td>
+<td>40</td>
+<td>40</td>
+<td>15</td>
+<td>3 tur</td>
+<td>Muhtarlık 2 + Seed Barn</td>
+<td>Gıda bozulması durur, hasat +%10 ek</td>
+</tr>
+<tr>
+<td>Sword</td>
+<td><strong>War College</strong></td>
+<td>40</td>
+<td>40</td>
+<td>20</td>
+<td>3 tur</td>
+<td>Muhtarlık 2 + Barracks + Fire Brigade</td>
+<td>Askerler +%20 güçlü, ordu nüfuzu artışı yarıya iner</td>
+</tr>
+<tr>
+<td>Book</td>
+<td><strong>The Academy</strong></td>
+<td>30</td>
+<td>40</td>
+<td>30</td>
+<td>3 tur</td>
+<td>Muhtarlık 2 + School + Apothecary</td>
+<td>EP üretimi ikiye katlanır</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Bir slot kaplar. Yol değiştirilirse proje durur (diğer yola özel binalar gibi).</li>
+<li>Rakip bir ustalık projesine başladığında tur raporunda duyurulur: "Nine has begun building The Academy." Projeler haritada iskeleyle görünür.</li>
+<li>Short match'te kabaca 10–14. turda bitirilebilecek şekilde fiyatlandı. Bot, muhtarlık 2'den sonra kendi yolunun projesine başlar.</li>
+</ul>
+<p><strong>Neden önemli:</strong> iki köy <strong>aynı yolun</strong> projesini bitirirse <strong>barış</strong> gelir (bkz. 14b). Oyuncu rakibin yolunu görür ve karar verir: kardeşini taklit edip barışı mı arayacak, yoksa başka bir yolla onu yenmeye mi çalışacak?</p>
 <hr />
 <h2 id="7-ekinler">7. Ekinler</h2>
 <h3 id="l-kural-k">Üçlü kural <span class="tag k">Karar</span></h3>
@@ -916,12 +1011,43 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <h3 id="konsey-ve-let-the-elders-decide">Konsey ve "Let the elders decide"</h3>
 <ul>
 <li>Konsey koltukları muhtarlık seviyesine bağlı (1, 2, 3).</li>
+<li><strong>Konseyi muhtar seçer [K]</strong>, yani oyuncu. Muhtarlığa tıklayınca "Council" paneli: koltuğa bir köylü atanır. Kimi seçeceğin, yatkınlıklarını ve karakterini görerek senin kararın. Kötü seçimin bedeli de senin.</li>
+<li><strong>Konsey üyesi çalışmaya devam edebilir [K].</strong> Bu bir tercih:</li>
+</ul>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th>Sadece yönetir</th>
+<th>Hem yönetir hem çalışır <span class="tag o">Öneri</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Üretim</td>
+<td>Yok</td>
+<td>Kendi işinde normal üretir</td>
+</tr>
+<tr>
+<td>Yönetim etkisi</td>
+<td>Tam</td>
+<td><strong>Yarısı</strong> (vakti bölünür)</td>
+</tr>
+<tr>
+<td>Halkla ilişki <span class="tag k">Karar</span></td>
+<td>Normal</td>
+<td><strong>Köy psikolojisi +1/tur</strong> her çalışan konsey üyesi için ("halk, muhtarın adamlarını tarlada görür")</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Bu seçim de konsey panelinde, her üye için bir anahtar: "Governs" / "Governs and works".</li>
 <li><strong>Konseyin ortalama Management'ı</strong> bütün köyün verimini etkiler: 1 → -%10, 3 → 0, 5 → +%10.</li>
 <li><strong>"Let the elders decide"</strong> atamaları konseye yaptırır:</li>
 <li>Yönetim 4–5: herkesi en uygun işe koyar.</li>
 <li>Yönetim 3: çoğunu doğru, her turda 1–2 hata.</li>
 <li>Yönetim 1–2: neredeyse rastgele.</li>
-<li>Oyuncu her zaman elle de atayabilir (F katmanı). C katmanında atama sadece bu düğme ve iş sayısı panelinden yapılır.</li>
+<li>Oyuncu her zaman elle de atayabilir (F katmanı). C katmanında atama sadece bu düğme ve iş sayısı panelinden yapılır. Konsey seçimi C katmanındadır (oyuncu konseyi her zaman kendi seçer).</li>
 </ul>
 <h3 id="n-fus">Nüfus</h3>
 <ul>
@@ -1603,6 +1729,42 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 </table></div>
 <p><strong>Kazanma ekranı:</strong> "History will remember it as a six."</p>
 <hr />
+<h2 id="14b-bar-sonlar-k">14b. Barış sonları <span class="tag k">Karar</span></h2>
+<p><strong>Barışın tek yolu:</strong> iki köy de <strong>aynı yolun ustalık projesini</strong> bitirir. Başka barış yok <span class="tag k">Karar</span>. Barış, iki köyün birlikte kazandığı bir sondur.</p>
+<ul>
+<li>İkinci köy projeyi bitirdiği turun sonunda tetiklenir. İlk bitiren sadece bekler (ve bonusunu kullanır).</li>
+<li>Barış, o tur başka bir bitişle çakışırsa (biri aynı tur düşerse) <strong>düşüş önce gelir</strong>.</li>
+<li>Muhtarlar burada ilk ve son kez birlikte görünür.</li>
+</ul>
+<h3 id="e-itim-bar-the-angle-k-do-ru-bakt-n-a-ya-g-re-de-i-ir">Eğitim barışı: "The Angle" <span class="tag k">Karar</span><span class="tag-note">doğru baktığın açıya göre değişir</span></h3>
+<p><strong>Animasyon:</strong> iki köyün âlimleri ortadaki taşın başında buluşur. Biri parayı eline alır ve yavaşça çevirir. Six'ten bakınca 6, Nine'dan bakınca 9. Âlimler birbirine bakar, sonra iki muhtara.</p>
+<blockquote>
+<p>"The scholars of Six and Nine studied the coin for a year.
+Their finding was short: it depends on where you stand.
+Peace was declared on both sides of the stone."</p>
+</blockquote>
+<p>Kardeşler: <strong>Six:</strong> "So I was right." <strong>Nine:</strong> "So was I."</p>
+<h3 id="tar-m-bar-full-bellies-k-herkes-kendi-i-ine-odakland-tokluk-ve-huzur">Tarım barışı: "Full Bellies" <span class="tag k">Karar</span><span class="tag-note">herkes kendi işine odaklandı, tokluk ve huzur</span></h3>
+<p><strong>Animasyon:</strong> iki köyün tarlaları ortaya doğru uzanır, hasat arabaları yolda birbirine selam verir. Taşın başında uzun bir sofra kurulur.</p>
+<blockquote>
+<p>"Both villages were too busy harvesting to argue.
+Full granaries. Quiet nights. Children who had never been hungry.
+Somewhere in the third autumn, nobody could remember what the fight was about."</p>
+</blockquote>
+<p>Kardeşler: <strong>Six:</strong> "Pass the bread." <strong>Nine:</strong> "It's my bread." <strong>Six:</strong> "..." <strong>Nine:</strong> "Fine. Take it."</p>
+<h3 id="askeri-bar-the-soldiers-truce-k-askerler-iki-muhtar-i-in-sava-mayacaklar-n-s-yledi">Askeri barış: "The Soldiers' Truce" <span class="tag k">Karar</span><span class="tag-note">askerler iki muhtar için savaşmayacaklarını söyledi</span></h3>
+<p><strong>Animasyon:</strong> iki ordu, iki köyün yetiştirdiği en iyi askerler, taşın başında karşı karşıya dizilir. Uzun bir sessizlik. Bir çavuş kılıcını yere bırakır, sonra hepsi bırakır. İki ordu birlikte arkalarını döner ve muhtarlıklara doğru yürür.</p>
+<blockquote>
+<p>"The two finest armies the valley had ever trained met at the coin stone.
+They looked at each other. Then at the coin.
+'We are not dying for two old men and a number,' said a sergeant from Six.
+'Agreed,' said a sergeant from Nine.
+The armies went home together. The headmen were informed later."</p>
+</blockquote>
+<p>Kardeşler: <strong>Six:</strong> "They can't just decide that." <strong>Nine:</strong> "They have swords, brother. They can."</p>
+<h3 id="bar-ve-director-s-cut">Barış ve Director's Cut</h3>
+<p>Barış sonunda Director's Cut başlığı <strong>"Director's Cut: The Tale of Six and Nine"</strong> olur ve 3 sahnenin sonuncusu her zaman barış anıdır. Kazanma ekranındaki "History will remember it as a six" yerine: <strong>"History remembers it as both."</strong></p>
+<hr />
 <h2 id="15-director-s-cut-ekran-k">15. Director's Cut ekranı <span class="tag k">Karar</span></h2>
 <p>Maç sonunda, bitiş animasyonundan sonra gelir. Temayla bağı burada kurulur: muhtar köyün yönetmeniydi, bu onun filmi.</p>
 <ul>
@@ -1646,6 +1808,8 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 </table></div>
 <p>Yol seçimi: Farmer → Plough, Warlord → Sword, Zealot → Book. Short match'te ilk 4 tur, Long match'te ilk 6 tur saldırmaz ve sabotaj oynamaz. Short match'te 8. turdan sonra askeri oyuncununkinden 2 fazlaysa saldırır (bkz. 2c).</p>
 <p>Ortak kurallar:
+- Muhtarlık 2'ye çıkınca kendi yolunun ustalık projesine başlar. Oyuncu aynı yolun projesine başladıysa projeyi <strong>yavaşlatmaz</strong>: barış her iki taraf için de bir çıkış.
+- Konseyine en yüksek Management'lı köylüyü koyar. Psikoloji 45'in altındaysa konsey üyesi çalışır da.
 - Tarlası sarılırsa ve Remedy'si varsa kullanır. Yoksa ve parası 20'nin üstündeyse satın alır.
 - Oyuncu 2 kez Spy oynadıysa bir köpek alır. Oyuncu 2 kez Gossip oynadıysa ve boş slotu varsa Yes-Men's Guild kurar.
 - Spy kartını oyuncuya saldırmadan bir tur önce oynar (Warlord).
@@ -1700,6 +1864,22 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <tr>
 <td>Yol</td>
 <td>"How will Six be ruled?" · "The Plough" · "The Sword" · "The Book" · "Change path"</td>
+</tr>
+<tr>
+<td>Ustalık</td>
+<td>"Granary of Plenty" · "War College" · "The Academy" · "Nine has begun building The Academy."</td>
+</tr>
+<tr>
+<td>Konsey</td>
+<td>"Council" · "Governs" · "Governs and works"</td>
+</tr>
+<tr>
+<td>Zorluk</td>
+<td>"Easy" · "Normal" · "Hard" · "First time? Try Easy."</td>
+</tr>
+<tr>
+<td>Barış</td>
+<td>"The Angle" · "Full Bellies" · "The Soldiers' Truce" · "History remembers it as both."</td>
 </tr>
 <tr>
 <td>Savunma</td>
@@ -1956,7 +2136,7 @@ Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
 <tbody>
 <tr>
 <td><strong>A</strong></td>
-<td>Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, <strong>Short match kuralları</strong>, <strong>yol seçimi (sadece bonuslar)</strong>, <strong>pazar (Sell wood, Buy food, satış oranı)</strong>, ilk 5 dakika ipuçları</td>
+<td>Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, <strong>Short match kuralları, zorluk seçimi</strong>, <strong>yol seçimi (sadece bonuslar)</strong>, <strong>pazar (Sell wood, Buy food, satış oranı)</strong>, ilk 5 dakika ipuçları</td>
 <td>Köy kurulup yaşatılabiliyor</td>
 </tr>
 <tr>
@@ -1971,12 +2151,12 @@ Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
 </tr>
 <tr>
 <td><strong>D</strong></td>
-<td>Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, Shrine ve tarikat talepleri</td>
+<td>Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, <strong>ustalık projeleri ve barış sonları (metin ekranı)</strong>, Shrine ve tarikat talepleri</td>
 <td>Rakiple etkileşim, üç güç</td>
 </tr>
 <tr>
 <td><strong>E</strong></td>
-<td>Açılış sahnesi, Director's Cut, muhtar animasyonları, ses, <strong>3 olay</strong>, <strong>sınırları zorlama hamleleri</strong> (Forced March, Raw Recruits, Levy)</td>
+<td>Açılış sahnesi, Director's Cut, muhtar animasyonları, <strong>barış animasyonları</strong>, ses, <strong>3 olay</strong>, <strong>sınırları zorlama hamleleri</strong> (Forced March, Raw Recruits, Levy)</td>
 <td>Jüri için cila</td>
 </tr>
 <tr>
@@ -2123,19 +2303,19 @@ Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
 </tr>
 <tr>
 <td>6</td>
-<td>Tarikat talep metinlerinin onayı</td>
-<td>Kullanıcı</td>
-<td>Hayır</td>
+<td>~~Tarikat talep metinleri~~ Onaylandı <span class="tag k">Karar</span></td>
+<td>Karar verildi</td>
+<td></td>
 </tr>
 <tr>
 <td>7</td>
-<td>Bitiş sözlerinin onayı</td>
-<td>Kullanıcı</td>
-<td>Hayır</td>
+<td>~~Bitiş sözleri~~ Onaylandı <span class="tag k">Karar</span></td>
+<td>Karar verildi</td>
+<td></td>
 </tr>
 <tr>
 <td>8</td>
-<td>Hangi köyü oyuncu yönetiyor (öneri: Six)</td>
+<td>Oyuncu Nine'ı da seçebilsin mi? (Şu an hep Six, öneri: başta "Which brother are you?")</td>
 <td>Kullanıcı</td>
 <td>Hayır</td>
 </tr>
