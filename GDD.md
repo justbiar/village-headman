@@ -16,7 +16,7 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).
 | Motor | **Unreal Engine 5**, ortografik kamera **[K]** |
 | Arayüz dili | **İngilizce [K]** (bu doküman Türkçe, oyundaki metinler İngilizce yazıldı) |
 | Rakip | Kural tabanlı bot (jam). Jev ve iki kişilik mod sonra **[K]** |
-| Maç süresi | Tur sınırı yok **[K]**, hedef 25–40 dakika **[Ö]** |
+| Maç süresi | Tur sınırı yok **[K]**. **Short match** varsayılan, hedef **12–15 dakika** (15–20 tur) **[K]**. Long match 25–40 dakika |
 | Jam | Epic MegaJam 2026. Teslim **16 Kasım 04:59 TR**. Build zip'i **1 GB altı [K]** |
 | Takım | Kullanıcı (tasarım), **maybeno2906** (Unreal yapımı) **[K]** |
 
@@ -79,12 +79,31 @@ Jüri oyunu birkaç dakika oynayacak. Oyun ilk kararları adım adım, tek satı
 | 2 | Tarla biter, ekim başlar. **Yol seçimi penceresi** açılır | "How will Six be ruled?" |
 | 2 | Seçimden sonra | "You can change your path. Not forever." |
 | 3 · Autumn | Kış uyarısı | "Winter is coming. Nothing grows in winter, and people eat more." |
-| 4 · Winter | İlk hasat ve ilk kart seçimi | "Every few seasons, fate offers you a card. Choose one." |
+| 3–4 | İlk kart seçimi (Short match'te 3. tur) ve ilk hasat | "Every few seasons, fate offers you a card. Choose one." |
 | 5 | Metrik çubukları açıklanır | "Keep the people calm, the army loyal, and the hooded ones small." |
 | 6+ | İpuçları sadece ilk kez olan olaylarda çıkar (ilk sarmaşık, ilk tarikat talebi, ilk saldırı) | |
 
-- **Botun ilk 6 turu yumuşak:** saldırmaz, sabotaj kartı oynamaz. Oyuncu sistemi öğrenirken cezalandırılmaz.
+- **Botun ilk turları yumuşak** (Short match'te 4, Long match'te 6 tur): saldırmaz, sabotaj kartı oynamaz. Oyuncu sistemi öğrenirken cezalandırılmaz.
 - İlk turdan sonraki her şey (ikinci tarla, odun satışı, okul) serbest. Oyun sadece ilk tarlayı ve yol seçimini zorunlu tutar.
+
+---
+
+## 2c. Maç türleri **[K: Short match varsayılan]**
+
+Jüri 5–10 dakika oynayacak. Oyunun en güçlü anları (bitiş animasyonu, kardeşin sözü, Director's Cut) maç sonunda olduğu için jam sürümünde maç kısa tutulur.
+
+| | **Short match** (varsayılan) | Long match |
+|---|---|---|
+| Hedef süre | 12–15 dakika (15–20 tur) | 25–40 dakika |
+| Kara Yıllar başlangıcı | **9. tur** (3. yıl) | 29. tur (8. yıl) |
+| Kara Yıllar etkisi (yıllık, birikimli) | **hasat -%15, tüketim +%15** | hasat -%5, tüketim +%5 |
+| Botun yumuşak dönemi | **İlk 4 tur** | İlk 6 tur |
+| Bot saldırganlığı | **8. turdan sonra** her kişilik, askeri oyuncununkinden 2 fazlaysa saldırır | Kişiliğe göre (bkz. 16) |
+| Kart seçimi | **3. turda başlar, 2 turda bir** | 4. turda başlar, 3 turda bir |
+
+- Ana menü: **"Short match"** büyük ve önde, "Long match" küçük ve altta.
+- İpuçları (2b) Short match'te de aynı, sadece tur numaraları erkene kayar.
+- **Simülasyon [Ö]:** Short match kurallarıyla rakipsiz, büyümeyen 4 tarlalı bir köy 25. turda düşüyor. Rakip baskısı ve kartlarla maçların 15–20 turda bitmesi bekleniyor. Turlar 40–50 saniye sürerse bu 12–15 dakika eder. İlk denemede maç 25 turu geçiyorsa Kara Yıllar 7. tura çekilir.
 
 ---
 
@@ -443,7 +462,7 @@ Psikolojiyi korumanın her yolu başka bir tehlikeyi besler: sıkıyönetim ordu
 
 ## 11. Kartlar
 
-- **8 kart.** **İlk seçim 4. turda**, sonra **3 turda bir** (4, 7, 10...) 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
+- **8 kart.** Short match'te ilk seçim **3. turda**, sonra **2 turda bir** (3, 5, 7...). Long match'te 4. turda, sonra 3 turda bir. Her seçimde 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
 - **Her kartın bir karşı hamlesi var.** Böylece kartlar şans değil, hazırlık meselesi olur.
 
 | Kart | Tür | Bedel | Etkisi | Karşı hamle |
@@ -526,7 +545,7 @@ Tarikat nüfuzu eşiğe ulaştığında bir sonraki turun başında açılır pe
 | Autumn | Hasat +%25 |
 | Winter | Ekim yok, gıda tüketimi +%25, ısınma odunu |
 
-**Kara Yıllar [K: tur sınırı yok, biri düşene kadar]:** 29. turdan (8. yılın başı) itibaren her yıl birikimli olarak hasat **-%5**, tüketim **+%5** (ilk taslakta %10'du, simülasyonda fazla sert çıktı). Ekranda "The Lean Years" yazısı çıkar. Maçın sonsuza uzamasını engeller.
+**Kara Yıllar [K: tur sınırı yok, biri düşene kadar]:** Short match'te 9. turdan itibaren yıllık %15 (bkz. 2c). Long match'te 29. turdan (8. yılın başı) itibaren her yıl birikimli olarak hasat **-%5**, tüketim **+%5** (ilk taslakta %10'du, simülasyonda fazla sert çıktı). Ekranda "The Lean Years" yazısı çıkar. Maçın sonsuza uzamasını engeller.
 
 ### Simülasyonun gösterdiği denge **[Ö]**
 
@@ -596,7 +615,7 @@ Bot da aynı kurallarla oynar, sadece görünür bilgiyi kullanır (oyuncunun bi
 | **Warlord** | Field, Field, School, Barracks, Hall 2 | Asker %30, rakipten 1.5 kat fazla askeri olunca saldırır, Mobilize sever |
 | **Zealot** | Field, Field, School, Shrine, Hall 2 | Tarikat taleplerini kabul eder, Sermon ve Gossip sever |
 
-Yol seçimi: Farmer → Plough, Warlord → Sword, Zealot → Book. İlk 6 tur saldırmaz ve sabotaj oynamaz (bkz. 2b).
+Yol seçimi: Farmer → Plough, Warlord → Sword, Zealot → Book. Short match'te ilk 4 tur, Long match'te ilk 6 tur saldırmaz ve sabotaj oynamaz. Short match'te 8. turdan sonra askeri oyuncununkinden 2 fazlaysa saldırır (bkz. 2c).
 
 Ortak kurallar:
 - Tarlası sarılırsa ve Remedy'si varsa kullanır. Yoksa ve parası 20'nin üstündeyse satın alır.
@@ -616,7 +635,7 @@ Ortak kurallar:
 
 | Yer | Metin |
 |---|---|
-| Ana menü | "Village Headman" · "Play" · "Quit" |
+| Ana menü | "Village Headman" · "Short match" · "Long match" · "Skip tutorial" · "Quit" |
 | Tur düğmesi | "End Turn" |
 | İnşa menüsü | "Build" · "Field" · "Granary" · "School" · "Barracks" · "Shrine" · "Upgrade Hall" |
 | Tarla | "Choose crop" · "Wheat" · "Potato" · "Beet" · "Saffron" · "Change crop" · "Demolish" |
@@ -719,7 +738,7 @@ Bir katman bitmeden sonrakine geçilmez. Hangi saatte durulursa durulsun elde oy
 
 | Katman | İçerik | Bitince |
 |---|---|---|
-| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **yol seçimi (sadece bonuslar)**, **pazar (Sell wood, Buy food, satış oranı)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
+| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **Short match kuralları**, **yol seçimi (sadece bonuslar)**, **pazar (Sell wood, Buy food, satış oranı)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
 | **B** | Psikoloji, **düğün**, tempo, ordu nüfuzu, Barracks ve asker, savaş, can barları, Repair hall, 5 bitiş | Kazanıp kaybedilebiliyor |
 | **C** | 10 rastgele köylü, yatkınlık, karakter, "Let the elders decide", iş sayısı paneli | Liyakat teması oyunda |
 | **D** | Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
@@ -786,7 +805,7 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 |---|---|---|---|
 | K1 | **Sprite yok** | A katmanı zemin, tarla, ağaç ve muhtarlık olmadan başlayamaz | İlk saat sadece bu 4 sprite'a. Gerisi için düz renkli yer tutucu kutular |
 | K2 | **Saat planı geride** | Plan 19:50'de kurulumla başlıyordu. Yapımcı başlamadıysa her saat bir katman yer | A ve B'ye odaklan, C ve D'yi kısalt. Paketleme saati (02:45) kaymaz |
-| K3 | **Jüri muhtemelen hiçbir bitişi görmeyecek** | Hedef maç 25–40 dakika, bir tur 1–2 dakika sürebilir. Jüri 5–10 dakika oynar. Oyunun en güçlü anları (bitiş animasyonu, kardeşin sözü, Director's Cut) maç sonunda | Ana menüye **"Short match"** (jam için varsayılan): Kara Yıllar 3. yılda başlar, bot 8. turdan sonra daha saldırgan. Hedef 12–15 dakika. Karar lazım |
+| K3 | **Jüri muhtemelen hiçbir bitişi görmeyecek** → **Çözüldü: Short match varsayılan (bkz. 2c)** | Hedef maç 25–40 dakika, bir tur 1–2 dakika sürebilir. Jüri 5–10 dakika oynar. Oyunun en güçlü anları (bitiş animasyonu, kardeşin sözü, Director's Cut) maç sonunda | Ana menüye **"Short match"** (jam için varsayılan): Kara Yıllar 3. yılda başlar, bot 8. turdan sonra daha saldırgan. Hedef 12–15 dakika. Karar lazım |
 | K4 | **Arayüz kalabalık** | Tempo, satış, odun sat, gıda al, düğün, sıkıyönetim, saldırı, asker, kartlar, ilaç, köpek, yol... İlk açışta 15+ kontrol | **Kademeli açılma:** kontrol, ilgili şey ilk kez mümkün olduğunda görünür (Recruit sadece Barracks'tan sonra, Cure sadece sarmaşıktan sonra) |
 | K5 | **Denge, gerçek kurallarla hiç test edilmedi** | Tasarım masasının simülasyonunda odun, köylüler, kartlar, savaş, depo sınırı ve rakip yok. "60 tur ayakta" sonucu kısmi | Yapımcı ilk oynanabilir sürümde 2–3 tam maç oynasın, sayılar ayar tablosundan değiştirilsin |
 
