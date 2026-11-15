@@ -735,6 +735,24 @@ Referans: 9 Kings, **sadece ilham** (okunaklı küçük krallık, net siluetler)
 
 **Renk:** soğuk, kasvetli bir zemin. Six için solgun kırmızı, Nine için solgun mavi bayrak rengi. Para altın sarısı ve sahnedeki en parlak şey.
 
+### Sprite kaynağı: iki yol **[Ö]**
+
+fal kredisi yok. Elde kalan iki yol:
+
+**Yol 1: Tripo ile 3D model, Unreal'da pixel art'a çevirme (önerilen)**
+- Jam partneri Tripo'nun 3.000 kredisi var (kod 16 Kasım'a kadar kullanılmalı). Bir model kabaca birkaç düzine kredi, yani bütün binalar ve karakterler rahat sığar.
+- Tripo'dan muhtarlık, binalar, tarla, ağaç, köylü modelleri alınır (düşük poligon, "stylized" istenir).
+- Unreal'da **ortografik izometrik kamera** düşük çözünürlüklü bir **Render Target**'a çizer (örneğin 480×270), bu görüntü ekrana **en yakın komşu (Nearest)** ile büyütülür. Sonuç gerçek pixel art gibi görünür, ayrıca ışık, gölge ve mevsim değişimi bedavaya gelir.
+- Renk sayısını sınırlayan basit bir post-process (palet) materyali görünümü daha da toparlar.
+- Artısı: tutarlı stil, dönen kamera gerekmez, Tripo bir jam sponsoru ("Tools you used"). Eksisi: Render Target kurulumu yapımcı için 30–45 dakika iş.
+
+**Yol 2: Claude'un elle ürettiği pixel sprite'lar**
+- Basit ve palet kilitli PNG sprite'lar kodla çizilir: zemin karoları, 4 ekinin tarla halleri, ağaç ve kütük, ikonlar, kart çerçeveleri, para. Bunlar hızlı ve piksel ızgarasına tam oturur.
+- Binalar ve köylüler de yapılabilir ama sade kalır.
+- Artısı: ücretsiz, anında, tutarlı. Eksisi: sanat kalitesi "temiz ama basit".
+
+**Karma öneri:** zemin, tarla, ağaç, ikon ve arayüz Yol 2 ile (hemen), binalar ve karakterler Yol 1 ile (Tripo). Yapımcı A katmanına Yol 2 sprite'larıyla hemen başlayabilir.
+
 ### Unreal'da pixel art ayarları
 
 - Dokular: **Texture Group "2D Pixels (unfiltered)"**, filtre **Nearest**, **mip map yok**, sıkıştırma **UserInterface2D**.
@@ -837,11 +855,15 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 
 | # | Eksik | Kimde | Engel mi? |
 |---|---|---|---|
-| 1 | **Sprite'ları kim çizecek / nereden gelecek?** Seçenekler: (a) **fal** kredisiyle görsel modeller, (b) **Scenario skills** (Claude Code'a bağlanır, Scenario hesabı ve kredisi ister), (c) **gpt-image-2d-assets** (Codex ve GPT-image ister). Üçü de yapay zeka çıktısı verir, pixel art'ı oyuna girmeden önce temizlemek gerekir (bkz. 24.4). Ya da lisanslı hazır pixel art paketi | Karar lazım | **Evet, A katmanı için zemin ve tarla şart** |
+| 1 | **Sprite kaynağı.** fal kredisi yok. Öneri: zemin, tarla, ağaç, ikonlar Claude'dan (Yol 2), binalar ve karakterler Tripo'dan (Yol 1), bkz. 18 | Karar lazım | **Evet, A katmanı için** |
 | 2 | Ses dosyaları. Seçenek: jam partneri **WeLoveIndies** ücretsiz ses ve müzik (sadece ticari olmayan kullanım, oyun satılırsa lisans gerekir) | Kullanıcı | E katmanına kadar hayır |
 | 3 | ~~Takım adı~~ **Arfdev** | Karar verildi | |
 | 4 | maybeno2906'nın GitHub erişimi | Sonra | Hayır |
-| 5 | Yeni ekonominin denge testi (odun, köylüler) | Oynanarak | Hayır, sayılar tabloda değiştirilebilir |
+| 5 | Yeni ekonominin denge testi (odun, köylüler, savaş, kartlar) | Yapımcı, ilk oynanabilir sürümde | Hayır, sayılar tabloda değiştirilebilir |
+| 13 | Her iki üyenin Epic hesabı e-postası | Kullanıcı ve maybeno2906 | **Teslimde evet** |
+| 14 | itch.io sayfası metni, dev log (Glass Box), "Tools you used" listesi, video senaryosu | Claude hazırlayabilir | Teslimde evet |
+| 15 | Saat planı (19:50'de başlıyordu) yapımcının gerçek başlangıç saatine göre güncellenmeli | Yapımcı | Evet |
+| 16 | `core/` C++ çekirdeği GDD'nin gerisinde (odun, köylü, vergi, olay yok) | Yapımcı GDD'yi esas alır | Hayır |
 | 6 | Tarikat talep metinlerinin onayı | Kullanıcı | Hayır |
 | 7 | Bitiş sözlerinin onayı | Kullanıcı | Hayır |
 | 8 | Hangi köyü oyuncu yönetiyor (öneri: Six) | Kullanıcı | Hayır |
