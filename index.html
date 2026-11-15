@@ -1,0 +1,2352 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style><title>Village Headman GDD</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"></head><body>
+<style>
+/* Layout: a field manual. Sticky contents rail on the left, one long reading column, wide tables scroll in their own frame. */
+:root {
+  --bg: #F1F0EA; --surface: #FAF9F5; --sunk: #E6E4DB; --fg: #1F201B; --muted: #615F55; --line: #D3D0C4;
+  --six: #9C3B33; --nine: #34598F; --accent: #8C6A1C;
+  --k-bg: #E4EDE0; --k-fg: #2F5C2A; --o-bg: #F2E7CF; --o-fg: #7A5612;
+  --f-display: "Spectral", Georgia, "Times New Roman", serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141511; --surface: #1B1C17; --sunk: #101109; --fg: #E6E3D8; --muted: #A09D90; --line: #2F3029;
+  --six: #E0786C; --nine: #84A9E0; --accent: #D6AE55;
+  --k-bg: #22331F; --k-fg: #A4D196; --o-bg: #3A3020; --o-fg: #E5C27A; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141511; --surface: #1B1C17; --sunk: #101109; --fg: #E6E3D8; --muted: #A09D90; --line: #2F3029;
+  --six: #E0786C; --nine: #84A9E0; --accent: #D6AE55;
+  --k-bg: #22331F; --k-fg: #A4D196; --o-bg: #3A3020; --o-fg: #E5C27A; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+.shell { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 40px; }
+@media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+header.cover { grid-column: 1 / -1; padding-block: 40px 28px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 16px 40px; align-items: flex-end; justify-content: space-between; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+header h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(34px, 6vw, 58px); line-height: 1; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+header h1 .six { color: var(--six); } header h1 .nine { color: var(--nine); }
+.tagline { margin: 12px 0 0; color: var(--muted); max-width: 62ch; font-style: italic; }
+dl.meta { display: grid; grid-template-columns: auto auto; gap: 4px 16px; margin: 0; font-size: 13px; }
+dl.meta dt { color: var(--muted); } dl.meta dd { margin: 0; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.legend { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; padding-block: 14px; font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--line); }
+.legend a { color: var(--fg); }
+nav.toc { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: 100vh; overflow-y: auto; padding-block: 24px; }
+nav.toc details summary { cursor: pointer; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; list-style: none; }
+nav.toc ol { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+nav.toc a { display: block; padding: 4px 8px; border-radius: 4px; color: var(--muted); text-decoration: none; font-size: 13.5px; line-height: 1.35; }
+nav.toc a:hover, nav.toc a.on { color: var(--fg); background: var(--sunk); }
+@media (max-width: 900px) { nav.toc { position: static; max-height: none; padding-block: 16px 0; } }
+main { padding-block: 8px 96px; min-width: 0; }
+main > * { max-width: 78ch; }
+main > .frame { max-width: 100%; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 28px; line-height: 1.2; margin: 56px 0 12px; padding-top: 18px; border-top: 1px solid var(--line); text-wrap: balance; scroll-margin-top: 16px; }
+h3 { font-family: var(--f-display); font-weight: 500; font-size: 20px; margin: 30px 0 8px; scroll-margin-top: 16px; }
+p, ul, ol { margin: 10px 0; }
+li { margin: 3px 0; }
+hr { display: none; }
+strong { font-weight: 600; }
+code { font-family: var(--f-mono); font-size: .9em; background: var(--sunk); padding: 1px 5px; border-radius: 3px; }
+a { color: var(--accent); }
+del { color: var(--muted); }
+.frame { overflow-x: auto; margin: 14px 0; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { background: var(--sunk); font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+pre { margin: 0; padding: 14px; font-family: var(--f-mono); font-size: 12.5px; line-height: 1.45; }
+pre code { background: none; padding: 0; }
+.tag { display: inline-block; font-family: var(--f-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; padding: 0 6px; border-radius: 3px; vertical-align: 1px; margin: 0 2px; white-space: nowrap; }
+.tag.k { background: var(--k-bg); color: var(--k-fg); } .tag.o { background: var(--o-bg); color: var(--o-fg); }
+.tag-note { font-size: 12px; color: var(--muted); margin-right: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="shell">
+  <header class="cover">
+    <div>
+      <p class="eyebrow">Game design document · Epic MegaJam 2026 · Arfdev</p>
+      <h1>Village Headman</h1>
+      <p class="tagline">Two brothers found a coin. One says <span style="color:var(--six)">six</span>. One says <span style="color:var(--nine)">nine</span>. Run your half of the village without starving, revolting, or getting couped.</p>
+    </div>
+    <dl class="meta">
+      <dt>Takım</dt><dd>Arfdev</dd>
+      <dt>Motor</dt><dd>Unreal Engine 5</dd>
+      <dt>Teslim</dt><dd>16.11.2026 04:59 TR</dd>
+      <dt>Güncelleme</dt><dd>15.11.2026 21:41</dd>
+    </dl>
+  </header>
+  <div class="legend">
+    <span><span class="tag k">Karar</span> kullanıcının kararı</span>
+    <span><span class="tag o">Öneri</span> önerilen değer, oynarken değiştirilebilir</span>
+    <span>Kaynak: <code>GDD.md</code> · <a href="https://github.com/justbiar/village-headman" target="_blank" rel="noopener">GitHub reposu</a> · <a href="https://claude.ai/artifact/4ihHVnny12mPr3NtRxnRB2" target="_blank" rel="noopener">Tasarım masası</a></span>
+  </div>
+  <nav class="toc" aria-label="İçindekiler">
+    <details open><summary>İçindekiler</summary><ol>
+<li><a href="#0-tek-sayfada">0. Tek sayfada</a></li>
+<li><a href="#1-hikaye-ve-ton">1. Hikaye ve ton</a></li>
+<li><a href="#2-oyun-d-ng-s">2. Oyun döngüsü</a></li>
+<li><a href="#2b-i-lk-5-dakika-k-nce-tarla-sonra-yol-se-imi">2b. İlk 5 dakika</a></li>
+<li><a href="#2c-ma-t-rleri-k-short-match-varsay-lan">2c. Maç türleri</a></li>
+<li><a href="#3-ekran-d-zeni">3. Ekran düzeni</a></li>
+<li><a href="#4-kaynaklar">4. Kaynaklar</a></li>
+<li><a href="#5-orman-k-k-y-n-etraf-nda-toplanabilir-a-a-lar">5. Orman</a></li>
+<li><a href="#6-binalar-ve-slotlar">6. Binalar ve slotlar</a></li>
+<li><a href="#6b-yol-se-imi-k">6b. Yol seçimi</a></li>
+<li><a href="#7-ekinler">7. Ekinler</a></li>
+<li><a href="#8-k-yl-ler">8. Köylüler</a></li>
+<li><a href="#9-metrikler-ve-dengeler">9. Metrikler ve dengeler</a></li>
+<li><a href="#10-askerlik-ve-sava">10. Askerlik ve savaş</a></li>
+<li><a href="#11-kartlar">11. Kartlar</a></li>
+<li><a href="#12-tarikat-talepleri">12. Tarikat talepleri</a></li>
+<li><a href="#13-mevsimler-ve-kara-y-llar">13. Mevsimler ve Kara Yıllar</a></li>
+<li><a href="#14-biti-ler">14. Bitişler</a></li>
+<li><a href="#15-director-s-cut-ekran-k">15. Director's Cut ekranı</a></li>
+<li><a href="#16-bot">16. Bot</a></li>
+<li><a href="#17-aray-z-metinleri-i-ngilizce">17. Arayüz metinleri (İngilizce)</a></li>
+<li><a href="#18-sanat-2d-pixel-art-k">18. Sanat (2D pixel art)</a></li>
+<li><a href="#19-ses-kullan-c-haz-rlayacak-k">19. Ses (kullanıcı hazırlayacak)</a></li>
+<li><a href="#20-teknik">20. Teknik</a></li>
+<li><a href="#21-yap-m-ncelikleri">21. Yapım öncelikleri</a></li>
+<li><a href="#22-teslim">22. Teslim</a></li>
+<li><a href="#23-h-l-eksik-olanlar">23. Hâlâ eksik olanlar</a></li>
+<li><a href="#24-uyar-lar-ve-zay-f-y-nler">24. Uyarılar ve zayıf yönler</a></li>
+    </ol></details>
+  </nav>
+  <main>
+
+<p><strong>Bu dosya tek doğru kaynaktır.</strong> <code>docs/</code> klasöründeki eski notlarla çelişen bir şey varsa bu dosya geçerlidir.
+Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
+<p>İşaretler: <span class="tag k">Karar</span> kullanıcının kararı · <span class="tag o">Öneri</span> önerilen değer, oynarken değiştirilebilir.</p>
+<hr />
+<h2 id="0-tek-sayfada">0. Tek sayfada</h2>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tür</td>
+<td>Tur bazlı köy yönetimi ve 1v1 strateji</td>
+</tr>
+<tr>
+<td>Görünüm</td>
+<td>İzometrik <strong>2D pixel art</strong>, tek ekran <span class="tag k">Karar</span></td>
+</tr>
+<tr>
+<td>Motor</td>
+<td><strong>Unreal Engine 5</strong>, ortografik kamera <span class="tag k">Karar</span></td>
+</tr>
+<tr>
+<td>Arayüz dili</td>
+<td><strong>İngilizce [K]</strong> (bu doküman Türkçe, oyundaki metinler İngilizce yazıldı)</td>
+</tr>
+<tr>
+<td>Rakip</td>
+<td>Kural tabanlı bot (jam). Jev ve iki kişilik mod sonra <span class="tag k">Karar</span></td>
+</tr>
+<tr>
+<td>Maç süresi</td>
+<td>Tur sınırı yok <span class="tag k">Karar</span>. <strong>Short match</strong> varsayılan, hedef <strong>12–15 dakika</strong> (15–20 tur) <span class="tag k">Karar</span>. Long match 25–40 dakika</td>
+</tr>
+<tr>
+<td>Jam</td>
+<td>Epic MegaJam 2026. Teslim <strong>16 Kasım 04:59 TR</strong>. Build zip'i <strong>1 GB altı [K]</strong></td>
+</tr>
+<tr>
+<td>Takım</td>
+<td><strong>Arfdev [K]</strong>: kullanıcı (tasarım), <strong>maybeno2906</strong> (Unreal yapımı) <span class="tag k">Karar</span></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Oyunun özü:</strong> köyü büyütmek değil, dengede tutmak. Her metriğin hem altında hem üstünde bir ölüm var. Zayıf ordu saldırı yer, güçlü ordu darbe yapar.</p>
+<hr />
+<h2 id="1-hikaye-ve-ton">1. Hikaye ve ton</h2>
+<p>İki kardeş aynı köyün muhtarlığını paylaşıyordu. Yolda üzerinde tek rakam yazan bir para buldular. Biri "Six" dedi, öbürü "Nine". Tartışma bir gün sürdü, sonra bir ömür. Köy ikiye bölündü. <span class="tag k">Karar</span></p>
+<ul>
+<li>Köyler: <strong>Six</strong> ve <strong>Nine</strong>. Oyuncu Six'i yönetir, bot Nine'ı <span class="tag o">Öneri</span>.</li>
+<li>Para birimi: Six köyünde <strong>six</strong>, Nine köyünde <strong>nine</strong>. Arayüzde "14 six" yazar <span class="tag k">Karar</span>.</li>
+<li>Ton: <strong>kara mizah [K]</strong>. Sebep gülünç, sonuçlar karanlık.</li>
+<li>Haritanın tam ortasında, iki köyün arasındaki taşın üstünde <strong>o para</strong> durur. Dekor, ama açılış ve kapanış sahnesinin merkezi <span class="tag o">Öneri</span>.</li>
+</ul>
+<p><strong>Açılış sahnesi [Ö]</strong> (3 kare, tıklayarak geçilir, en fazla 15 saniye):
+1. "Two brothers. One village. One coin."
+2. "'Six,' said one. 'Nine,' said the other."
+3. "That was forty years ago. They are still arguing."</p>
+<hr />
+<h2 id="2-oyun-d-ng-s">2. Oyun döngüsü</h2>
+<p><strong>1 tur = 1 mevsim. 4 tur = 1 yıl.</strong> Oyuncu ve bot emirlerini aynı tur içinde verir, sonra tur birlikte çözülür. Oyuncu botun bu tur ne yaptığını tur raporunda görür.</p>
+<h3 id="tur-ak">Tur akışı</h3>
+<ol>
+<li><strong>Planlama (oyuncu oynar):</strong> inşa et, köylü ata, asker al, saldırı emri ver, kart oyna ya da seç, satış oranı ve tempo seç, düğün yap, tarikat talebi varsa cevapla.</li>
+<li><strong>"End Turn"</strong> düğmesine basılır. Bot da emirlerini verir.</li>
+<li><strong>Çözümleme (sabit sıra, hep aynı):</strong></li>
+<li>Kartlar</li>
+<li>Emirler (inşaat başlar, askerler alınır, muhtarlık yükseltmesi başlar)</li>
+<li>İnşaatlar ilerler ve biten binalar açılır</li>
+<li>Üretim (tarla, orman, eğitim merkezi)</li>
+<li>Savaş (iki saldırı aynı anda)</li>
+<li>Satış ve depo (kapasite, bozulma)</li>
+<li>Tüketim ve metrikler (gıda, maaş, ısınma, psikoloji, ordu nüfuzu)</li>
+<li>Tarikat</li>
+<li>Nüfus (doğum, büyüme, açlıktan ölüm)</li>
+<li>Bitiş kontrolü</li>
+<li><strong>Tur raporu:</strong> en fazla 6 satır, önemli olandan önemsize. Örnek: "Wheat harvest: 13 food, 6 six."</li>
+</ol>
+<p>Sabit sıra önemli: oyuncu "kartım savaştan önce çözülür" diye plan yapabilir. Satranç hissi buradan gelir.</p>
+<hr />
+<h2 id="2b-i-lk-5-dakika-k-nce-tarla-sonra-yol-se-imi">2b. İlk 5 dakika <span class="tag k">Karar</span><span class="tag-note">önce tarla, sonra yol seçimi</span></h2>
+<p>Jüri oyunu birkaç dakika oynayacak. Oyun ilk kararları adım adım, tek satırlık ipuçlarıyla öğretir. İpuçları ekranın altında çıkar, tıklayınca kapanır. Ana menüde "Skip tutorial" seçeneği var.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Tur</th>
+<th>Ne olur</th>
+<th>İpucu metni (oyunda)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Açılış</td>
+<td>Para sahnesi (3 kare)</td>
+<td></td>
+</tr>
+<tr>
+<td>1 · Spring</td>
+<td>Kamera köye iner. 10 köylü yürüyerek gelir. Sadece slotlar parlar</td>
+<td>"Ten souls followed you here. Feed them first."</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Oyuncu slota tıklar, sadece <strong>Field</strong> seçilebilir, ekin olarak Wheat önerilir</td>
+<td>"Wheat grows fast and feeds many. It sells for almost nothing."</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Orman parlar</td>
+<td>"Idle hands can cut wood. Wood builds, warms, and sells."</td>
+</tr>
+<tr>
+<td>1</td>
+<td>End Turn parlar</td>
+<td>"End the turn. Nine is doing the same."</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Tarla biter, ekim başlar. <strong>Yol seçimi penceresi</strong> açılır</td>
+<td>"How will Six be ruled?"</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Seçimden sonra</td>
+<td>"You can change your path. Not forever."</td>
+</tr>
+<tr>
+<td>3 · Autumn</td>
+<td>Kış uyarısı</td>
+<td>"Winter is coming. Nothing grows in winter, and people eat more."</td>
+</tr>
+<tr>
+<td>3–4</td>
+<td>İlk kart seçimi (Short match'te 3. tur) ve ilk hasat</td>
+<td>"Every few seasons, fate offers you a card. Choose one."</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Metrik çubukları açıklanır</td>
+<td>"Keep the people calm, the army loyal, and the hooded ones small."</td>
+</tr>
+<tr>
+<td>6+</td>
+<td>İpuçları sadece ilk kez olan olaylarda çıkar (ilk sarmaşık, ilk tarikat talebi, ilk saldırı)</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Botun ilk turları yumuşak</strong> (Short match'te 4, Long match'te 6 tur): saldırmaz, sabotaj kartı oynamaz. Oyuncu sistemi öğrenirken cezalandırılmaz.</li>
+<li>İlk turdan sonraki her şey (ikinci tarla, odun satışı, okul) serbest. Oyun sadece ilk tarlayı ve yol seçimini zorunlu tutar.</li>
+</ul>
+<hr />
+<h2 id="2c-ma-t-rleri-k-short-match-varsay-lan">2c. Maç türleri <span class="tag k">Karar</span><span class="tag-note">Short match varsayılan</span></h2>
+<p>Jüri 5–10 dakika oynayacak. Oyunun en güçlü anları (bitiş animasyonu, kardeşin sözü, Director's Cut) maç sonunda olduğu için jam sürümünde maç kısa tutulur.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Short match</strong> (varsayılan)</th>
+<th>Long match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hedef süre</td>
+<td>12–15 dakika (15–20 tur)</td>
+<td>25–40 dakika</td>
+</tr>
+<tr>
+<td>Kara Yıllar başlangıcı</td>
+<td><strong>9. tur</strong> (3. yıl)</td>
+<td>29. tur (8. yıl)</td>
+</tr>
+<tr>
+<td>Kara Yıllar etkisi (yıllık, birikimli)</td>
+<td><strong>hasat -%15, tüketim +%15</strong></td>
+<td>hasat -%5, tüketim +%5</td>
+</tr>
+<tr>
+<td>Botun yumuşak dönemi</td>
+<td><strong>İlk 4 tur</strong></td>
+<td>İlk 6 tur</td>
+</tr>
+<tr>
+<td>Bot saldırganlığı</td>
+<td><strong>8. turdan sonra</strong> her kişilik, askeri oyuncununkinden 2 fazlaysa saldırır</td>
+<td>Kişiliğe göre (bkz. 16)</td>
+</tr>
+<tr>
+<td>Kart seçimi</td>
+<td><strong>3. turda başlar, 2 turda bir</strong></td>
+<td>4. turda başlar, 3 turda bir</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Ana menü: <strong>"Short match"</strong> büyük ve önde, "Long match" küçük ve altta.</li>
+<li>İpuçları (2b) Short match'te de aynı, sadece tur numaraları erkene kayar.</li>
+<li><strong>Simülasyon [Ö]:</strong> Short match kurallarıyla rakipsiz, büyümeyen 4 tarlalı bir köy 25. turda düşüyor. Rakip baskısı ve kartlarla maçların 15–20 turda bitmesi bekleniyor. Turlar 40–50 saniye sürerse bu 12–15 dakika eder. İlk denemede maç 25 turu geçiyorsa Kara Yıllar 7. tura çekilir.</li>
+</ul>
+<hr />
+<h2 id="3-ekran-d-zeni">3. Ekran düzeni</h2>
+<p>Tek ekran, 16:9. <span class="tag o">Öneri</span></p>
+<div class="frame"><pre><code>+-----------------------------------------------------------------------+
+| SIX  [######### hall 100 ]   Year 2 · Autumn   [ hall 85 ####### ] NINE |
+| six 14  wood 12/40  food 30/60  EP 4     psych ▮▮▮  army ▮  cult ▯   |
++-----------------------------------------------------------------------+
+|  trees trees                                         trees trees       |
+|  trees [slot][slot]                         [slot][slot] trees         |
+|        [ HALL ]          ( coin )            [ HALL ]                  |
+|  trees [slot]                                     [slot] trees         |
+|  trees trees                                         trees trees       |
++-----------------------------------------------------------------------+
+| VILLAGERS (10)  farm 4 · wood 4 · teach 0 · idle 2  [Let the elders decide] |
+| CARDS [Vine][Gossip][ ]     TEMPO (Light|Normal|Heavy)  SELL [40%]      |
+| ATTACK [ 0 ]  RECRUIT [ 0 ]  [Martial law]                [ END TURN ] |
++-----------------------------------------------------------------------+
+| Turn report: Wheat harvest: 13 food, 6 six. Nine built a Barracks.    |
++-----------------------------------------------------------------------+
+</code></pre></div>
+<ul>
+<li><strong>Üst şerit:</strong> iki muhtarlığın can barı, yıl ve mevsim. Kendi kaynakların ve 3 metrik çubuğu.</li>
+<li><strong>Metrik çubukları renkli bant:</strong> yeşil, sarı, kırmızı. Sayı ancak üstüne gelince görünür. Tehlikeye giren çubuk titrer.</li>
+<li><strong>Rakibin metrikleri gizli</strong>, sadece "High / Medium / Low" <span class="tag k">Karar</span>. Rakibin binaları, inşaatları ve askerleri haritada görünür <span class="tag k">Karar</span>.</li>
+<li><strong>Slota tıklamak</strong> inşa menüsünü açar. Dolu slota tıklamak binanın bilgisini ve işçilerini gösterir.</li>
+<li><strong>Ormana tıklamak</strong> oduncu sayısını gösterir.</li>
+</ul>
+<hr />
+<h2 id="4-kaynaklar">4. Kaynaklar</h2>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Kaynak</th>
+<th>Gelir</th>
+<th>Gider</th>
+<th>Sınır</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>six / nine</strong> (para)</td>
+<td>Ekin satışı, odun satışı</td>
+<td>İnşa, tohum, asker alma, maaş, kartlar</td>
+<td>Sınırsız</td>
+</tr>
+<tr>
+<td><strong>Wood</strong> (odun) <span class="tag k">Karar</span></td>
+<td>Orman</td>
+<td>İnşa, kışın ısınma, satış</td>
+<td>Depo</td>
+</tr>
+<tr>
+<td><strong>Food</strong> (gıda)</td>
+<td>Hasat</td>
+<td>Nüfus, tohum (para yoksa)</td>
+<td>Depo</td>
+</tr>
+<tr>
+<td><strong>EP</strong> (eğitim puanı)</td>
+<td>İnşa tamamlamak, Eğitim Merkezi <span class="tag k">Karar</span></td>
+<td>Gelişmiş binalar, muhtarlık</td>
+<td>Sınırsız</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ba-lang-k-sadece-ilk-tarlaya-yetecek-kadar">Başlangıç <span class="tag k">Karar</span><span class="tag-note">sadece ilk tarlaya yetecek kadar</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>six</th>
+<th>wood</th>
+<th>food</th>
+<th>EP</th>
+<th>Köylü</th>
+<th>Slot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14</td>
+<td>12</td>
+<td>50</td>
+<td>0</td>
+<td>10 (5 kadın, 5 erkek)</td>
+<td>3, hepsi boş</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sat">Satış <span class="tag o">Öneri</span></h3>
+<ul>
+<li>Her tur bir <strong>satış oranı</strong> seçilir (0, 20, 40, 60, 80, 100%). Hasadın o kadarı satılır, kalanı ambara girer. Varsayılan %40.</li>
+<li><strong>Odun satışı:</strong> "Sell wood" düğmesi, <strong>2 wood = 1 six</strong>. Erken oyunda para kazanmanın tek güvenli yolu bu. Olmazsa ilk turlarda açlık sarmalı oluşuyor.</li>
+<li><strong>Gıda alımı:</strong> "Buy food" düğmesi, <strong>1 food = 1.25 six</strong>. Ayrıca gıda tur sonunda yetmezse pazar eksik kısmı kendiliğinden <strong>satın alır</strong> (6 six tohum parası her zaman kesede kalır). Bu olmadan nakit ekinler (pancar, safran) anlamsızdı: zengin ama aç köyler ölüyordu.</li>
+</ul>
+<h3 id="vergi-k">Vergi <span class="tag k">Karar</span></h3>
+<p>"<strong>Collect taxes</strong>" düğmesi. Paranın üçüncü kaynağı (satış ve odunun yanında).</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th>Değer <span class="tag o">Öneri</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gelir</td>
+<td>Yetişkin başına <strong>1 six</strong> (askerler hariç)</td>
+</tr>
+<tr>
+<td>Bedel</td>
+<td>Köy psikolojisi <strong>-5</strong></td>
+</tr>
+<tr>
+<td>Sınır</td>
+<td><strong>Üst üste iki tur toplanamaz</strong></td>
+</tr>
+<tr>
+<td>Plough yolu</td>
+<td>Vergi geliri +%20 (tüccar köy)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Sadece gıda eken köyün parasızlıktan darbe yemesine karşı çıkış yolu: maaşı vergiyle ödersin, bedelini psikolojiyle.</li>
+<li>Psikoloji zaten düşükse vergi isyanı hızlandırır. Arayüz psikoloji 35'in altındaysa uyarır: "They will not pay quietly."</li>
+</ul>
+<h3 id="depo">Depo <span class="tag o">Öneri</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th>Gıda</th>
+<th>Odun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Muhtarlık (başlangıç)</td>
+<td>60</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Her Granary</td>
+<td>+60</td>
+<td>+40</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Kapasiteyi aşan kaybolur ("The granary overflowed.").</li>
+<li>Her tur gıdanın <strong>%4</strong>'ü bozulur, köyde Granary varsa <strong>%2</strong>.</li>
+</ul>
+<hr />
+<h2 id="5-orman-k-k-y-n-etraf-nda-toplanabilir-a-a-lar">5. Orman <span class="tag k">Karar</span><span class="tag-note">köyün etrafında toplanabilir ağaçlar</span></h2>
+<ul>
+<li>Her köyün çevresinde orman halkası. Slot kaplamaz.</li>
+<li>Stok <strong>120 wood</strong> (12 ağaç kümesi × 10) <span class="tag o">Öneri</span>.</li>
+<li><strong>Oduncu başına 3 wood/tur</strong>, kışın 2. Yatkınlık verimiyle çarpılır.</li>
+<li>İlkbahar ve yazda orman <strong>+4/tur</strong> yenilenir, 120'yi geçmez.</li>
+<li>Stok düştükçe ağaç kümeleri kütüğe döner (her 10 wood bir küme).</li>
+<li><strong>Kışın ısınma:</strong> her kış turunda 5 kişi başına 1 wood yanar. Odun yetmezse psikoloji <strong>-3</strong>.</li>
+</ul>
+<hr />
+<h2 id="6-binalar-ve-slotlar">6. Binalar ve slotlar</h2>
+<p>Her bina bir slot kaplar. <strong>Tarlalar da slotlara dahil [K].</strong> Maliyet ve süreler <span class="tag o">Öneri</span>.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Bina</th>
+<th>six</th>
+<th>wood</th>
+<th>EP</th>
+<th>Süre</th>
+<th>İşçi</th>
+<th>Etkisi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Field</strong></td>
+<td>10</td>
+<td>10</td>
+<td>0</td>
+<td>1 tur</td>
+<td>2 çiftçi</td>
+<td>Seçilen ekini yetiştirir</td>
+</tr>
+<tr>
+<td><strong>Granary</strong></td>
+<td>8</td>
+<td>15</td>
+<td>0</td>
+<td>1 tur</td>
+<td>0</td>
+<td>+60 gıda, +40 odun kapasite, bozulma yarıya</td>
+</tr>
+<tr>
+<td><strong>School</strong> (Eğitim Merkezi)</td>
+<td>15</td>
+<td>20</td>
+<td>0</td>
+<td>2 tur</td>
+<td>2 öğretmen</td>
+<td>Öğretmen başına 3 EP/tur × verim</td>
+</tr>
+<tr>
+<td><strong>Barracks</strong></td>
+<td>20</td>
+<td>25</td>
+<td>5</td>
+<td>2 tur</td>
+<td>0</td>
+<td><strong>Asker almayı açar</strong> (tur başına en fazla 2), savaş gücü +%10</td>
+</tr>
+<tr>
+<td><strong>Shrine</strong></td>
+<td>15</td>
+<td>15</td>
+<td>5</td>
+<td>2 tur</td>
+<td>1 rahip</td>
+<td>Psikoloji +4/tur, tarikat +3/tur</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="yola-zel-binalar-bkz-6b-yol-se-imi">Yola özel binalar (bkz. 6b. Yol seçimi)</h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Bina</th>
+<th>Yol</th>
+<th>six</th>
+<th>wood</th>
+<th>EP</th>
+<th>Süre</th>
+<th>İşçi</th>
+<th>Etkisi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Seed Barn</strong></td>
+<td>Plough</td>
+<td>12</td>
+<td>15</td>
+<td>0</td>
+<td>1 tur</td>
+<td>0</td>
+<td>Tohum yarı fiyatına. Safran 1 tur daha geç çürür</td>
+</tr>
+<tr>
+<td><strong>Fire Brigade</strong> (itfaiye) <span class="tag k">Karar</span></td>
+<td>Sword</td>
+<td>15</td>
+<td>20</td>
+<td>5</td>
+<td>2 tur</td>
+<td>1 asker</td>
+<td>Granary Fire'ın etkisi %25'ten %5'e düşer <span class="tag k">Karar</span><span class="tag-note">sadece savaş yolu</span></td>
+</tr>
+<tr>
+<td><strong>Apothecary</strong> (ilaç merkezi) <span class="tag k">Karar</span></td>
+<td>Book</td>
+<td>15</td>
+<td>15</td>
+<td>8</td>
+<td>2 tur</td>
+<td>1 eczacı</td>
+<td>2 turda bir <strong>Remedy</strong> üretir (verimle). Eczacı Education yatkınlığını kullanır <span class="tag k">Karar</span><span class="tag-note">eğitim kolunda</span></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>İnşaat sırasında slotta iskele görünür, bina çalışmaz.</li>
+<li><strong>Her bina tamamlandığında +2 EP [K].</strong></li>
+<li>Bina yıkılabilir ("Demolish"), maliyetin yarısı geri gelir.</li>
+</ul>
+<h3 id="muhtarl-k-hall">Muhtarlık (Hall)</h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Seviye</th>
+<th>six</th>
+<th>wood</th>
+<th>EP</th>
+<th>Süre</th>
+<th>Slot</th>
+<th>Konsey koltuğu</th>
+<th>Sur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 (başlangıç)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>3</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>25</td>
+<td>20</td>
+<td>10</td>
+<td>2</td>
+<td>5</td>
+<td>2</td>
+<td>10</td>
+</tr>
+<tr>
+<td>3</td>
+<td>40</td>
+<td>40</td>
+<td>25</td>
+<td>3</td>
+<td>7</td>
+<td>3</td>
+<td>15</td>
+</tr>
+<tr>
+<td>4</td>
+<td>60</td>
+<td>60</td>
+<td>45</td>
+<td>3</td>
+<td>9</td>
+<td>3</td>
+<td>20</td>
+</tr>
+</tbody>
+</table></div>
+<p>Seviye atlayınca <strong>+5 EP</strong> ve can barı <strong>+20</strong> (en fazla 100).</p>
+<p><strong>Repair hall [Ö]:</strong> 5 six + 10 wood ile can barı +15, tur başına bir kez. Yoksa uzun maçta can barı sadece azalır.</p>
+<hr />
+<h2 id="6b-yol-se-imi-k">6b. Yol seçimi <span class="tag k">Karar</span></h2>
+<p>Köye 10 kişi gelir. <strong>Önce tarla kurulur, sonra köyün nasıl yönetileceğine karar verilir:</strong> tarım mı, savaş mı, eğitim mi.</p>
+<p>İlk tarla tamamlandığı turda (normalde 2. tur) bir pencere açılır: <strong>"How will Six be ruled?"</strong></p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Yol</th>
+<th>Ad (oyunda)</th>
+<th>Bonus</th>
+<th>Açtığı özel bina</th>
+<th>Tek cümle (oyunda)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tarım</strong></td>
+<td><strong>The Plough</strong></td>
+<td>Bütün hasatlar +%15</td>
+<td>Seed Barn</td>
+<td>"Full bellies never started a war. Probably."</td>
+</tr>
+<tr>
+<td><strong>Savaş</strong></td>
+<td><strong>The Sword</strong></td>
+<td>Barracks %30 ucuz, askerler +%10 güçlü</td>
+<td>Fire Brigade</td>
+<td>"Peace is a six. Strength is a nine. Or the other way."</td>
+</tr>
+<tr>
+<td><strong>Eğitim</strong></td>
+<td><strong>The Book</strong></td>
+<td>Her bina tamamlanınca +3 EP (normalde 2), School %30 ucuz</td>
+<td>Apothecary</td>
+<td>"Learn enough and you'll know which way is up."</td>
+</tr>
+</tbody>
+</table></div>
+<p>İnanç bir yol değil. Shrine her yolda kurulabilir, çünkü inanç bir yönetim tercihi değil bir kriz cevabıdır.</p>
+<h3 id="yol-de-i-tirmek-belli-bir-noktaya-kadar-k">Yol değiştirmek: belli bir noktaya kadar <span class="tag k">Karar</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Muhtarlık seviyesi</th>
+<th>Yol değiştirme bedeli <span class="tag o">Öneri</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>15 six + 10 EP</td>
+</tr>
+<tr>
+<td>2</td>
+<td>30 six + 25 EP</td>
+</tr>
+<tr>
+<td>3 ve üstü</td>
+<td><strong>Kilitli.</strong> Köy artık ne olduysa o</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Yol değişince eski yolun bonusu gider, eski yolun özel binası <strong>durur</strong> (yıkılmaz, ama çalışmaz). Geri dönülürse tekrar çalışır.</li>
+<li>Arayüzde: muhtarlığa tıklayınca "Change path" düğmesi ve bedeli. 3. seviyede düğme kilit ikonuyla gri.</li>
+<li>Bot da maç başında kişiliğine göre bir yol seçer (Farmer: Plough, Warlord: Sword, Zealot: Book).</li>
+</ul>
+<hr />
+<h2 id="7-ekinler">7. Ekinler</h2>
+<h3 id="l-kural-k">Üçlü kural <span class="tag k">Karar</span></h3>
+<p>Her ekin üç özellikten <strong>en fazla ikisinde</strong> iyi olabilir: <strong>hız</strong> (kaç turda büyür), <strong>maliyet</strong> (tohum parası), <strong>getiri</strong> (gıda ya da para). Üçünde birden iyi olan ekinin bedeli <strong>risktir</strong>.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Ekin</th>
+<th>Hız</th>
+<th>Maliyet</th>
+<th>Getiri</th>
+<th>Bedeli</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wheat</strong></td>
+<td>✓ hızlı</td>
+<td>✓ ucuz</td>
+<td>½ besleyici ama para etmez <span class="tag k">Karar</span></td>
+<td>Satınca neredeyse hiç kazandırmaz</td>
+</tr>
+<tr>
+<td><strong>Potato</strong></td>
+<td>✗ yavaş</td>
+<td>✓ ucuz</td>
+<td>✓ en çok gıda</td>
+<td>Sabır ister, kışa stok</td>
+</tr>
+<tr>
+<td><strong>Beet</strong> (pancar)</td>
+<td>✓ hızlı</td>
+<td>✗ pahalı</td>
+<td>✓ çok para</td>
+<td>Başta sermaye ister</td>
+</tr>
+<tr>
+<td><strong>Saffron</strong></td>
+<td>✓ hızlı</td>
+<td>✓ ucuz</td>
+<td>✓ çok para</td>
+<td><strong>Risk:</strong> çürür, sarmaşığa ilk hedef, usta çiftçi ister</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Wheat ile Beet'in farkı:</strong> buğday doyurur, pancar zenginleştirir. Buğday gıda ekinidir (ucuz ve güvenli ama para getirmez). Pancar nakit ekindir (pahalı tohum, az gıda, ama satınca iyi para). Pancarın parası pazardan gıda almaya, bina dikmeye ya da asker beslemeye gider.</p>
+<h3 id="de-erler">Değerler <span class="tag o">Öneri</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Ekin</th>
+<th>Tohum (six)</th>
+<th>Büyüme</th>
+<th>Verim</th>
+<th>Gıda/birim</th>
+<th>Fiyat/birim</th>
+<th>Hepsi yenirse gıda/tur</th>
+<th>Hepsi satılırsa six/tur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wheat</strong></td>
+<td>2</td>
+<td>2 tur</td>
+<td>8</td>
+<td>2.5</td>
+<td>0.75</td>
+<td>10</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>Potato</strong></td>
+<td>2</td>
+<td>4 tur</td>
+<td>16</td>
+<td>3</td>
+<td>1</td>
+<td>12</td>
+<td>3.5</td>
+</tr>
+<tr>
+<td><strong>Beet</strong></td>
+<td>7</td>
+<td>2 tur</td>
+<td>6</td>
+<td>1</td>
+<td>4</td>
+<td>3</td>
+<td>8.5</td>
+</tr>
+<tr>
+<td><strong>Saffron</strong></td>
+<td>3</td>
+<td>2 tur</td>
+<td>4</td>
+<td>0.5</td>
+<td>8</td>
+<td>1</td>
+<td>14.5</td>
+</tr>
+</tbody>
+</table></div>
+<p>Hiçbir ekin bir başkasını her açıdan ezmiyor. Tasarım masası bunu her değişiklikte denetliyor.</p>
+<ul>
+<li>Tarlanın ekini inşa ederken seçilir. Hasattan sonra <strong>aynı ekin kendiliğinden tekrar ekilir</strong> (tohum parası düşer). Ekini değiştirmek için tarlaya tıklayıp "Change crop".</li>
+<li><strong>Para yoksa tohum ambardan ayrılır:</strong> 1 six yerine 2 food. Bot testlerinde bulunan ölüm sarmalını önleyen kural.</li>
+<li><strong>Kışın ekim yapılmaz.</strong> Büyüyen ekin büyümeye devam eder.</li>
+<li><strong>Hasat verimi</strong> = verim × çiftçilerin ortalama verimi × tempo × mevsim × Kara Yıllar.</li>
+<li><strong>Safran:</strong> "usta çiftçi ister". Hasat zamanı geldiğinde tarladaki 2 çiftçinin ortalama <strong>Farming yatkınlığı 3'ün altındaysa</strong> ya da tarlada 2 çiftçi yoksa hasat bekler. 1 turdan fazla beklerse çürür. (İlk taslaktaki "verim %60'ın altında" kuralı hiç tetiklenmiyordu, çünkü en düşük verim %70.)</li>
+</ul>
+<hr />
+<h2 id="8-k-yl-ler">8. Köylüler</h2>
+<h3 id="yatk-nl-klar-k-4-de-er-rastgele">Yatkınlıklar <span class="tag k">Karar</span><span class="tag-note">4 değer, rastgele</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Yatkınlık</th>
+<th>İşler</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Farming</strong></td>
+<td>Çiftçi, Oduncu</td>
+</tr>
+<tr>
+<td><strong>Management</strong></td>
+<td>Konsey üyesi (Elder)</td>
+</tr>
+<tr>
+<td><strong>Military</strong></td>
+<td>Asker</td>
+</tr>
+<tr>
+<td><strong>Education</strong></td>
+<td>Öğretmen, Rahip, Eczacı</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Her biri 1–5, <strong>4'ünün toplamı 10 [Ö]</strong>. "Her şeyi iyi yapan" köylü çıkmaz.</li>
+<li><strong>Verim = 0.55 + 0.15 × yatkınlık [Ö]</strong>: 1 → %70, 3 → %100, 5 → %130.</li>
+</ul>
+<h3 id="karakter-k-her-k-yl-n-n-karakteri-var">Karakter <span class="tag k">Karar</span><span class="tag-note">her köylünün karakteri var</span></h3>
+<p>Her köylüye rastgele 1 karakter <span class="tag o">Öneri</span>:</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Karakter</th>
+<th>Etkisi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hardworking</strong></td>
+<td>Verim +%10</td>
+</tr>
+<tr>
+<td><strong>Lazy</strong></td>
+<td>Verim -%15</td>
+</tr>
+<tr>
+<td><strong>Devout</strong></td>
+<td>Shrine varken kişisel psikoloji +1/tur. Rahipse tarikat +1/tur ek</td>
+</tr>
+<tr>
+<td><strong>Ambitious</strong></td>
+<td>Askerse ordu nüfuzu +1/tur. Konseydeyse yönetim +1</td>
+</tr>
+<tr>
+<td><strong>Loyal</strong></td>
+<td>Tarikat reddinde firar etmez</td>
+</tr>
+<tr>
+<td><strong>Doubter</strong></td>
+<td>"Ya para aslında öbür rakamsa?" Kişisel psikolojisi 30'un altına düşerse rakip köye kaçar</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="i-ler">İşler</h3>
+<p>Çiftçi (tarla başına 2), Oduncu (sınırsız), Öğretmen (okul başına 2), Rahip (shrine başına 1), Eczacı (Apothecary başına 1), İtfaiyeci (Fire Brigade'de 1 asker), Asker (Barracks şart), Konsey (muhtarlık koltukları), Yandaş (Yes-Men's Guild'de 1, Management), Boşta.</p>
+<h3 id="ki-isel-psikoloji">Kişisel psikoloji</h3>
+<ul>
+<li>Her köylünün kendi psikolojisi var (başlangıç 60).</li>
+<li>En yüksek yatkınlığının olduğu işteyse <strong>+1/tur</strong>.</li>
+<li>Yatkınlığı 2 veya altı olan bir işteyken başka bir yatkınlığı 4 veya üstüyse <strong>-2/tur</strong> ("küçük insanlara büyük iş").</li>
+<li>Boşta olan <strong>-1/tur</strong>.</li>
+<li><strong>Köy psikolojisi</strong> = kişisel psikolojilerin ortalaması, <strong>en mutsuz %20 iki kat ağırlıklı [Ö]</strong>.</li>
+<li>Köy geneline gelen etkiler (açlık, tempo, kartlar) herkese aynı uygulanır.</li>
+</ul>
+<h3 id="konsey-ve-let-the-elders-decide">Konsey ve "Let the elders decide"</h3>
+<ul>
+<li>Konsey koltukları muhtarlık seviyesine bağlı (1, 2, 3).</li>
+<li><strong>Konseyin ortalama Management'ı</strong> bütün köyün verimini etkiler: 1 → -%10, 3 → 0, 5 → +%10.</li>
+<li><strong>"Let the elders decide"</strong> atamaları konseye yaptırır:</li>
+<li>Yönetim 4–5: herkesi en uygun işe koyar.</li>
+<li>Yönetim 3: çoğunu doğru, her turda 1–2 hata.</li>
+<li>Yönetim 1–2: neredeyse rastgele.</li>
+<li>Oyuncu her zaman elle de atayabilir (F katmanı). C katmanında atama sadece bu düğme ve iş sayısı panelinden yapılır.</li>
+</ul>
+<h3 id="n-fus">Nüfus</h3>
+<ul>
+<li><strong>Çift = evli çift.</strong> Başlangıçta 10 kişiden <strong>2 çift evli</strong>, 6 kişi bekar <span class="tag o">Öneri</span>. Yeni çiftler sadece düğünle oluşur.</li>
+<li>Doğum: köy psikolojisi 55'in üstündeyse evli çift başına %6/tur, 40–55 arası %2, altında doğum yok. Düğünle yeni evlenen çiftin ilk yıl ihtimali ayrıca %50 (bkz. Düğün).</li>
+<li>C katmanından önce (köylüler sadece sayıyken) bekar sayısı basit bir sayaçtır.</li>
+<li>Çocuğun yatkınlıkları ve karakteri rastgele. <strong>8 turda</strong> yetişkin olur.</li>
+<li>Tüketim (tur başına): <strong>yetişkin 1, asker 1.5, çocuk 0.5</strong> gıda.</li>
+<li>Gıda yarıdan fazla eksikse her tur yetişkinlerin %5'i ölür (en düşük psikolojiliden başlayarak).</li>
+</ul>
+<hr />
+<h2 id="9-metrikler-ve-dengeler">9. Metrikler ve dengeler</h2>
+<h3 id="psikoloji-0-100">Psikoloji (0–100)</h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Etki</th>
+<th>Tur başına</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tempo Light / Normal / Heavy</td>
+<td>+3 / 0 / -4</td>
+</tr>
+<tr>
+<td>Gıda eksiği</td>
+<td>-8 × eksik oranı</td>
+</tr>
+<tr>
+<td>Her Shrine</td>
+<td>+4</td>
+</tr>
+<tr>
+<td>Hane başına para 1'in altında</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>Kışın odun yetmezse</td>
+<td>-3</td>
+</tr>
+<tr>
+<td>Ölen her asker</td>
+<td>-2 (köy geneline)</td>
+</tr>
+<tr>
+<td><strong>Doyduysa, psikoloji 50'nin altındaysa</strong></td>
+<td><strong>+1</strong></td>
+</tr>
+<tr>
+<td><strong>Bol doyduysa (ambarda en az 2 turluk gıda kaldıysa), psikoloji 50'nin altındaysa</strong></td>
+<td><strong>+2</strong></td>
+</tr>
+<tr>
+<td><strong>Düğün</strong> (bkz. aşağısı)</td>
+<td><strong>+8</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Bütün metrikler <strong>0 ile 100</strong> arasındadır <span class="tag k">Karar</span>.</p>
+<p><strong>50 sınırı kime uygulanır:</strong> sadece <strong>yemek</strong> 50'de durur. Düğün, kartlar (Tax Relief, Sermon) ve tempo 50'nin üstüne çıkarabilir. <strong>Shrine</strong> ve <strong>Light tempo</strong> ise en fazla <strong>65</strong>'e kadar çıkarır <span class="tag o">Öneri</span>, yoksa her tur bedava artış veren bu iki yol düğünü gereksiz kılar.</p>
+<h3 id="psikolojinin-iki-yar-s-k">Psikolojinin iki yarısı <span class="tag k">Karar</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Aralık</th>
+<th>Ne yükseltir</th>
+<th>Anlamı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0–50</strong></td>
+<td><strong>Yemek.</strong> Doyan halk her tur toparlanır, ama yemek tek başına 50'yi geçirmez</td>
+<td>Karın doyurmak hayatta tutar</td>
+</tr>
+<tr>
+<td><strong>50–100</strong></td>
+<td><strong>Düğün.</strong> Yemek burada artık işe yaramaz</td>
+<td>Mutluluk ise para ve emek ister</td>
+</tr>
+</tbody>
+</table></div>
+<p>Toparlanma kuralının çıkış sebebi: tasarım masasının simülasyonu, psikolojinin normal tempoda sadece düşebildiğini ve köyün er ya da geç isyanla bittiğini gösterdi.</p>
+<h3 id="d-n-k">Düğün <span class="tag k">Karar</span></h3>
+<p>"<strong>Hold a Wedding</strong>" düğmesi. Tur başına en fazla bir düğün.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th>Değer <span class="tag o">Öneri</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Maliyet</td>
+<td><strong>6 six + 10 food</strong> (para ve yemek, <span class="tag k">Karar</span>)</td>
+</tr>
+<tr>
+<td>Etki</td>
+<td>Köy psikolojisi <strong>+8</strong> (100'ü geçmez). İki bekar yetişkin evlenir, o çiftin ilk yıl içinde çocuk yapma ihtimali %50</td>
+</tr>
+<tr>
+<td>Şart</td>
+<td>Köyde en az iki bekar yetişkin</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Sık düğün verimi düşürür [K].</strong> Son 4 turda yapılan düğün sayısına göre bütün işlerin verimi düşer (halk iş yerine eğlencede):</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Son 4 turdaki düğün</th>
+<th>Verim</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Normal</td>
+</tr>
+<tr>
+<td>2</td>
+<td>-%10</td>
+</tr>
+<tr>
+<td>3</td>
+<td>-%20</td>
+</tr>
+<tr>
+<td>4</td>
+<td>-%30</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tur raporunda: "The village is still celebrating. Work suffers."</p>
+<h3 id="y-ksek-psikolojinin-d-l">Yüksek psikolojinin ödülü <span class="tag o">Öneri</span></h3>
+<p>Düğüne para ve yemek harcamanın karşılığı olmalı:
+- Psikoloji <strong>55'in üstünde:</strong> doğum ihtimali artar (bkz. Nüfus).
+- Psikoloji <strong>75'in üstünde:</strong> bütün işlerde <strong>+%10 verim</strong> ("The village works with a song.").
+- Yüksek psikoloji, düşmanın Gossip kartına ve tarikat reddinin cezasına karşı tampon olur.</p>
+<p>Böylece seçim şöyle olur: düğünle psikolojiyi 75'in üstüne çıkar ve +%10 verim kazan, ama düğünleri sıklaştırırsan o verimi geri kaybedersin.</p>
+<p><strong>Simülasyon (karışık ekinli 4 tarlalı köy, 60 tur):</strong></p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Düğün sıklığı</th>
+<th>Ortalama psikoloji</th>
+<th>60. turda gıda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hiç</td>
+<td>60</td>
+<td>107</td>
+</tr>
+<tr>
+<td><strong>8 turda bir</strong></td>
+<td><strong>85</strong></td>
+<td><strong>69</strong></td>
+</tr>
+<tr>
+<td>4 turda bir</td>
+<td>92</td>
+<td>0 (sınırda)</td>
+</tr>
+<tr>
+<td>Her tur</td>
+<td>90, ama sonda 68'e düşüyor</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>En iyi denge <strong>yılda iki düğün civarı.</strong> Daha sıkı yapan köy ambarını boşaltıyor ve verim cezası yüzünden psikoloji yine düşmeye başlıyor.</p>
+<ul>
+<li><strong>İsyan:</strong> köy psikolojisi <strong>3 tur üst üste 25'in altında</strong> kalırsa. Sayaç ekranda görünür ("Unrest 2/3").</li>
+</ul>
+<h3 id="tempo">Tempo <span class="tag o">Öneri</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Tempo</th>
+<th>Üretim</th>
+<th>Psikoloji</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Light</td>
+<td>-%20</td>
+<td>+3/tur</td>
+</tr>
+<tr>
+<td>Normal</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Heavy</td>
+<td>+%30</td>
+<td>-4/tur</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ordu-n-fuzu-0-100">Ordu nüfuzu (0–100)</h3>
+<ul>
+<li>Her tur: <strong>+ (asker / yetişkin) × 12 − 3</strong>.</li>
+<li>Maaş ödenemezse <strong>+5</strong>.</li>
+<li><strong>Martial law (sıkıyönetim):</strong> açıkken psikoloji düşmez, ordu nüfuzu <strong>+8/tur</strong>.</li>
+<li><strong>75'te uyarı, 100'de darbe.</strong></li>
+</ul>
+<h3 id="tarikat-n-fuzu-0-100">Tarikat nüfuzu (0–100)</h3>
+<ul>
+<li>Her Shrine <strong>+3/tur</strong> (Devout rahip +1 ek).</li>
+<li><strong>30, 50, 70'te talep</strong> gelir (bkz. 12. bölüm).</li>
+<li><strong>100'de tarikat köyü ele geçirir.</strong></li>
+</ul>
+<h3 id="g">Üç güç</h3>
+<p>Psikolojiyi korumanın her yolu başka bir tehlikeyi besler: sıkıyönetim orduyu, Shrine tarikatı büyütür. <strong>Sermon</strong> kartı orduyu tarikat pahasına yumuşatır.</p>
+<hr />
+<h2 id="10-askerlik-ve-sava">10. Askerlik ve savaş</h2>
+<ul>
+<li><strong>Asker almak:</strong> Barracks şart. Tur başına en fazla 2. Asker başına <strong>3 six</strong>. Köylü işinden çıkar ve asker olur.</li>
+<li><strong>Maaş:</strong> asker başına <strong>1 six/tur</strong>. Gıda 1.5/tur.</li>
+<li><strong>Eğitim süresi [Ö]:</strong> alınan asker <strong>1 tur</strong> eğitilir. Alındığı tur ne saldırır ne savunur.</li>
+<li><strong>Saldırı:</strong> "Attack" sayısı seçilir. Giden askerler o tur savunmaya katılmaz.</li>
+<li><strong>Dinlenme [Ö]:</strong> saldıran askerler bir sonraki tur yorgundur ve normalde tekrar saldıramaz.</li>
+</ul>
+<h3 id="s-n-rlar-zorlamak-k-sava-ta-askerler-s-n-rlar-n-zorlayabilsin">Sınırları zorlamak <span class="tag k">Karar</span><span class="tag-note">savaşta askerler sınırlarını zorlayabilsin</span></h3>
+<p>Savaş anında kurallar esneyebilir, ama her esnetmenin bir bedeli var:</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Hamle</th>
+<th>Ne yapar</th>
+<th>Bedeli <span class="tag o">Öneri</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Forced March</strong></td>
+<td>Yorgun askerler dinlenmeden tekrar saldırır</td>
+<td>Saldırı gücü <strong>-%25</strong>, ordu nüfuzu <strong>+5</strong>, köy psikolojisi <strong>-3</strong></td>
+</tr>
+<tr>
+<td><strong>Raw Recruits</strong></td>
+<td>Bu tur alınan askerler eğitimsiz savaşır (saldırı ya da savunma)</td>
+<td>Güçleri <strong>%50</strong>, kayıp oranları iki katı</td>
+</tr>
+<tr>
+<td><strong>Levy</strong> (seferberlik çağrısı)</td>
+<td>Saldırı altındayken çiftçi ve oduncular da savunmaya katılır</td>
+<td>Her biri %40 güçle savaşır, <strong>o tur üretim yapmazlar</strong>, ölen her köylü psikoloji -2</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Üçü de arayüzde sadece mümkün oldukları anda çıkar (Forced March saldırıdan sonraki tur, Levy sadece rakip saldırısı görüldüğünde ya da casusla öğrenildiğinde).</li>
+<li>Bu hamleler ordu nüfuzunu ve psikolojiyi yer, yani "kazanmak için her şeyi göze almak" darbe ve isyan riskini büyütür. İki yönlü ölüm kuralı savaşta da geçerli.</li>
+<li><strong>Levy</strong> için teknik not: rakibin saldırısı tur çözülmeden görünmediği için Levy, oyuncu "savunmaya hazırlan" emri verdiğinde tetiklenir ve saldırı gelmezse o tur üretim boşa gider. Kumar budur.</li>
+</ul>
+<p><strong>Formüller [Ö]:</strong>
+- Asker gücü = Military verimi × (1 + 0.1 × Barracks sayısı)
+- <strong>Saldırı</strong> = gidenlerin gücü toplamı × (0.5 + psikoloji / 100)
+- <strong>Savunma</strong> = kalanların gücü toplamı × 1.2 + sur (muhtarlık seviyesine göre 5–20)
+- Saldırı savunmayı geçerse <strong>muhtarlık hasarı = (saldırı − savunma) × 4</strong>
+- Kayıplar: saldıran, gidenlerin en fazla %60'ını, savunma oranına göre kaybeder. Savunan, kalanların en fazla %60'ını, saldırı oranına göre kaybeder.
+- İki taraf aynı tur saldırırsa iki savaş aynı anda çözülür.
+- <strong>Muhtarlık canı 0 → muhtar ölür [K].</strong> Muhtarın tek ölüm yolu bu (jam).</p>
+<hr />
+<h2 id="11-kartlar">11. Kartlar</h2>
+<ul>
+<li><strong>8 kart.</strong> Short match'te ilk seçim <strong>3. turda</strong>, sonra <strong>2 turda bir</strong> (3, 5, 7...). Long match'te 4. turda, sonra 3 turda bir. Her seçimde 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.</li>
+<li><strong>Her kartın bir karşı hamlesi var.</strong> Böylece kartlar şans değil, hazırlık meselesi olur.</li>
+</ul>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Kart</th>
+<th>Tür</th>
+<th>Bedel</th>
+<th>Etkisi</th>
+<th>Karşı hamle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Vine</strong></td>
+<td>Sabotaj</td>
+<td>Yok</td>
+<td>Rakibin en değerli ekili tarlasını sarar, bir sonraki hasadı yok olur</td>
+<td><strong>Remedy</strong> (ilaç) <span class="tag k">Karar</span>, bkz. aşağısı</td>
+</tr>
+<tr>
+<td><strong>Gossip</strong></td>
+<td>Karanlık</td>
+<td>Yok</td>
+<td>Rakibin köy psikolojisi -10</td>
+<td><strong>Yes-Men's Guild</strong> (yancılar birliği) <span class="tag k">Karar</span>: dedikoduyu tamamen durdurur ve geri teper. Guild yoksa: psikoloji 75'in üstündeyse etkisi yarıya iner</td>
+</tr>
+<tr>
+<td><strong>Spy</strong> (casus)</td>
+<td>Yönetim</td>
+<td>5 six</td>
+<td>2 tur boyunca rakibin kesin metriklerini, stoklarını ve <strong>bu turki gizli emrini</strong> (saldırı sayısı, oynayacağı kart) gösterir</td>
+<td><strong>Guard Dog</strong> (köpek) <span class="tag k">Karar</span>: casusu yakalar, bkz. aşağısı</td>
+</tr>
+<tr>
+<td><strong>Granary Fire</strong></td>
+<td>Sabotaj</td>
+<td>Yok</td>
+<td>Rakibin gıdasının dörtte biri yanar</td>
+<td><strong>Fire Brigade</strong> (sadece Sword yolu) <span class="tag k">Karar</span>: kayıp %5'e iner. Diğer yollar için: gıdayı fazla biriktirmemek, satmak</td>
+</tr>
+<tr>
+<td><strong>Tax Relief</strong></td>
+<td>Yönetim</td>
+<td>8 six</td>
+<td>Kendi psikolojin +10</td>
+<td>Yok (kendine oynanır)</td>
+</tr>
+<tr>
+<td><strong>Mobilize</strong></td>
+<td>Yönetim</td>
+<td>Yok</td>
+<td>Bu tur 3 ek savaşçı (saldırı ya da savunma), ordu nüfuzu +5</td>
+<td>Rakip saldırıyı görünce bu tur saldırmamak. Sur seviyesi</td>
+</tr>
+<tr>
+<td><strong>Sermon</strong></td>
+<td>Karanlık</td>
+<td>Yok</td>
+<td>Psikoloji +6, ordu nüfuzu -10, tarikat +8</td>
+<td>Yok (kendine oynanır, bedeli tarikat)</td>
+</tr>
+<tr>
+<td><strong>Upside Down</strong></td>
+<td>Karanlık</td>
+<td>4 six</td>
+<td>Rakibin parasını ters çevirir: <strong>bir sonraki tur</strong> rakibin satışları yarı fiyatına gider. Rakibe tur raporunda duyurulur: "Your coin looks... upside down." <span class="tag o">Öneri</span><span class="tag-note">hikayeden</span></td>
+<td>O tur satış oranını 0 yapmak (etki bir sonraki tura kaydırıldı, çünkü kartlar aynı tur çözülünce karşı hamle imkansızdı)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="remedy-ila-k">Remedy (ilaç) <span class="tag k">Karar</span></h3>
+<p>Sarmaşığın karşılığı. Bir eşya, ambarda sayılır (depo sınırı yok).</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Nereden</th>
+<th>Nasıl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pazardan satın al</strong></td>
+<td><strong>8 six</strong> bir tane. Her yol satın alabilir <span class="tag k">Karar</span></td>
+</tr>
+<tr>
+<td><strong>Apothecary</strong> (sadece Book yolu)</td>
+<td>1 eczacıyla 2 turda bir 1 Remedy × verim <span class="tag k">Karar</span><span class="tag-note">eğitim kolunda</span></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Sarmaşık sarılan tarla haritada yeşil sarmaşıkla görünür ve tur raporunda yazar: "Nine's vine is choking your Saffron."</li>
+<li>Oyuncu tarlaya tıklar, <strong>"Cure (1 Remedy)"</strong> der. Sarmaşık hasattan önce temizlenirse hasat kurtulur.</li>
+<li>Remedy yoksa hasat kaybolur.</li>
+<li>Böylece Book yolu sabotaja karşı ucuz bir kalkan kazanır, Sword yolu yangına karşı, Plough yolu ise kaybı kaldırabilecek kadar çok üretir. Her yolun kendi savunma dili var.</li>
+</ul>
+<p><strong>Teknik not (Spy için):</strong> bot emirlerini turun <strong>başında</strong> belirlemeli, End Turn'de değil. Yoksa casus gösterecek bir "gizli emir" bulamaz.</p>
+<h3 id="guard-dog-k-pek-k-casusa-kar">Guard Dog (köpek) <span class="tag k">Karar</span><span class="tag-note">casusa karşı</span></h3>
+<p>Pazardan satın alınır, her yol alabilir. Maliyetler <span class="tag o">Öneri</span>:</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th>Değer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fiyat</td>
+<td><strong>6 six</strong></td>
+</tr>
+<tr>
+<td>Bakım</td>
+<td><strong>0.5 food/tur</strong> (köpek de yer)</td>
+</tr>
+<tr>
+<td>En fazla</td>
+<td>2 köpek</td>
+</tr>
+<tr>
+<td>Etkisi</td>
+<td>Rakip Spy oynarsa: 1 köpekle <strong>%70</strong>, 2 köpekle <strong>%90</strong> ihtimalle casus yakalanır</td>
+</tr>
+<tr>
+<td>Casus yakalanırsa</td>
+<td>Kart boşa gider, rakip hiçbir şey öğrenmez. Üstüne, yakalanan casus konuşur: <strong>sen 1 tur boyunca rakibin kesin metriklerini görürsün</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Tur raporunda: "The dog caught Nine's spy. He talked." Haritada muhtarlığın önünde küçük bir köpek sprite'ı yatar.</p>
+<h3 id="yes-men-s-guild-yanc-lar-birli-i-k-dedikoduya-kar">Yes-Men's Guild (yancılar birliği) <span class="tag k">Karar</span><span class="tag-note">dedikoduya karşı</span></h3>
+<p>Muhtarın yandaşları. Köyde "her şey yolunda" söylentisini yayarlar. Bir bina, bir slot kaplar, her yol kurabilir. Maliyetler <span class="tag o">Öneri</span>:</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th>Değer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Maliyet</td>
+<td><strong>10 six + 10 wood</strong>, 1 tur</td>
+</tr>
+<tr>
+<td>İşçi</td>
+<td>1 kişi (Management yatkınlığı)</td>
+</tr>
+<tr>
+<td>Bakım</td>
+<td><strong>1 six/tur</strong> (yandaşlar ücretsiz yaranmaz)</td>
+</tr>
+<tr>
+<td>Etkisi</td>
+<td>Rakibin Gossip kartı <strong>hiç işlemez</strong> ve <strong>geri teper</strong>: rakibin kendi psikolojisi -3</td>
+</tr>
+<tr>
+<td>Bakım ödenemezse</td>
+<td>Guild o tur çalışmaz</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tur raporunda: "Your Yes-Men drowned out Nine's gossip. Everyone agrees with you. Loudly."</p>
+<p>Seçim: bir slotu ve her tur parayı, belki hiç gelmeyecek bir dedikoduya mı harcarsın? Bot Gossip seven bir Zealot'sa evet.</p>
+<hr />
+<h2 id="12-tarikat-talepleri">12. Tarikat talepleri</h2>
+<p>Tarikat nüfuzu eşiğe ulaştığında bir sonraki turun başında açılır pencere çıkar. <strong>"Accept"</strong> ya da <strong>"Refuse"</strong>.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Eşik</th>
+<th>Talep (oyun metni)</th>
+<th>Accept</th>
+<th>Refuse <span class="tag k">Karar</span><span class="tag-note">huzursuzluk, ordu düzeni bozulur, isyan</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30</td>
+<td>"The Hooded Ones ask for a fifth of the harvest. For the coin, they say."</td>
+<td>Gıdanın %20'si gider, tarikat +10</td>
+<td>Psikoloji -5</td>
+</tr>
+<tr>
+<td>50</td>
+<td>"They want a seat on the council."</td>
+<td>Bir konsey koltuğu tarikata geçer (verim çarpanı ondan hesaplanır, yönetimi 1), tarikat +10</td>
+<td>Psikoloji -10, askerlerin %10'u firar eder (Loyal olanlar hariç)</td>
+</tr>
+<tr>
+<td>70</td>
+<td>"One of yours has doubted the coin. They want him gone."</td>
+<td>Bir köylü sürgün edilir (Doubter varsa o), tarikat +10</td>
+<td>Psikoloji -15, askerlerin %20'si firar eder, isyan sayacı +1</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="13-mevsimler-ve-kara-y-llar">13. Mevsimler ve Kara Yıllar</h2>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Mevsim</th>
+<th>Etki</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spring</td>
+<td>Ekim yapılabilir, orman +4</td>
+</tr>
+<tr>
+<td>Summer</td>
+<td>Büyüme ×1.25, orman +4</td>
+</tr>
+<tr>
+<td>Autumn</td>
+<td>Hasat +%25</td>
+</tr>
+<tr>
+<td>Winter</td>
+<td>Ekim yok, gıda tüketimi +%25, ısınma odunu</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Kara Yıllar [K: tur sınırı yok, biri düşene kadar]:</strong> Short match'te 9. turdan itibaren yıllık %15 (bkz. 2c). Long match'te 29. turdan (8. yılın başı) itibaren her yıl birikimli olarak hasat <strong>-%5</strong>, tüketim <strong>+%5</strong> (ilk taslakta %10'du, simülasyonda fazla sert çıktı). Ekranda "The Lean Years" yazısı çıkar. Maçın sonsuza uzamasını engeller.</p>
+<h3 id="olaylar-k-3-olay-bir-tur-nceden-duyurulur">Olaylar <span class="tag k">Karar</span><span class="tag-note">3 olay, bir tur önceden duyurulur</span></h3>
+<p>Satranç hissini bozmamak için olaylar sürpriz değildir: <strong>bir tur önceden</strong> tur raporunda ve ekranın üstünde duyurulur, oyuncu hazırlanır. Olay <strong>iki köyü birden</strong> etkiler (aynı dünya), ama hazırlıklı olan daha az zarar görür.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th></th>
+<th>Short match</th>
+<th>Long match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>İlk olay</td>
+<td>5. tur (4. turda duyurulur)</td>
+<td>7. tur</td>
+</tr>
+<tr>
+<td>Sıklık</td>
+<td>4 turda bir (5, 9, 13, 17...)</td>
+<td>6 turda bir</td>
+</tr>
+<tr>
+<td>Hangisi</td>
+<td>Rastgele, aynı olay üst üste gelmez</td>
+<td>Aynı</td>
+</tr>
+</tbody>
+</table></div>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Olay</th>
+<th>Duyuru (oyunda)</th>
+<th>Etkisi <span class="tag o">Öneri</span></th>
+<th>Hazırlık / karşı hamle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Drought</strong> (kuraklık)</td>
+<td>"The wells are low. Next season will be dry."</td>
+<td>O tur bütün hasatlar <strong>-%30</strong>, orman yenilenmez</td>
+<td><strong>Potato etkilenmez</strong> (kökler derinde). Gıda almak, satışı azaltmak</td>
+</tr>
+<tr>
+<td><strong>Plague</strong> (salgın)</td>
+<td>"A cough travels the road from Nine." (Nine'da: "...from Six.")</td>
+<td>Her yetişkin %15 ihtimalle hastalanır: <strong>2 tur çalışmaz</strong>. Gıda eksikse hasta ölür</td>
+<td><strong>Remedy</strong> bir hastayı anında iyileştirir. Apothecary'si olan Book yolu avantajlı</td>
+</tr>
+<tr>
+<td><strong>Wandering Merchant</strong> (gezgin tüccar)</td>
+<td>"A merchant's cart is on the road. He haggles badly."</td>
+<td>O tur satış fiyatları <strong>+%50</strong>, gıda alış fiyatı <strong>1 six</strong>, Remedy <strong>5 six</strong>, köpek <strong>4 six</strong></td>
+<td>Satılacak stok biriktirmek. Nakit ekin eken köy kazanır</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Hasta köylüler haritada gri ve oturur halde görünür.</li>
+<li>Bot da duyuruyu görür: kuraklıkta satışı keser, salgında Remedy alır, tüccarda satışı %80'e çıkarır.</li>
+<li>Katman: <strong>E</strong> (cila). Zaman kalmazsa ilk kesilecek şeylerden biri.</li>
+</ul>
+<h3 id="sim-lasyonun-g-sterdi-i-denge">Simülasyonun gösterdiği denge <span class="tag o">Öneri</span></h3>
+<p>Tek köy, rakipsiz, 60 tur (tasarım masası):</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Köy</th>
+<th>Sonuç</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Karışık: Wheat, Potato, Potato, Beet, %30 satış</strong></td>
+<td><strong>60 tur ayakta</strong>, 107 gıda, psikoloji 60, ordu nüfuzu 15</td>
+</tr>
+<tr>
+<td>Sadece gıda ekinleri (Wheat ve Potato)</td>
+<td>Doyuyor ama parasız kalıyor. Asker maaşı ödenemiyor, <strong>50. turda darbe</strong></td>
+</tr>
+<tr>
+<td>Sadece Saffron ya da sadece Beet</td>
+<td>10–11. turda açlık. Nakit ekin tek başına köy doyurmaz</td>
+</tr>
+<tr>
+<td>Fazla satış (%50)</td>
+<td>56. turda isyan</td>
+</tr>
+<tr>
+<td>Heavy tempo sürekli</td>
+<td>13. turda isyan. Heavy bir kriz aracı, kalıcı politika değil</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Sonuç:</strong> üçlü kural oyuncuyu ekinleri karıştırmaya zorluyor. Gıda ekinleri karnı, nakit ekinler orduyu ve binaları doyuruyor. Tek bir ekine yaslanan köy ya açlıktan ya darbeden düşüyor. Bu "iki yönlü ölüm" fikrinin tarladaki karşılığı.</p>
+<hr />
+<h2 id="14-biti-ler">14. Bitişler</h2>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Bitiş</th>
+<th>Tetikleyici</th>
+<th>Ekran başlığı</th>
+<th>Muhtar animasyonu <span class="tag k">Karar</span><span class="tag-note">muhtar sadece bu anlarda görünür</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Muhtar öldü</td>
+<td>Muhtarlık canı 0</td>
+<td>"The Headman Fell"</td>
+<td>Kapıdan son kez çıkar ve düşer</td>
+</tr>
+<tr>
+<td>Açlık</td>
+<td>2 tur üst üste gıda tamamen yetmezse</td>
+<td>"The Empty Granary"</td>
+<td>Boş ambarın önünde tek başına oturur</td>
+</tr>
+<tr>
+<td>İsyan</td>
+<td>Psikoloji 3 tur 25'in altında</td>
+<td>"The People Rose"</td>
+<td>Kalabalık onu muhtarlıktan sürükleyerek çıkarır</td>
+</tr>
+<tr>
+<td>Darbe</td>
+<td>Ordu nüfuzu 100</td>
+<td>"The General's Hat"</td>
+<td>General muhtarın şapkasını alıp kendi takar</td>
+</tr>
+<tr>
+<td>Tarikat</td>
+<td>Tarikat nüfuzu 100</td>
+<td>"The Hooded Ones"</td>
+<td>Cübbeli figürler onu içeri alır, kapı kapanır</td>
+</tr>
+</tbody>
+</table></div>
+<p>Rakip düşerse kazanırsın. İkisi aynı tur düşerse berabere: "Both brothers lost. The coin stayed where it was."</p>
+<p><strong>Kardeşin son sözü [Ö]</strong> (kaybeden köyün muhtarı söyler):</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Bitiş</th>
+<th>Six kaybederse</th>
+<th>Nine kaybederse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The Headman Fell</td>
+<td>"It was a six. Write that on the stone."</td>
+<td>"Nine. It was always nine."</td>
+</tr>
+<tr>
+<td>The Empty Granary</td>
+<td>"We could have sold the coin."</td>
+<td>"Nobody eats a number."</td>
+</tr>
+<tr>
+<td>The People Rose</td>
+<td>"They never cared what it said."</td>
+<td>"Fine. Call it a seven."</td>
+</tr>
+<tr>
+<td>The General's Hat</td>
+<td>"At least the general agrees it's a six."</td>
+<td>"The general says nine. I hate that he's right."</td>
+</tr>
+<tr>
+<td>The Hooded Ones</td>
+<td>"They say it's neither. That's worse."</td>
+<td>"They worship the coin now. Both sides of it."</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Kazanma ekranı:</strong> "History will remember it as a six."</p>
+<hr />
+<h2 id="15-director-s-cut-ekran-k">15. Director's Cut ekranı <span class="tag k">Karar</span></h2>
+<p>Maç sonunda, bitiş animasyonundan sonra gelir. Temayla bağı burada kurulur: muhtar köyün yönetmeniydi, bu onun filmi.</p>
+<ul>
+<li>Başlık: <strong>"Director's Cut: The Tale of Six"</strong></li>
+<li><strong>3 sahne</strong> (yıl ve mevsimiyle), maçın en belirleyici anları. Seçim kuralı <span class="tag o">Öneri</span>:
+  1. Psikolojinin en çok düştüğü tur
+  2. En çok asker ya da köylünün kaybedildiği tur
+  3. Bitişi tetikleyen tur</li>
+<li>Her sahne kısa bir cümle. Örnek: "Year 3, Spring. The general asked for more men. You gave them."</li>
+<li>En altta bitişin başlığı ve kardeşin sözü. "Play again" düğmesi.</li>
+</ul>
+<p>Bunun için tur çözümlemesi her turda olayları (event) kaydetmeli: hasat, kayıp, metrik değişimi, kart, talep.</p>
+<hr />
+<h2 id="16-bot">16. Bot</h2>
+<p>Bot da aynı kurallarla oynar, sadece görünür bilgiyi kullanır (oyuncunun binaları ve askerleri). Maç başında 3 kişilikten biri rastgele seçilir <span class="tag o">Öneri</span>:</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Kişilik</th>
+<th>İnşa sırası</th>
+<th>Davranış</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Farmer</strong></td>
+<td>Field, Field, Granary, School, Field (Saffron), Hall 2</td>
+<td>Az asker (%15), Vine ve Tax Relief sever</td>
+</tr>
+<tr>
+<td><strong>Warlord</strong></td>
+<td>Field, Field, School, Barracks, Hall 2</td>
+<td>Asker %30, rakipten 1.5 kat fazla askeri olunca saldırır, Mobilize sever</td>
+</tr>
+<tr>
+<td><strong>Zealot</strong></td>
+<td>Field, Field, School, Shrine, Hall 2</td>
+<td>Tarikat taleplerini kabul eder, Sermon ve Gossip sever</td>
+</tr>
+</tbody>
+</table></div>
+<p>Yol seçimi: Farmer → Plough, Warlord → Sword, Zealot → Book. Short match'te ilk 4 tur, Long match'te ilk 6 tur saldırmaz ve sabotaj oynamaz. Short match'te 8. turdan sonra askeri oyuncununkinden 2 fazlaysa saldırır (bkz. 2c).</p>
+<p>Ortak kurallar:
+- Tarlası sarılırsa ve Remedy'si varsa kullanır. Yoksa ve parası 20'nin üstündeyse satın alır.
+- Oyuncu 2 kez Spy oynadıysa bir köpek alır. Oyuncu 2 kez Gossip oynadıysa ve boş slotu varsa Yes-Men's Guild kurar.
+- Spy kartını oyuncuya saldırmadan bir tur önce oynar (Warlord).
+- Atamaları her tur "en uygun işe koy" mantığıyla yapar (iyi konsey gibi).
+- Gıda stoku 3 turluk tüketimin altına düşerse yeni tarla önceliklidir.
+- Odun 15'in altındaysa en az 3 oduncu tutar.
+- Her zaman tohum için 6 six yedek bırakır.
+- Psikoloji 40'ın altında: tempo Light. 30'un altında ve ordu nüfuzu 55'in altında: sıkıyönetim.</p>
+<p><strong>Not:</strong> <code>core/</code> klasöründeki C++ çekirdek bu GDD'den önce yazıldı. Odun, köylüler ve yeni maliyetler orada yok. Formüller ve bot mantığı için referans olarak okunabilir, ama sayılar bu dokümana göre güncellenmeli.</p>
+<hr />
+<h2 id="17-aray-z-metinleri-i-ngilizce">17. Arayüz metinleri (İngilizce)</h2>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Yer</th>
+<th>Metin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ana menü</td>
+<td>"Village Headman" · "Short match" · "Long match" · "Skip tutorial" · "Quit"</td>
+</tr>
+<tr>
+<td>Tur düğmesi</td>
+<td>"End Turn"</td>
+</tr>
+<tr>
+<td>İnşa menüsü</td>
+<td>"Build" · "Field" · "Granary" · "School" · "Barracks" · "Shrine" · "Upgrade Hall"</td>
+</tr>
+<tr>
+<td>Tarla</td>
+<td>"Choose crop" · "Wheat" · "Potato" · "Beet" · "Saffron" · "Change crop" · "Demolish"</td>
+</tr>
+<tr>
+<td>Köylüler</td>
+<td>"Let the elders decide" · "Farmers" · "Woodcutters" · "Teachers" · "Priests" · "Soldiers" · "Elders" · "Idle"</td>
+</tr>
+<tr>
+<td>Politika</td>
+<td>"Tempo" · "Light" · "Normal" · "Heavy" · "Sell" · "Sell wood" · "Buy food" · "Martial law"</td>
+</tr>
+<tr>
+<td>Düğün</td>
+<td>"Hold a Wedding" · "The village is still celebrating. Work suffers." · "The village works with a song."</td>
+</tr>
+<tr>
+<td>Ordu</td>
+<td>"Recruit" · "Attack"</td>
+</tr>
+<tr>
+<td>Yol</td>
+<td>"How will Six be ruled?" · "The Plough" · "The Sword" · "The Book" · "Change path"</td>
+</tr>
+<tr>
+<td>Savunma</td>
+<td>"Buy Remedy" · "Cure (1 Remedy)" · "Buy Guard Dog" · "Yes-Men's Guild" · "Nine's vine is choking your Saffron." · "Your coin looks... upside down." · "The dog caught Nine's spy. He talked." · "Your Yes-Men drowned out Nine's gossip. Everyone agrees with you. Loudly."</td>
+</tr>
+<tr>
+<td>Özel binalar</td>
+<td>"Seed Barn" · "Fire Brigade" · "Apothecary"</td>
+</tr>
+<tr>
+<td>Vergi</td>
+<td>"Collect taxes" · "They will not pay quietly."</td>
+</tr>
+<tr>
+<td>Savaş</td>
+<td>"Forced March" · "Raw Recruits" · "Levy" · "Prepare to defend"</td>
+</tr>
+<tr>
+<td>Olaylar</td>
+<td>"Drought" · "Plague" · "Wandering Merchant" · "The wells are low. Next season will be dry." · "A cough travels the road from Nine." · "A merchant's cart is on the road. He haggles badly."</td>
+</tr>
+<tr>
+<td>Uyarılar</td>
+<td>"Unrest 2/3" · "The army grows restless." · "The Lean Years have begun." · "The granary overflowed."</td>
+</tr>
+<tr>
+<td>Rakip</td>
+<td>"High" · "Medium" · "Low"</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="18-sanat-2d-pixel-art-k">18. Sanat (2D pixel art) <span class="tag k">Karar</span></h2>
+<p>Referans: 9 Kings, <strong>sadece ilham</strong> (okunaklı küçük krallık, net siluetler). Görünüşü kopyalanmayacak, jam kuralları başkasının IP'sini yasaklıyor.</p>
+<h3 id="sprite-listesi">Sprite listesi <span class="tag o">Öneri</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Sprite</th>
+<th>Boyut (px)</th>
+<th>Not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zemin karosu (çimen, toprak)</td>
+<td>64×32</td>
+<td>İzometrik elmas</td>
+</tr>
+<tr>
+<td>Muhtarlık (4 seviye)</td>
+<td>96×96</td>
+<td>Six ve Nine için iki renk varyantı</td>
+</tr>
+<tr>
+<td>Field (boş, ekili, olgun × 4 ekin)</td>
+<td>64×48</td>
+<td>Wheat, Potato, Beet, Saffron. Sarmaşıklı hali de</td>
+</tr>
+<tr>
+<td>Granary, School, Barracks, Shrine</td>
+<td>64×64</td>
+<td>İnşaat iskelesi ortak</td>
+</tr>
+<tr>
+<td>Seed Barn, Fire Brigade, Apothecary</td>
+<td>64×64</td>
+<td>Yola özel binalar</td>
+</tr>
+<tr>
+<td>Remedy şişesi, sarmaşık örtüsü (tarlanın üstüne)</td>
+<td>16×16 / 64×48</td>
+<td></td>
+</tr>
+<tr>
+<td>Guard Dog (yatan ve havlayan, 2 kare)</td>
+<td>16×16</td>
+<td>Muhtarlığın önünde</td>
+</tr>
+<tr>
+<td>Yes-Men's Guild binası</td>
+<td>64×64</td>
+<td>Bayraklı, alkışlayan iki figürle</td>
+</tr>
+<tr>
+<td>Casus (pelerinli, gece)</td>
+<td>16×24</td>
+<td>Yakalanma anı için</td>
+</tr>
+<tr>
+<td>Yol seçimi kartları (Plough, Sword, Book)</td>
+<td>96×128</td>
+<td>Açılış penceresi</td>
+</tr>
+<tr>
+<td>Ağaç kümesi ve kütük</td>
+<td>32×48</td>
+<td></td>
+</tr>
+<tr>
+<td>Para (ortadaki taşın üstünde)</td>
+<td>32×32</td>
+<td>Büyük ve parlak, sahnenin odağı</td>
+</tr>
+<tr>
+<td>Köylü (yürüme 2 kare)</td>
+<td>16×24</td>
+<td>İş rengine göre şapka</td>
+</tr>
+<tr>
+<td>Asker</td>
+<td>16×24</td>
+<td></td>
+</tr>
+<tr>
+<td>Cübbeli tarikat üyesi</td>
+<td>16×24</td>
+<td></td>
+</tr>
+<tr>
+<td>Muhtar (animasyonlar için)</td>
+<td>24×32</td>
+<td>Sadece bitişlerde</td>
+</tr>
+<tr>
+<td>Düğün (fenerler ve uzun masa, muhtarlık önünde)</td>
+<td>64×32</td>
+<td>Düğün turunda görünür</td>
+</tr>
+<tr>
+<td>Kuru tarla örtüsü, hasta köylü (oturan, gri), tüccar arabası</td>
+<td>64×48 / 16×24 / 48×32</td>
+<td>Olaylar için</td>
+</tr>
+<tr>
+<td>Arayüz ikonları (kaynaklar, metrikler, kartlar)</td>
+<td>16×16</td>
+<td></td>
+</tr>
+<tr>
+<td>Kart çerçevesi</td>
+<td>64×96</td>
+<td>3 tür rengi</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Renk:</strong> soğuk, kasvetli bir zemin. Six için solgun kırmızı, Nine için solgun mavi bayrak rengi. Para altın sarısı ve sahnedeki en parlak şey.</p>
+<h3 id="sprite-kayna-iki-yol">Sprite kaynağı: iki yol <span class="tag o">Öneri</span></h3>
+<p>fal kredisi yok. Elde kalan iki yol:</p>
+<p><strong>Yol 1: Tripo ile 3D model, Unreal'da pixel art'a çevirme (önerilen)</strong>
+- Jam partneri Tripo'nun 3.000 kredisi var (kod 16 Kasım'a kadar kullanılmalı). Bir model kabaca birkaç düzine kredi, yani bütün binalar ve karakterler rahat sığar.
+- Tripo'dan muhtarlık, binalar, tarla, ağaç, köylü modelleri alınır (düşük poligon, "stylized" istenir).
+- Unreal'da <strong>ortografik izometrik kamera</strong> düşük çözünürlüklü bir <strong>Render Target</strong>'a çizer (örneğin 480×270), bu görüntü ekrana <strong>en yakın komşu (Nearest)</strong> ile büyütülür. Sonuç gerçek pixel art gibi görünür, ayrıca ışık, gölge ve mevsim değişimi bedavaya gelir.
+- Renk sayısını sınırlayan basit bir post-process (palet) materyali görünümü daha da toparlar.
+- Artısı: tutarlı stil, dönen kamera gerekmez, Tripo bir jam sponsoru ("Tools you used"). Eksisi: Render Target kurulumu yapımcı için 30–45 dakika iş.</p>
+<p><strong>Yol 2: Claude'un elle ürettiği pixel sprite'lar</strong>
+- Basit ve palet kilitli PNG sprite'lar kodla çizilir: zemin karoları, 4 ekinin tarla halleri, ağaç ve kütük, ikonlar, kart çerçeveleri, para. Bunlar hızlı ve piksel ızgarasına tam oturur.
+- Binalar ve köylüler de yapılabilir ama sade kalır.
+- Artısı: ücretsiz, anında, tutarlı. Eksisi: sanat kalitesi "temiz ama basit".</p>
+<p><strong>Karma öneri:</strong> zemin, tarla, ağaç, ikon ve arayüz Yol 2 ile (hemen), binalar ve karakterler Yol 1 ile (Tripo). Yapımcı A katmanına Yol 2 sprite'larıyla hemen başlayabilir.</p>
+<h3 id="unreal-da-pixel-art-ayarlar">Unreal'da pixel art ayarları</h3>
+<ul>
+<li>Dokular: <strong>Texture Group "2D Pixels (unfiltered)"</strong>, filtre <strong>Nearest</strong>, <strong>mip map yok</strong>, sıkıştırma <strong>UserInterface2D</strong>.</li>
+<li>Kamera ortografik, ölçek tam sayı katlarında.</li>
+</ul>
+<hr />
+<h2 id="19-ses-kullan-c-haz-rlayacak-k">19. Ses (kullanıcı hazırlayacak <span class="tag k">Karar</span>)</h2>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Ses</th>
+<th>Ne zaman</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ana müzik (döngü)</td>
+<td>Oyun boyunca</td>
+</tr>
+<tr>
+<td>Kış müziği ya da katmanı</td>
+<td>Kış turlarında</td>
+</tr>
+<tr>
+<td>Tıklama</td>
+<td>Arayüz</td>
+</tr>
+<tr>
+<td>İnşaat bitti</td>
+<td>Bina açılınca</td>
+</tr>
+<tr>
+<td>Hasat</td>
+<td>Hasat satırında</td>
+</tr>
+<tr>
+<td>Balta</td>
+<td>Odun</td>
+</tr>
+<tr>
+<td>Savaş</td>
+<td>Saldırı çözülürken</td>
+</tr>
+<tr>
+<td>Kart çekme ve oynama</td>
+<td>Kartlar</td>
+</tr>
+<tr>
+<td>Tarikat talebi</td>
+<td>Açılır pencere</td>
+</tr>
+<tr>
+<td>Düğün (kısa, neşeli, biraz akortsuz)</td>
+<td>Düğün turu</td>
+</tr>
+<tr>
+<td>Bitiş (5 kısa melodi ya da tek ortak)</td>
+<td>Bitiş ekranı</td>
+</tr>
+</tbody>
+</table></div>
+<p>Müzik OGG ya da sıkıştırılmış olmalı (1 GB sınırı için).</p>
+<hr />
+<h2 id="20-teknik">20. Teknik</h2>
+<h3 id="katmanlar">Katmanlar</h3>
+<div class="frame"><pre><code>Sunum (harita, arayüz, ses)  →  sadece durumu okur, olayları dinler
+Köprü                       →  durum fotoğrafı, olay listesi, emir girişi
+Kurallar                    →  tur çözücüsü, sistemler sabit sırayla
+Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
+</code></pre></div>
+<ul>
+<li><strong>Kurallar ekranı bilmez, ekran kuralları bilmez.</strong> Yeni bir özellik yeni bir olay türü ekler, eski ekranlar bozulmaz.</li>
+<li><strong>Bütün sayılar tek bir ayar tablosunda</strong> (Unreal'da DataTable ya da tek bir Data Asset). Denge değişikliği için koda dokunulmaz.</li>
+<li><strong>Rakip arayüzü:</strong> "Bu durumu görüyorsun, emirlerin ne?" Bot, Jev, ikinci oyuncu aynı yere takılır.</li>
+</ul>
+<h3 id="build-ve-boyut-k-1-gb-alt">Build ve boyut <span class="tag k">Karar</span><span class="tag-note">1 GB altı</span></h3>
+<ul>
+<li>Hedef zip <strong>400 MB altı</strong>. Starter Content yok, gereksiz eklentiler kapalı.</li>
+<li>Paketleme: Use Pak File, Create compressed cooked packages, Exclude editor content when cooking.</li>
+<li>Sadece oyun haritası paketlenir. <strong>Development build</strong> (jam e-postası bunu öneriyor). Development build Shipping'den biraz büyüktür, 1 GB bütçesinde sorun değil.</li>
+<li>Zip adı: <strong><code>Arfdev_VillageHeadman.zip</code></strong>.</li>
+</ul>
+<hr />
+<h2 id="21-yap-m-ncelikleri">21. Yapım öncelikleri</h2>
+<p>Bir katman bitmeden sonrakine geçilmez. Hangi saatte durulursa durulsun elde oynanabilir bir oyun kalır.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Katman</th>
+<th>İçerik</th>
+<th>Bitince</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, <strong>Short match kuralları</strong>, <strong>yol seçimi (sadece bonuslar)</strong>, <strong>pazar (Sell wood, Buy food, satış oranı)</strong>, ilk 5 dakika ipuçları</td>
+<td>Köy kurulup yaşatılabiliyor</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>Psikoloji, <strong>düğün</strong>, <strong>vergi</strong>, tempo, ordu nüfuzu, Barracks ve asker (eğitim süresi, dinlenme), savaş, can barları, Repair hall, 5 bitiş</td>
+<td>Kazanıp kaybedilebiliyor</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>10 rastgele köylü, yatkınlık, karakter, "Let the elders decide", iş sayısı paneli</td>
+<td>Liyakat teması oyunda</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, Shrine ve tarikat talepleri</td>
+<td>Rakiple etkileşim, üç güç</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>Açılış sahnesi, Director's Cut, muhtar animasyonları, ses, <strong>3 olay</strong>, <strong>sınırları zorlama hamleleri</strong> (Forced March, Raw Recruits, Levy)</td>
+<td>Jüri için cila</td>
+</tr>
+<tr>
+<td><strong>F</strong></td>
+<td>Tek tek köylü atama, Doubter'ın kaçması</td>
+<td>Tam liyakat</td>
+</tr>
+<tr>
+<td><strong>G</strong></td>
+<td>Pazar, olaylar, suikast, Jev, iki kişilik mod</td>
+<td>Jam sonrası</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Her durumda teslimden önce:</strong> bitiş ekranı ve bir müzik (E'nin en küçük parçası).</p>
+<h3 id="saat-plan">Saat planı <span class="tag o">Öneri</span></h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Saat (TR)</th>
+<th>İş</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>19:50–20:30</td>
+<td>Proje kurulumu, kamera, pixel art ayarları, boş harita</td>
+</tr>
+<tr>
+<td>20:30–22:30</td>
+<td>Katman A</td>
+</tr>
+<tr>
+<td>22:30–00:00</td>
+<td>Katman B</td>
+</tr>
+<tr>
+<td>00:00–01:00</td>
+<td>Katman C</td>
+</tr>
+<tr>
+<td>01:00–01:45</td>
+<td>Katman D</td>
+</tr>
+<tr>
+<td>01:45–02:45</td>
+<td>Katman E</td>
+</tr>
+<tr>
+<td>02:45–03:30</td>
+<td>Paketleme, başka bir bilgisayarda deneme, boyut kontrolü</td>
+</tr>
+<tr>
+<td>03:30–04:15</td>
+<td>Video (30–60 sn), itch sayfası</td>
+</tr>
+<tr>
+<td>04:15–04:40</td>
+<td>Jam'e teslim</td>
+</tr>
+<tr>
+<td>04:40–04:59</td>
+<td>Yedek süre</td>
+</tr>
+</tbody>
+</table></div>
+<p>Bir katman geç kalırsa sonraki katman kısaltılır, <strong>paketleme ve teslim saatleri kaydırılmaz.</strong></p>
+<hr />
+<h2 id="22-teslim">22. Teslim</h2>
+<ul>
+<li><strong>Video (30–60 sn):</strong> ilk 5 saniyede bir bitiş anı ("The General's Hat"), sonra para ve kardeşler (3 sn), sonra hızlı oynanış: inşa, hasat, kart, saldırı, Director's Cut ekranı.</li>
+<li><strong>itch sayfası:</strong> tek cümlelik özet ("Two brothers found a coin. One says six. One says nine. Run your half of the village without starving, revolting, or getting couped."), 3 ekran görüntüsü, kontroller, takım, kullanılan araçlar ve asset listesi.</li>
+<li><strong>Dev log (Glass Box ödülü için):</strong> tasarımın yapay zekayla nasıl kurulduğu, bot simülasyonunun bulduğu hatalar (ölüm sarmalı, çok sık kartlar), kesilen özellikler.</li>
+<li><strong>Form:</strong> takım adı <strong>Arfdev</strong>, iki üyenin adı ve Epic hesabı e-postası, oyun adı <strong>Village Headman</strong>, video linki.</li>
+<li><strong>Opsiyonel ama ödül için gerekli:</strong> dev log linki (Glass Box), "Tools you used" listesi (Hyper3D ödül havuzu için). Kullanılan araçları gece boyunca bir yere not edin: Claude, Unreal Engine 5, sprite ve ses için ne kullanıldıysa.</li>
+<li><strong>Son teslim:</strong> 15 Kasım 17:59 PST = <strong>16 Kasım 04:59 TR</strong>. Geç teslim kabul edilmiyor. Yükleme için zaman bırakın.</li>
+<li><strong>Yükleme sırası:</strong> paketle, zip'i <strong><code>Arfdev_VillageHeadman.zip</code></strong> olarak adlandır, kendi itch.io hesabına yükle, sonra jam'e gönder.</li>
+</ul>
+<hr />
+<h2 id="23-h-l-eksik-olanlar">23. Hâlâ eksik olanlar</h2>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Eksik</th>
+<th>Kimde</th>
+<th>Engel mi?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Sprite kaynağı.</strong> fal kredisi yok. Öneri: zemin, tarla, ağaç, ikonlar Claude'dan (Yol 2), binalar ve karakterler Tripo'dan (Yol 1), bkz. 18</td>
+<td>Karar lazım</td>
+<td><strong>Evet, A katmanı için</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Ses dosyaları. Seçenek: jam partneri <strong>WeLoveIndies</strong> ücretsiz ses ve müzik (sadece ticari olmayan kullanım, oyun satılırsa lisans gerekir)</td>
+<td>Kullanıcı</td>
+<td>E katmanına kadar hayır</td>
+</tr>
+<tr>
+<td>3</td>
+<td>~~Takım adı~~ <strong>Arfdev</strong></td>
+<td>Karar verildi</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>maybeno2906'nın GitHub erişimi</td>
+<td>Sonra</td>
+<td>Hayır</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Yeni ekonominin denge testi (odun, köylüler, savaş, kartlar)</td>
+<td>Yapımcı, ilk oynanabilir sürümde</td>
+<td>Hayır, sayılar tabloda değiştirilebilir</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Her iki üyenin Epic hesabı e-postası</td>
+<td>Kullanıcı ve maybeno2906</td>
+<td><strong>Teslimde evet</strong></td>
+</tr>
+<tr>
+<td>14</td>
+<td>itch.io sayfası metni, dev log (Glass Box), "Tools you used" listesi, video senaryosu</td>
+<td>Claude hazırlayabilir</td>
+<td>Teslimde evet</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Saat planı (19:50'de başlıyordu) yapımcının gerçek başlangıç saatine göre güncellenmeli</td>
+<td>Yapımcı</td>
+<td>Evet</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>core/</code> C++ çekirdeği GDD'nin gerisinde (odun, köylü, vergi, olay yok)</td>
+<td>Yapımcı GDD'yi esas alır</td>
+<td>Hayır</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Tarikat talep metinlerinin onayı</td>
+<td>Kullanıcı</td>
+<td>Hayır</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Bitiş sözlerinin onayı</td>
+<td>Kullanıcı</td>
+<td>Hayır</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Hangi köyü oyuncu yönetiyor (öneri: Six)</td>
+<td>Kullanıcı</td>
+<td>Hayır</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Jev, iki kişilik mod, pazar, suikast</td>
+<td>Jam sonrası</td>
+<td>Hayır</td>
+</tr>
+<tr>
+<td>10</td>
+<td>~~Dal seviye ağacı~~ Jam'de sadece yol seçimi, seviye ağacı M1 <span class="tag k">Karar</span></td>
+<td>Karar verildi</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>~~Ek rakip etkileşimi~~ Jam'de yok (savaş, kartlar, Doubter yeterli), sınır tarlaları ve su jam sonrası <span class="tag k">Karar</span></td>
+<td>Karar verildi</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>~~Platform~~ Yapımcının bilgisayarına göre Windows ya da macOS development build. Kayıt/yükleme yok <span class="tag k">Karar</span></td>
+<td>Karar verildi</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="24-uyar-lar-ve-zay-f-y-nler">24. Uyarılar ve zayıf yönler</h2>
+<p>15 Kasım 20:15 itibarıyla GDD'nin eleştirel okuması. Kesin hatalar dokümanda düzeltildi (24.3), büyük kararlar kullanıcıya soruldu (24.1).</p>
+<h3 id="24-1-kritik-jam-i-tehlikeye-atanlar">24.1 Kritik: jam'i tehlikeye atanlar</h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Sorun</th>
+<th>Neden tehlikeli</th>
+<th>Öneri</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K1</td>
+<td><strong>Sprite yok</strong></td>
+<td>A katmanı zemin, tarla, ağaç ve muhtarlık olmadan başlayamaz</td>
+<td>İlk saat sadece bu 4 sprite'a. Gerisi için düz renkli yer tutucu kutular</td>
+</tr>
+<tr>
+<td>K2</td>
+<td><strong>Saat planı geride</strong></td>
+<td>Plan 19:50'de kurulumla başlıyordu. Yapımcı başlamadıysa her saat bir katman yer</td>
+<td>A ve B'ye odaklan, C ve D'yi kısalt. Paketleme saati (02:45) kaymaz</td>
+</tr>
+<tr>
+<td>K3</td>
+<td><strong>Jüri muhtemelen hiçbir bitişi görmeyecek</strong> → <strong>Çözüldü: Short match varsayılan (bkz. 2c)</strong></td>
+<td>Hedef maç 25–40 dakika, bir tur 1–2 dakika sürebilir. Jüri 5–10 dakika oynar. Oyunun en güçlü anları (bitiş animasyonu, kardeşin sözü, Director's Cut) maç sonunda</td>
+<td>Ana menüye <strong>"Short match"</strong> (jam için varsayılan): Kara Yıllar 3. yılda başlar, bot 8. turdan sonra daha saldırgan. Hedef 12–15 dakika. Karar lazım</td>
+</tr>
+<tr>
+<td>K4</td>
+<td><strong>Arayüz kalabalık</strong></td>
+<td>Tempo, satış, odun sat, gıda al, düğün, sıkıyönetim, saldırı, asker, kartlar, ilaç, köpek, yol... İlk açışta 15+ kontrol</td>
+<td><strong>Kademeli açılma:</strong> kontrol, ilgili şey ilk kez mümkün olduğunda görünür (Recruit sadece Barracks'tan sonra, Cure sadece sarmaşıktan sonra)</td>
+</tr>
+<tr>
+<td>K5</td>
+<td><strong>Denge, gerçek kurallarla hiç test edilmedi</strong></td>
+<td>Tasarım masasının simülasyonunda odun, köylüler, kartlar, savaş, depo sınırı ve rakip yok. "60 tur ayakta" sonucu kısmi</td>
+<td>Yapımcı ilk oynanabilir sürümde 2–3 tam maç oynasın, sayılar ayar tablosundan değiştirilsin</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="24-2-denge-riskleri-oynay-nca-kontrol-edilmeli">24.2 Denge riskleri (oynayınca kontrol edilmeli)</h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Risk</th>
+<th>Belirti</th>
+<th>İlk ayar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td>Depo sınırı simülasyonda yok</td>
+<td>4 tarlalı köy 107 gıda biriktiriyordu, gerçek oyunda 60'ta taşar</td>
+<td>Granary erken lazım olabilir. Taşma çok sinir bozucuysa başlangıç kapasitesi 80</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Savaş formülleri hiç denenmedi</td>
+<td>Tek saldırıda muhtar ölebilir ya da hiç hasar çıkmayabilir</td>
+<td>Hasar çarpanı 4 ile başla, ilk maçta muhtarlık 3 saldırıdan önce düşüyorsa 3'e indir</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Shrine ve Light tempo bedava psikoloji</td>
+<td>Düğünü gereksiz kılabilirdi</td>
+<td>65 tavanı eklendi (24.3). Yine de baskınsa Shrine +4'ü +3'e indir</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Bot zayıf kalabilir</td>
+<td>Kural tabanlı bot, oyuncu bir açık bulunca hep aynı şekilde kaybeder</td>
+<td>3 kişilik rastgele seçiliyor. Jam için yeterli</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>Kartopu</td>
+<td>Önde olan köy hızla büyür</td>
+<td>Tarikat ve darbe riski büyük köyü zaten frenliyor. Ek önlem jam sonrası</td>
+</tr>
+<tr>
+<td>D6</td>
+<td>Sword yolu ile Fire Brigade asimetrisi</td>
+<td>Diğer yollar yangına karşı tamamen savunmasız</td>
+<td>Bilinçli bir seçim <span class="tag k">Karar</span>, ama oyunda hissedilirse Granary yangın kaybını %20'ye indirebilir</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="24-3-bu-okumada-d-zeltilen-hatalar">24.3 Bu okumada düzeltilen hatalar</h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Hata</th>
+<th>Düzeltme</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Pazar eksik gıdayı kendiliğinden <strong>satar</strong>" (yanlış fiil)</td>
+<td><strong>Satın alır</strong></td>
+</tr>
+<tr>
+<td>Safran kuralı hiç tetiklenmiyordu (verim %60 altı, ama en düşük verim %70)</td>
+<td>Çiftçilerin ortalama Farming yatkınlığı 3'ün altındaysa ya da 2 çiftçi yoksa</td>
+</tr>
+<tr>
+<td>Upside Down'un karşı hamlesi imkansızdı (kartlar aynı tur çözülüyor)</td>
+<td>Etki bir sonraki tura kaydırıldı ve rakibe duyuruluyor</td>
+</tr>
+<tr>
+<td>"Çift" tanımsızdı (doğum çift başına, düğün bekarları evlendiriyor)</td>
+<td>Başlangıçta 2 evli çift ve 6 bekar. Yeni çift sadece düğünle</td>
+</tr>
+<tr>
+<td>İlk kart turu çelişkiliydi</td>
+<td>İlk seçim 4. tur, sonra 3 turda bir</td>
+</tr>
+<tr>
+<td>"Sadece düğün 50'yi geçirir" ile Shrine, Light tempo ve kartlar çelişiyordu</td>
+<td>Sadece yemek 50'de durur. Shrine ve Light tempo 65'e kadar, düğün ve kartlar 100'e kadar</td>
+</tr>
+<tr>
+<td>Muhtarlık canı hiç iyileşmiyordu</td>
+<td>"Repair hall": 5 six + 10 wood ile +15</td>
+</tr>
+<tr>
+<td>Pazar, düğün, köpek ve Guild hiçbir katmana atanmamıştı</td>
+<td>Pazar A'ya, düğün B'ye, köpek ve Guild D'ye</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="24-4-yapay-zeka-sprite-ara-lar-i-in-uyar-lar">24.4 Yapay zeka sprite araçları için uyarılar</h3>
+<p>Kullanıcının bulduğu araçlar (15 Kasım):</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Araç</th>
+<th>Ne</th>
+<th>Gerekenler</th>
+<th>Not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/scenario-labs/skills">scenario-labs/skills</a></td>
+<td>Claude Code'a görsel, ses, 3D üretimi öğreten skill'ler (MIT). <code>scenario-game-assets</code>, <code>scenario-sprite-animation</code> gibi oyun skill'leri var</td>
+<td>Scenario MCP sunucusu, Scenario hesabı ve kredisi (ücretli olabilir)</td>
+<td>Ayrıca <strong>Unreal skill'leri</strong> var (Claude'un Unreal'ı sürmesi), ama kendi README'leri "Unreal içinde hiç çalıştırılmadı" diyor. Bu gece güvenilecek bir şey değil</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Harrison0223-svg/gpt-image-2d-assets">gpt-image-2d-assets</a></td>
+<td>Codex için 2D asset skill'i (MIT): stil seçimi, sprite sayfası, GIF önizleme</td>
+<td>Codex ve GPT-image erişimi, Python ve Pillow</td>
+<td>Küçük ve yeni bir proje. Kendi README'si pixel stilinin "pixel-perfect olarak kontrol edilmediğini" söylüyor</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Hangisi seçilirse seçilsin:</strong>
+1. Yapay zeka "pixel art" çıktısı gerçek piksel ızgarasına oturmaz. Her sprite oyuna girmeden önce: büyük üret, <strong>en yakın komşu</strong> ile hedef boyuta küçült (64×64 gibi), renk sayısını sabit bir palete indir. Yoksa Unreal'daki "2D Pixels" ayarı bile bulanık görünümü kurtarmaz.
+2. <strong>Tutarlılık:</strong> her sprite'ı aynı stil tarifi ve aynı referans görselle üret. Yoksa her bina başka bir oyundan gelmiş gibi durur.
+3. Üçüncü parti bir skill kurmadan önce içindeki script'lere bakılmalı (kurulum kod çalıştırır).
+4. Kullanılan araç teslimde <strong>"Tools you used"</strong> listesine yazılır. GPT-image kullanılırsa jam'in <strong>OpenAI ödülleri</strong> için de aday olunur (formda OpenAI sorusu var).</p>
+  </main>
+</div>
+<script>
+(() => {
+  const links = [...document.querySelectorAll('nav.toc a')];
+  const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  const heads = [...document.querySelectorAll('main h2[id]')];
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { links.forEach(l => l.classList.remove('on')); map.get(e.target.id)?.classList.add('on'); } });
+  }, { rootMargin: '0px 0px -70% 0px' });
+  heads.forEach(h => io.observe(h));
+  if (window.matchMedia('(max-width: 900px)').matches) document.querySelector('nav.toc details').open = false;
+})();
+</script>
+</body></html>
