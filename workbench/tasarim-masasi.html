@@ -171,7 +171,7 @@ const INTRO = {
   cards: "Her kartın bir karşı hamlesi olmalı, yoksa satranç hissi bozulur. Tür dağılımı Özet'te sayılır.",
   questions: "Tasarımda hâlâ cevabı olmayan her şey. Durumu 'Karar verildi' yapınca sayaçtan düşer.",
 };
-const SIM_DEFAULT = { startGold: 14, startFood: 50, adults: 10, soldiers: 2, sellPct: 40, tempo: "Normal", faith: "Kapalı", martial: "Kapalı", wage: 1, eatAdult: 1, eatSoldier: 1.5, eatChild: 0.5, foodBuy: 1.25, turns: 60, fields: [] };
+const SIM_DEFAULT = { startGold: 14, startFood: 50, adults: 10, soldiers: 2, sellPct: 40, tempo: "Normal", faith: "Kapalı", martial: "Kapalı", wage: 1, eatAdult: 1, eatSoldier: 1.5, eatChild: 0.5, foodBuy: 1.25, weddingEvery: 0, turns: 60, fields: [] };
 
 const state = { rows: {}, sim: null, loaded: {}, db: null, canWrite: true, filter: "Hepsi" };
 for (const k in SECTIONS) state.rows[k] = [];
@@ -289,10 +289,16 @@ function simulate(p, cropRows) {
   let gold = num(p.startGold), food = num(p.startFood), adults = num(p.adults), soldiers = Math.min(num(p.soldiers), adults);
   let psy = 60, huz = 60, army = 10, cult = 0, lowPsy = 0, starve = 0;
   const kids = []; const fields = (p.fields || []).map((name) => ({ crop: crops[name], left: null }));
-  const rows = []; let end = null;
+  const rows = []; let end = null; const weddings = [];
   const T = Math.min(80, Math.max(4, num(p.turns) || 48));
   for (let t = 1; t <= T; t++) {
     const season = (t - 1) % 4, dark = t > 28 ? (Math.floor((t - 29) / 4) + 1) * 0.5 : 0;
+    // Wedding: costs coin and food, lifts mood, but frequent feasts cut work output.
+    const every = num(p.weddingEvery);
+    const weddingNow = every > 0 && t % every === 0 && gold >= 6 && food >= 10 && adults - soldiers >= 2;
+    if (weddingNow) { gold -= 6; food -= 10; weddings.push(t); }
+    const recent = weddings.filter((w) => w > t - 4).length;
+    const workMul = (1 - 0.1 * Math.max(0, recent - 1)) * (psy > 75 ? 1.1 : 1);
     const workers = Math.max(0, adults - soldiers), need = fields.length * 2;
     const labor = need ? Math.min(1, workers / need) : 0;
     let harvested = 0;
@@ -308,7 +314,7 @@ function simulate(p, cropRows) {
       if (f.left <= 0) {
         const rotLoss = num(f.crop.rot) > 0 && labor < 0.6 ? 0.5 : 0;
         const sabotage = (num(f.crop.risk) / 100) * 0.5;
-        const units = num(f.crop.yield) * labor * tempoMul * (season === 2 ? 1.25 : 1) * Math.max(0, 1 - 0.1 * dark) * (1 - rotLoss) * (1 - sabotage);
+        const units = num(f.crop.yield) * labor * tempoMul * workMul * (season === 2 ? 1.25 : 1) * Math.max(0, 1 - 0.1 * dark) * (1 - rotLoss) * (1 - sabotage);
         const sell = units * Math.min(1, Math.max(0, num(p.sellPct) / 100));
         gold += sell * num(f.crop.price); food += (units - sell) * num(f.crop.food); harvested += units; f.left = null;
       }
@@ -327,7 +333,8 @@ function simulate(p, cropRows) {
     if (gold < 0) { army += 5; gold = 0; }
     const perCap = gold / Math.max(1, adults + kidsN);
     let dPsy = tempoPsy - 8 * shortage + (faith ? 4 : 0);
-    if (shortage === 0 && psy < 50) dPsy += 1;   // fed people slowly get used to things
+    if (shortage === 0 && psy < 50) dPsy += Math.min(food >= cons * 2 ? 2 : 1, 50 - psy);   // food lifts mood, but only up to 50
+    if (weddingNow) dPsy += 8;   // above 50 only weddings help
     let dHuz = tempoHuz - 8 * shortage - (perCap < 1 ? 2 : 0);
     if (martial) { dPsy = Math.max(dPsy, 0); dHuz -= 4; army += 8; }
     psy = Math.max(0, Math.min(100, psy + dPsy)); huz = Math.max(0, Math.min(100, huz + dHuz));
@@ -483,7 +490,7 @@ function simView() {
         <h3>Başlangıç</h3>
         ${numF("startGold", "Başlangıç altını")}${numF("startFood", "Başlangıç gıdası")}${numF("adults", "Yetişkin köylü")}${numF("soldiers", "Asker")}
         <h3>Politika</h3>
-        ${numF("sellPct", "Hasadın satılan kısmı %", 5)}${selF("tempo", "Çalışma temposu", ["Hafif", "Normal", "Ağır"])}${selF("faith", "İnanç binası", ["Kapalı", "Açık"])}${selF("martial", "Sıkıyönetim", ["Kapalı", "Açık"])}
+        ${numF("sellPct", "Hasadın satılan kısmı %", 5)}${selF("tempo", "Çalışma temposu", ["Hafif", "Normal", "Ağır"])}${selF("faith", "İnanç binası", ["Kapalı", "Açık"])}${selF("martial", "Sıkıyönetim", ["Kapalı", "Açık"])}${numF("weddingEvery", "Düğün: kaç turda bir (0 = hiç)")}
         <h3>Kurallar</h3>
         ${numF("wage", "Asker maaşı (altın/tur)", 0.5)}${numF("eatAdult", "Yetişkin gıdası/tur", 0.5)}${numF("eatSoldier", "Asker gıdası/tur", 0.5)}${numF("eatChild", "Çocuk gıdası/tur", 0.5)}${numF("foodBuy", "Gıda alış fiyatı (para)", 0.25)}${numF("turns", "Simüle edilecek tur")}
         <h3>Tarlalar</h3>

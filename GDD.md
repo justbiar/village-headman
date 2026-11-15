@@ -46,7 +46,7 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).
 
 ### Tur akışı
 
-1. **Planlama (oyuncu oynar):** inşa et, köylü ata, asker al, saldırı emri ver, kart oyna ya da seç, satış oranı ve tempo seç, tarikat talebi varsa cevapla.
+1. **Planlama (oyuncu oynar):** inşa et, köylü ata, asker al, saldırı emri ver, kart oyna ya da seç, satış oranı ve tempo seç, düğün yap, tarikat talebi varsa cevapla.
 2. **"End Turn"** düğmesine basılır. Bot da emirlerini verir.
 3. **Çözümleme (sabit sıra, hep aynı):**
    1. Kartlar
@@ -255,7 +255,7 @@ Her köylüye rastgele 1 karakter **[Ö]**:
 
 ### Nüfus
 
-- Doğum: köy psikolojisi 55'in üstündeyse çift başına %6/tur, 40–55 arası %2, altında doğum yok.
+- Doğum: köy psikolojisi 55'in üstündeyse çift başına %6/tur, 40–55 arası %2, altında doğum yok. Düğünle yeni evlenen çiftin ilk yıl ihtimali ayrıca %50 (bkz. Düğün).
 - Çocuğun yatkınlıkları ve karakteri rastgele. **8 turda** yetişkin olur.
 - Tüketim (tur başına): **yetişkin 1, asker 1.5, çocuk 0.5** gıda.
 - Gıda yarıdan fazla eksikse her tur yetişkinlerin %5'i ölür (en düşük psikolojiliden başlayarak).
@@ -274,9 +274,61 @@ Her köylüye rastgele 1 karakter **[Ö]**:
 | Hane başına para 1'in altında | -1 |
 | Kışın odun yetmezse | -3 |
 | Ölen her asker | -2 (köy geneline) |
-| **Halk doyduysa ve psikoloji 50'nin altındaysa** | **+1 (alışma)** |
+| **Doyduysa, psikoloji 50'nin altındaysa** | **+1** |
+| **Bol doyduysa (ambarda en az 2 turluk gıda kaldıysa), psikoloji 50'nin altındaysa** | **+2** |
+| **Düğün** (bkz. aşağısı) | **+8** |
 
-**Neden toparlanma var:** tasarım masasının simülasyonu, psikolojinin normal tempoda sadece düşebildiğini gösterdi. Bir kez düşen psikoloji hiç geri gelmiyor ve köy er ya da geç isyanla bitiyordu. Doyan halk zamanla alışır: psikoloji 50'ye kadar kendiliğinden toparlanır, 50'nin üstüne ise ancak oyuncunun kararlarıyla çıkar.
+Bütün metrikler **0 ile 100** arasındadır **[K]**.
+
+### Psikolojinin iki yarısı **[K]**
+
+| Aralık | Ne yükseltir | Anlamı |
+|---|---|---|
+| **0–50** | **Yemek.** Doyan halk her tur toparlanır, ama yemek tek başına 50'yi geçirmez | Karın doyurmak hayatta tutar |
+| **50–100** | **Düğün.** Yemek burada artık işe yaramaz | Mutluluk ise para ve emek ister |
+
+Toparlanma kuralının çıkış sebebi: tasarım masasının simülasyonu, psikolojinin normal tempoda sadece düşebildiğini ve köyün er ya da geç isyanla bittiğini gösterdi.
+
+### Düğün **[K]**
+
+"**Hold a Wedding**" düğmesi. Tur başına en fazla bir düğün.
+
+| | Değer **[Ö]** |
+|---|---|
+| Maliyet | **6 six + 10 food** (para ve yemek, **[K]**) |
+| Etki | Köy psikolojisi **+8** (100'ü geçmez). İki bekar yetişkin evlenir, o çiftin ilk yıl içinde çocuk yapma ihtimali %50 |
+| Şart | Köyde en az iki bekar yetişkin |
+
+**Sık düğün verimi düşürür [K].** Son 4 turda yapılan düğün sayısına göre bütün işlerin verimi düşer (halk iş yerine eğlencede):
+
+| Son 4 turdaki düğün | Verim |
+|---|---|
+| 1 | Normal |
+| 2 | -%10 |
+| 3 | -%20 |
+| 4 | -%30 |
+
+Tur raporunda: "The village is still celebrating. Work suffers."
+
+### Yüksek psikolojinin ödülü **[Ö]**
+
+Düğüne para ve yemek harcamanın karşılığı olmalı:
+- Psikoloji **55'in üstünde:** doğum ihtimali artar (bkz. Nüfus).
+- Psikoloji **75'in üstünde:** bütün işlerde **+%10 verim** ("The village works with a song.").
+- Yüksek psikoloji, düşmanın Gossip kartına ve tarikat reddinin cezasına karşı tampon olur.
+
+Böylece seçim şöyle olur: düğünle psikolojiyi 75'in üstüne çıkar ve +%10 verim kazan, ama düğünleri sıklaştırırsan o verimi geri kaybedersin.
+
+**Simülasyon (karışık ekinli 4 tarlalı köy, 60 tur):**
+
+| Düğün sıklığı | Ortalama psikoloji | 60. turda gıda |
+|---|---|---|
+| Hiç | 60 | 107 |
+| **8 turda bir** | **85** | **69** |
+| 4 turda bir | 92 | 0 (sınırda) |
+| Her tur | 90, ama sonda 68'e düşüyor | 0 |
+
+En iyi denge **yılda iki düğün civarı.** Daha sıkı yapan köy ambarını boşaltıyor ve verim cezası yüzünden psikoloji yine düşmeye başlıyor.
 
 - **İsyan:** köy psikolojisi **3 tur üst üste 25'in altında** kalırsa. Sayaç ekranda görünür ("Unrest 2/3").
 
@@ -451,7 +503,8 @@ Ortak kurallar:
 | İnşa menüsü | "Build" · "Field" · "Granary" · "School" · "Barracks" · "Shrine" · "Upgrade Hall" |
 | Tarla | "Choose crop" · "Wheat" · "Potato" · "Beet" · "Saffron" · "Change crop" · "Demolish" |
 | Köylüler | "Let the elders decide" · "Farmers" · "Woodcutters" · "Teachers" · "Priests" · "Soldiers" · "Elders" · "Idle" |
-| Politika | "Tempo" · "Light" · "Normal" · "Heavy" · "Sell" · "Sell wood" · "Martial law" |
+| Politika | "Tempo" · "Light" · "Normal" · "Heavy" · "Sell" · "Sell wood" · "Buy food" · "Martial law" |
+| Düğün | "Hold a Wedding" · "The village is still celebrating. Work suffers." · "The village works with a song." |
 | Ordu | "Recruit" · "Attack" |
 | Uyarılar | "Unrest 2/3" · "The army grows restless." · "The Lean Years have begun." · "The granary overflowed." |
 | Rakip | "High" · "Medium" · "Low" |
@@ -476,6 +529,7 @@ Referans: 9 Kings, **sadece ilham** (okunaklı küçük krallık, net siluetler)
 | Asker | 16×24 | |
 | Cübbeli tarikat üyesi | 16×24 | |
 | Muhtar (animasyonlar için) | 24×32 | Sadece bitişlerde |
+| Düğün (fenerler ve uzun masa, muhtarlık önünde) | 64×32 | Düğün turunda görünür |
 | Arayüz ikonları (kaynaklar, metrikler, kartlar) | 16×16 | |
 | Kart çerçevesi | 64×96 | 3 tür rengi |
 
@@ -501,6 +555,7 @@ Referans: 9 Kings, **sadece ilham** (okunaklı küçük krallık, net siluetler)
 | Savaş | Saldırı çözülürken |
 | Kart çekme ve oynama | Kartlar |
 | Tarikat talebi | Açılır pencere |
+| Düğün (kısa, neşeli, biraz akortsuz) | Düğün turu |
 | Bitiş (5 kısa melodi ya da tek ortak) | Bitiş ekranı |
 
 Müzik OGG ya da sıkıştırılmış olmalı (1 GB sınırı için).
@@ -526,7 +581,7 @@ Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
 
 - Hedef zip **400 MB altı**. Starter Content yok, gereksiz eklentiler kapalı.
 - Paketleme: Use Pak File, Create compressed cooked packages, Exclude editor content when cooking.
-- Sadece oyun haritası paketlenir. Mümkünse Shipping build.
+- Sadece oyun haritası paketlenir. **Development build** (jam e-postası bunu öneriyor). Development build Shipping'den biraz büyüktür, 1 GB bütçesinde sorun değil.
 - Zip adı: `TeamName_VillageHeadman`.
 
 ---
@@ -571,7 +626,10 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 - **Video (30–60 sn):** ilk 5 saniyede bir bitiş anı ("The General's Hat"), sonra para ve kardeşler (3 sn), sonra hızlı oynanış: inşa, hasat, kart, saldırı, Director's Cut ekranı.
 - **itch sayfası:** tek cümlelik özet ("Two brothers found a coin. One says six. One says nine. Run your half of the village without starving, revolting, or getting couped."), 3 ekran görüntüsü, kontroller, takım, kullanılan araçlar ve asset listesi.
 - **Dev log (Glass Box ödülü için):** tasarımın yapay zekayla nasıl kurulduğu, bot simülasyonunun bulduğu hatalar (ölüm sarmalı, çok sık kartlar), kesilen özellikler.
-- **Form:** takım adı, iki üyenin adı ve Epic hesabı e-postası, oyun adı, video linki, kullanılan araçlar.
+- **Form:** takım adı, iki üyenin adı ve Epic hesabı e-postası, oyun adı, video linki.
+- **Opsiyonel ama ödül için gerekli:** dev log linki (Glass Box), "Tools you used" listesi (Hyper3D ödül havuzu için). Kullanılan araçları gece boyunca bir yere not edin: Claude, Unreal Engine 5, sprite ve ses için ne kullanıldıysa.
+- **Son teslim:** 15 Kasım 17:59 PST = **16 Kasım 04:59 TR**. Geç teslim kabul edilmiyor. Yükleme için zaman bırakın.
+- **Yükleme sırası:** paketle, zip'i `TeamName_VillageHeadman` olarak adlandır, kendi itch.io hesabına yükle, sonra jam'e gönder.
 
 ---
 
@@ -579,8 +637,8 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 
 | # | Eksik | Kimde | Engel mi? |
 |---|---|---|---|
-| 1 | **Sprite'ları kim çizecek / nereden gelecek?** (pixel art üretimi, araç ya da asset paketi) | Karar lazım | **Evet, A katmanı için zemin ve tarla şart** |
-| 2 | Ses dosyaları | Kullanıcı | E katmanına kadar hayır |
+| 1 | **Sprite'ları kim çizecek / nereden gelecek?** Seçenek: jam partneri **fal**'ın 30 $ kredisiyle görsel modellerden pixel art üretmek (kredi jam e-postasında, 30 Kasım'a kadar). Ya da lisanslı hazır pixel art paketi (teslimde listelenmeli) | Karar lazım | **Evet, A katmanı için zemin ve tarla şart** |
+| 2 | Ses dosyaları. Seçenek: jam partneri **WeLoveIndies** ücretsiz ses ve müzik (sadece ticari olmayan kullanım, oyun satılırsa lisans gerekir) | Kullanıcı | E katmanına kadar hayır |
 | 3 | Takım adı | Karar lazım | Teslimde evet |
 | 4 | maybeno2906'nın GitHub erişimi | Sonra | Hayır |
 | 5 | Yeni ekonominin denge testi (odun, köylüler) | Oynanarak | Hayır, sayılar tabloda değiştirilebilir |
