@@ -6,7 +6,7 @@
 |---|---|
 | Oyunun adı | **Village Headman** |
 | Hedef | **Epic MegaJam 2026'ya yetiştirilecek.** Unreal tarafı bu Mac'te değil, başka bir bilgisayarda yapılacak. Bu Mac plan ve tasarım içindir |
-| Katılım | Önce **solo** denildi. Sonra oyunu **arkadaşın kodlayacağı** söylendi. Bu durumda kurallar gereği arkadaş da takım üyesi olarak listelenmeli (Solo Driver'a girilemez). Netleşmedi |
+| Katılım | **Takım (2 kişi).** Kullanıcı: tasarım ve plan. **maybeno2906**: Unreal'da kodlama ve yapım. Teslimde ikisi de adı ve Epic hesabının e-postasıyla listelenecek. Best Team (2+ kişi) ödülüne uygun, Solo Driver'a değil |
 | Planın detayı | Plan bütün sistemleri tam anlatır, kodlayan kişi öncelik sırasına göre yetişebildiği kadarını yapar (bkz. 06, bölüm 3) |
 | Muhtarın ölümü (jam) | Sadece savaşta muhtarlık can barının sıfırlanması. Suikast kartı M2'ye kaldı |
 | Tema ekranı | Maç sonunda **"Director's Cut"** özeti: hangi kararlar köyü batırdı ya da kurtardı |
