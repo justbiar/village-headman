@@ -1,32 +1,21 @@
 # Village Headman
 
-İki düşman köyün karşı karşıya geldiği, izometrik görünümlü, tur bazlı bir strateji ve köy yönetimi oyunu.
-Oyunun özü: **köyü büyütmek değil, köyü dengede tutmak.** Ton ciddi ve karanlık.
+Two brothers found a coin. One says six. One says nine. Run your half of the village without starving, revolting, or getting couped.
 
-Teknoloji: **Unreal Engine 5** (ortografik izometrik kamera, C++ simülasyon çekirdeği), modeller **Tripo AI** ile.
+İzometrik 2D pixel art, tur bazlı köy yönetimi ve 1v1 strateji. Epic MegaJam 2026 için Unreal Engine 5 ile yapılıyor.
 
-Bu repo şimdilik sadece tasarım notlarını içeriyor. Kodlamaya tasarım netleşince başlanacak.
+## Önce bunu oku
 
-## Dokümanlar
+**[GDD.md](GDD.md) tek doğru kaynaktır.** Oyunu yapan kişi sadece onu okusun. Aşağıdaki diğer dosyalar tasarımın nasıl oluştuğunun geçmişidir ve içlerinde artık geçersiz sayılar var.
 
-| Dosya | İçerik |
-|---|---|
-| [docs/01-jam-analizi.md](docs/01-jam-analizi.md) | Epic MegaJam 2026 kuralları, takvim, puanlama, ödüller |
-| [docs/02-oyun-tasarimi.md](docs/02-oyun-tasarimi.md) | Çekirdek oyun mimarisi: kaynaklar, denge metrikleri, mahsuller, nüfus, köylüler, kartlar |
-| [docs/03-kararlar-ve-sorular.md](docs/03-kararlar-ve-sorular.md) | Verilen kararlar, teknik kısıtlar, açık sorular |
-| [docs/04-acik-konular-onerileri.md](docs/04-acik-konular-onerileri.md) | Eksik kalan sistemler için somut öneriler: tur akışı, formüller, tarikat, savaş, pazar, LLM rakip |
-| [docs/05-tam-analiz.md](docs/05-tam-analiz.md) | Baştan sona eleştirel analiz: güçlü yanlar, riskler, eksikler, yapım sırası |
-| [docs/06-hikaye-ve-buyuyen-mimari.md](docs/06-hikaye-ve-buyuyen-mimari.md) | Six ve Nine hikayesi, katmanlı mimari, kilometre taşları |
-| [docs/07-ekonomi-ve-koyluler.md](docs/07-ekonomi-ve-koyluler.md) | Odun ve orman, binalar, depo, EP, köylü yatkınlıkları, karakterler, konsey, muhtarın animasyonları |
-| [workbench/tasarim-masasi.html](workbench/tasarim-masasi.html) | Tasarım masası: verileri girip denge denetimi ve kaba ekonomi simülasyonu yapan sayfa |
-| [docs/00-orijinal-fikir.md](docs/00-orijinal-fikir.md) | Fikrin ilk hali, olduğu gibi |
+## Diğer dosyalar
 
-## Kısa özet
-
-- 1v1: iki muhtarlık binası karşı karşıya, harita ortadan ikiye bölünmüş.
-- Gelişim dalları: **Tarım** (para ve gıda), **Eğitim** (bina gelişimi), **Askeri** (savunma ve saldırı), **İnanç** (psikoloji tamponu, tarikat riski).
-- Her metriğin hem altında hem üstünde bir tehlike var: zayıf ordu saldırı yer, fazla güçlü ordu darbe yapar.
-- Her tur 3 güç kartından 1'i seçilir (sabotaj, propaganda, casusluk...).
-- Başta 5 kadın ve 5 erkek köylü. Evlilik, çocuk ve büyüme var.
-- Köylülerin yeteneği ve isteği var. Yanlış işe verilen köylü mutsuz olur. Azaların kalitesi tüm yönetimi etkiler.
-- Rakip: yapay zeka (LLM) veya kural tabanlı bot. İki kişilik mod sonra.
+| Dosya | İçerik | Durum |
+|---|---|---|
+| [GDD.md](GDD.md) | Bütün oyun: kurallar, sayılar, ekran, sanat, ses, teknik, yapım sırası, teslim | **Güncel** |
+| [workbench/tasarim-masasi.html](workbench/tasarim-masasi.html) | Tasarım masası: veri girişi, denge denetimi, ekonomi simülasyonu | Güncel ([canlı sayfa](https://claude.ai/artifact/4ihHVnny12mPr3NtRxnRB2), sadece sahibi açabilir) |
+| [core/](core/) | C++ kural çekirdeği ve bot-bot denge testi | **Eski:** odun, köylüler ve yeni ekin değerleri yok. Formül ve bot mantığı için referans |
+| [docs/03-kararlar-ve-sorular.md](docs/03-kararlar-ve-sorular.md) | Kararların geçmişi, build boyutu kuralı | Kısmen güncel |
+| [docs/01-jam-analizi.md](docs/01-jam-analizi.md) | Jam kuralları, takvim, puanlama, ödüller | Güncel |
+| [docs/00-orijinal-fikir.md](docs/00-orijinal-fikir.md) | Fikrin ilk hali, olduğu gibi | Arşiv |
+| [docs/02-oyun-tasarimi.md](docs/02-oyun-tasarimi.md), [04](docs/04-acik-konular-onerileri.md), [05](docs/05-tam-analiz.md), [06](docs/06-hikaye-ve-buyuyen-mimari.md), [07](docs/07-ekonomi-ve-koyluler.md) | Tasarımın adım adım gelişimi | Geçmiş (GDD'ye taşındı) |

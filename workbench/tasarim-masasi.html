@@ -171,7 +171,7 @@ const INTRO = {
   cards: "Her kartın bir karşı hamlesi olmalı, yoksa satranç hissi bozulur. Tür dağılımı Özet'te sayılır.",
   questions: "Tasarımda hâlâ cevabı olmayan her şey. Durumu 'Karar verildi' yapınca sayaçtan düşer.",
 };
-const SIM_DEFAULT = { startGold: 30, startFood: 40, adults: 10, soldiers: 2, sellPct: 40, tempo: "Normal", faith: "Kapalı", martial: "Kapalı", wage: 1, eatAdult: 2, eatSoldier: 3, eatChild: 1, turns: 48, fields: [] };
+const SIM_DEFAULT = { startGold: 14, startFood: 50, adults: 10, soldiers: 2, sellPct: 40, tempo: "Normal", faith: "Kapalı", martial: "Kapalı", wage: 1, eatAdult: 1, eatSoldier: 1.5, eatChild: 0.5, foodBuy: 1.25, turns: 60, fields: [] };
 
 const state = { rows: {}, sim: null, loaded: {}, db: null, canWrite: true, filter: "Hepsi" };
 for (const k in SECTIONS) state.rows[k] = [];
@@ -283,7 +283,7 @@ function runChecks() {
 function simulate(p, cropRows) {
   const crops = {}; for (const c of cropRows) if (c.name) crops[c.name] = c;
   const tempoMul = { Hafif: 0.8, Normal: 1, Ağır: 1.3 }[p.tempo] ?? 1;
-  const tempoPsy = { Hafif: 3, Normal: 0, Ağır: -6 }[p.tempo] ?? 0;
+  const tempoPsy = { Hafif: 3, Normal: 0, Ağır: -4 }[p.tempo] ?? 0;
   const tempoHuz = { Hafif: 2, Normal: 0, Ağır: -3 }[p.tempo] ?? 0;
   const faith = p.faith === "Açık", martial = p.martial === "Açık";
   let gold = num(p.startGold), food = num(p.startFood), adults = num(p.adults), soldiers = Math.min(num(p.soldiers), adults);
@@ -292,13 +292,18 @@ function simulate(p, cropRows) {
   const rows = []; let end = null;
   const T = Math.min(80, Math.max(4, num(p.turns) || 48));
   for (let t = 1; t <= T; t++) {
-    const season = (t - 1) % 4, dark = t > 28 ? Math.floor((t - 29) / 4) + 1 : 0;
+    const season = (t - 1) % 4, dark = t > 28 ? (Math.floor((t - 29) / 4) + 1) * 0.5 : 0;
     const workers = Math.max(0, adults - soldiers), need = fields.length * 2;
     const labor = need ? Math.min(1, workers / need) : 0;
     let harvested = 0;
     for (const f of fields) {
       if (!f.crop) continue;
-      if (f.left === null) { if (season !== 3 && gold >= num(f.crop.cost)) { gold -= num(f.crop.cost); f.left = Math.max(1, num(f.crop.turns)); } continue; }
+      if (f.left === null) {
+        // seed is bought with coin, or set aside from the granary (2 food per coin) when the purse is empty
+        const c = num(f.crop.cost), byGold = gold >= c, byFood = !byGold && food >= c * 2;
+        if (season !== 3 && (byGold || byFood)) { if (byGold) gold -= c; else food -= c * 2; f.left = Math.max(1, num(f.crop.turns)); }
+        continue;
+      }
       f.left -= season === 1 ? 1.25 : 1;
       if (f.left <= 0) {
         const rotLoss = num(f.crop.rot) > 0 && labor < 0.6 ? 0.5 : 0;
@@ -311,12 +316,18 @@ function simulate(p, cropRows) {
     const kidsN = kids.reduce((s, k) => s + k.n, 0);
     const cons = ((adults - soldiers) * num(p.eatAdult) + soldiers * num(p.eatSoldier) + kidsN * num(p.eatChild)) * (season === 3 ? 1.25 : 1) * (1 + 0.1 * dark);
     food -= cons;
+    const seedReserve = 6;
+    if (food < 0 && gold > seedReserve && num(p.foodBuy) > 0) {   // the market sells food for coin, seed money stays
+      const bought = Math.min(-food, (gold - seedReserve) / num(p.foodBuy));
+      gold -= bought * num(p.foodBuy); food += bought;
+    }
     const shortage = food < 0 && cons > 0 ? Math.min(1, -food / cons) : 0;
     if (food < 0) food = 0;
     gold -= soldiers * num(p.wage);
     if (gold < 0) { army += 5; gold = 0; }
     const perCap = gold / Math.max(1, adults + kidsN);
     let dPsy = tempoPsy - 8 * shortage + (faith ? 4 : 0);
+    if (shortage === 0 && psy < 50) dPsy += 1;   // fed people slowly get used to things
     let dHuz = tempoHuz - 8 * shortage - (perCap < 1 ? 2 : 0);
     if (martial) { dPsy = Math.max(dPsy, 0); dHuz -= 4; army += 8; }
     psy = Math.max(0, Math.min(100, psy + dPsy)); huz = Math.max(0, Math.min(100, huz + dHuz));
@@ -474,7 +485,7 @@ function simView() {
         <h3>Politika</h3>
         ${numF("sellPct", "Hasadın satılan kısmı %", 5)}${selF("tempo", "Çalışma temposu", ["Hafif", "Normal", "Ağır"])}${selF("faith", "İnanç binası", ["Kapalı", "Açık"])}${selF("martial", "Sıkıyönetim", ["Kapalı", "Açık"])}
         <h3>Kurallar</h3>
-        ${numF("wage", "Asker maaşı (altın/tur)", 0.5)}${numF("eatAdult", "Yetişkin gıdası/tur", 0.5)}${numF("eatSoldier", "Asker gıdası/tur", 0.5)}${numF("eatChild", "Çocuk gıdası/tur", 0.5)}${numF("turns", "Simüle edilecek tur")}
+        ${numF("wage", "Asker maaşı (altın/tur)", 0.5)}${numF("eatAdult", "Yetişkin gıdası/tur", 0.5)}${numF("eatSoldier", "Asker gıdası/tur", 0.5)}${numF("eatChild", "Çocuk gıdası/tur", 0.5)}${numF("foodBuy", "Gıda alış fiyatı (para)", 0.25)}${numF("turns", "Simüle edilecek tur")}
         <h3>Tarlalar</h3>
         <div class="fields-list">${fieldRows || `<span class="note">Henüz tarla yok.</span>`}</div>
         <div class="toolbar"><button type="button" id="addfield" ${names.length ? "" : "disabled"}>Tarla ekle</button>${names.length ? "" : `<span class="note">Önce Mahsuller sekmesine ürün gir.</span>`}</div>
@@ -483,7 +494,7 @@ function simView() {
         ${verdict}
         <div class="panel"><h3>Gıda ve altın</h3>${chart(res.rows, [{ k: "food", l: "Gıda", c: "--s-food" }, { k: "gold", l: "Altın", c: "--s-gold" }], Math.max(50, ...res.rows.map((r) => Math.max(r.food, r.gold))) * 1.1, "Gıda ve altın stoku, tur tur")}</div>
         <div class="panel"><h3>Metrikler (0–100)</h3>${chart(res.rows, [{ k: "psy", l: "Psikoloji", c: "--s-psy" }, { k: "huz", l: "Huzur", c: "--s-huz" }, { k: "army", l: "Ordu nüfuzu", c: "--s-army" }, { k: "cult", l: "Tarikat nüfuzu", c: "--s-cult" }], 100, "Psikoloji, huzur, ordu ve tarikat nüfuzu, tur tur")}
-        <p class="note">Gri sütunlar kış. Y1, Y2 yılları gösterir. Kesikli çizgiden sonra Kara Yıllar başlar (tarım −%10, tüketim +%10, her yıl birikerek).</p></div>
+        <p class="note">Gri sütunlar kış. Y1, Y2 yılları gösterir. Kesikli çizgiden sonra Kara Yıllar başlar (tarım −%5, tüketim +%5, her yıl birikerek). Doyan halkın psikolojisi 50'nin altındaysa tur başına +1 toparlanır.</p></div>
       </div>
     </div>`;
 }

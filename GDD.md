@@ -1,0 +1,590 @@
+# Village Headman · GDD (jam sürümü)
+
+**Bu dosya tek doğru kaynaktır.** `docs/` klasöründeki eski notlarla çelişen bir şey varsa bu dosya geçerlidir.
+Son güncelleme: 15 Kasım 2026, 19:50 (TR).
+
+İşaretler: **[K]** kullanıcının kararı · **[Ö]** önerilen değer, oynarken değiştirilebilir.
+
+---
+
+## 0. Tek sayfada
+
+| | |
+|---|---|
+| Tür | Tur bazlı köy yönetimi ve 1v1 strateji |
+| Görünüm | İzometrik **2D pixel art**, tek ekran **[K]** |
+| Motor | **Unreal Engine 5**, ortografik kamera **[K]** |
+| Arayüz dili | **İngilizce [K]** (bu doküman Türkçe, oyundaki metinler İngilizce yazıldı) |
+| Rakip | Kural tabanlı bot (jam). Jev ve iki kişilik mod sonra **[K]** |
+| Maç süresi | Tur sınırı yok **[K]**, hedef 25–40 dakika **[Ö]** |
+| Jam | Epic MegaJam 2026. Teslim **16 Kasım 04:59 TR**. Build zip'i **1 GB altı [K]** |
+| Takım | Kullanıcı (tasarım), **maybeno2906** (Unreal yapımı) **[K]** |
+
+**Oyunun özü:** köyü büyütmek değil, dengede tutmak. Her metriğin hem altında hem üstünde bir ölüm var. Zayıf ordu saldırı yer, güçlü ordu darbe yapar.
+
+---
+
+## 1. Hikaye ve ton
+
+İki kardeş aynı köyün muhtarlığını paylaşıyordu. Yolda üzerinde tek rakam yazan bir para buldular. Biri "Six" dedi, öbürü "Nine". Tartışma bir gün sürdü, sonra bir ömür. Köy ikiye bölündü. **[K]**
+
+- Köyler: **Six** ve **Nine**. Oyuncu Six'i yönetir, bot Nine'ı **[Ö]**.
+- Para birimi: Six köyünde **six**, Nine köyünde **nine**. Arayüzde "14 six" yazar **[K]**.
+- Ton: **kara mizah [K]**. Sebep gülünç, sonuçlar karanlık.
+- Haritanın tam ortasında, iki köyün arasındaki taşın üstünde **o para** durur. Dekor, ama açılış ve kapanış sahnesinin merkezi **[Ö]**.
+
+**Açılış sahnesi [Ö]** (3 kare, tıklayarak geçilir, en fazla 15 saniye):
+1. "Two brothers. One village. One coin."
+2. "'Six,' said one. 'Nine,' said the other."
+3. "That was forty years ago. They are still arguing."
+
+---
+
+## 2. Oyun döngüsü
+
+**1 tur = 1 mevsim. 4 tur = 1 yıl.** Oyuncu ve bot emirlerini aynı tur içinde verir, sonra tur birlikte çözülür. Oyuncu botun bu tur ne yaptığını tur raporunda görür.
+
+### Tur akışı
+
+1. **Planlama (oyuncu oynar):** inşa et, köylü ata, asker al, saldırı emri ver, kart oyna ya da seç, satış oranı ve tempo seç, tarikat talebi varsa cevapla.
+2. **"End Turn"** düğmesine basılır. Bot da emirlerini verir.
+3. **Çözümleme (sabit sıra, hep aynı):**
+   1. Kartlar
+   2. Emirler (inşaat başlar, askerler alınır, muhtarlık yükseltmesi başlar)
+   3. İnşaatlar ilerler ve biten binalar açılır
+   4. Üretim (tarla, orman, eğitim merkezi)
+   5. Savaş (iki saldırı aynı anda)
+   6. Satış ve depo (kapasite, bozulma)
+   7. Tüketim ve metrikler (gıda, maaş, ısınma, psikoloji, ordu nüfuzu)
+   8. Tarikat
+   9. Nüfus (doğum, büyüme, açlıktan ölüm)
+   10. Bitiş kontrolü
+4. **Tur raporu:** en fazla 6 satır, önemli olandan önemsize. Örnek: "Wheat harvest: 13 food, 6 six."
+
+Sabit sıra önemli: oyuncu "kartım savaştan önce çözülür" diye plan yapabilir. Satranç hissi buradan gelir.
+
+---
+
+## 3. Ekran düzeni
+
+Tek ekran, 16:9. **[Ö]**
+
+```
++-----------------------------------------------------------------------+
+| SIX  [######### hall 100 ]   Year 2 · Autumn   [ hall 85 ####### ] NINE |
+| six 14  wood 12/40  food 30/60  EP 4     psych ▮▮▮  army ▮  cult ▯   |
++-----------------------------------------------------------------------+
+|  trees trees                                         trees trees       |
+|  trees [slot][slot]                         [slot][slot] trees         |
+|        [ HALL ]          ( coin )            [ HALL ]                  |
+|  trees [slot]                                     [slot] trees         |
+|  trees trees                                         trees trees       |
++-----------------------------------------------------------------------+
+| VILLAGERS (10)  farm 4 · wood 4 · teach 0 · idle 2  [Let the elders decide] |
+| CARDS [Vine][Gossip][ ]     TEMPO (Light|Normal|Heavy)  SELL [40%]      |
+| ATTACK [ 0 ]  RECRUIT [ 0 ]  [Martial law]                [ END TURN ] |
++-----------------------------------------------------------------------+
+| Turn report: Wheat harvest: 13 food, 6 six. Nine built a Barracks.    |
++-----------------------------------------------------------------------+
+```
+
+- **Üst şerit:** iki muhtarlığın can barı, yıl ve mevsim. Kendi kaynakların ve 3 metrik çubuğu.
+- **Metrik çubukları renkli bant:** yeşil, sarı, kırmızı. Sayı ancak üstüne gelince görünür. Tehlikeye giren çubuk titrer.
+- **Rakibin metrikleri gizli**, sadece "High / Medium / Low" **[K]**. Rakibin binaları, inşaatları ve askerleri haritada görünür **[K]**.
+- **Slota tıklamak** inşa menüsünü açar. Dolu slota tıklamak binanın bilgisini ve işçilerini gösterir.
+- **Ormana tıklamak** oduncu sayısını gösterir.
+
+---
+
+## 4. Kaynaklar
+
+| Kaynak | Gelir | Gider | Sınır |
+|---|---|---|---|
+| **six / nine** (para) | Ekin satışı, odun satışı | İnşa, tohum, asker alma, maaş, kartlar | Sınırsız |
+| **Wood** (odun) **[K]** | Orman | İnşa, kışın ısınma, satış | Depo |
+| **Food** (gıda) | Hasat | Nüfus, tohum (para yoksa) | Depo |
+| **EP** (eğitim puanı) | İnşa tamamlamak, Eğitim Merkezi **[K]** | Gelişmiş binalar, muhtarlık | Sınırsız |
+
+### Başlangıç **[K: sadece ilk tarlaya yetecek kadar]**
+
+| six | wood | food | EP | Köylü | Slot |
+|---|---|---|---|---|---|
+| 14 | 12 | 50 | 0 | 10 (5 kadın, 5 erkek) | 3, hepsi boş |
+
+### Satış **[Ö]**
+
+- Her tur bir **satış oranı** seçilir (0, 20, 40, 60, 80, 100%). Hasadın o kadarı satılır, kalanı ambara girer. Varsayılan %40.
+- **Odun satışı:** "Sell wood" düğmesi, **2 wood = 1 six**. Erken oyunda para kazanmanın tek güvenli yolu bu. Olmazsa ilk turlarda açlık sarmalı oluşuyor.
+- **Gıda alımı:** "Buy food" düğmesi, **1 food = 1.25 six**. Ayrıca gıda tur sonunda yetmezse pazar eksik kısmı kendiliğinden satar (6 six tohum parası her zaman kesede kalır). Bu olmadan nakit ekinler (pancar, safran) anlamsızdı: zengin ama aç köyler ölüyordu.
+
+### Depo **[Ö]**
+
+| | Gıda | Odun |
+|---|---|---|
+| Muhtarlık (başlangıç) | 60 | 40 |
+| Her Granary | +60 | +40 |
+
+- Kapasiteyi aşan kaybolur ("The granary overflowed.").
+- Her tur gıdanın **%4**'ü bozulur, köyde Granary varsa **%2**.
+
+---
+
+## 5. Orman **[K: köyün etrafında toplanabilir ağaçlar]**
+
+- Her köyün çevresinde orman halkası. Slot kaplamaz.
+- Stok **120 wood** (12 ağaç kümesi × 10) **[Ö]**.
+- **Oduncu başına 3 wood/tur**, kışın 2. Yatkınlık verimiyle çarpılır.
+- İlkbahar ve yazda orman **+4/tur** yenilenir, 120'yi geçmez.
+- Stok düştükçe ağaç kümeleri kütüğe döner (her 10 wood bir küme).
+- **Kışın ısınma:** her kış turunda 5 kişi başına 1 wood yanar. Odun yetmezse psikoloji **-3**.
+
+---
+
+## 6. Binalar ve slotlar
+
+Her bina bir slot kaplar. **Tarlalar da slotlara dahil [K].** Maliyet ve süreler **[Ö]**.
+
+| Bina | six | wood | EP | Süre | İşçi | Etkisi |
+|---|---|---|---|---|---|---|
+| **Field** | 10 | 10 | 0 | 1 tur | 2 çiftçi | Seçilen ekini yetiştirir |
+| **Granary** | 8 | 15 | 0 | 1 tur | 0 | +60 gıda, +40 odun kapasite, bozulma yarıya |
+| **School** (Eğitim Merkezi) | 15 | 20 | 0 | 2 tur | 2 öğretmen | Öğretmen başına 3 EP/tur × verim |
+| **Barracks** | 20 | 25 | 5 | 2 tur | 0 | **Asker almayı açar** (tur başına en fazla 2), savaş gücü +%10 |
+| **Shrine** | 15 | 15 | 5 | 2 tur | 1 rahip | Psikoloji +4/tur, tarikat +3/tur |
+
+- İnşaat sırasında slotta iskele görünür, bina çalışmaz.
+- **Her bina tamamlandığında +2 EP [K].**
+- Bina yıkılabilir ("Demolish"), maliyetin yarısı geri gelir.
+
+### Muhtarlık (Hall)
+
+| Seviye | six | wood | EP | Süre | Slot | Konsey koltuğu | Sur |
+|---|---|---|---|---|---|---|---|
+| 1 (başlangıç) | | | | | 3 | 1 | 5 |
+| 2 | 25 | 20 | 10 | 2 | 5 | 2 | 10 |
+| 3 | 40 | 40 | 25 | 3 | 7 | 3 | 15 |
+| 4 | 60 | 60 | 45 | 3 | 9 | 3 | 20 |
+
+Seviye atlayınca **+5 EP** ve can barı **+20** (en fazla 100).
+
+---
+
+## 7. Ekinler
+
+### Üçlü kural **[K]**
+
+Her ekin üç özellikten **en fazla ikisinde** iyi olabilir: **hız** (kaç turda büyür), **maliyet** (tohum parası), **getiri** (gıda ya da para). Üçünde birden iyi olan ekinin bedeli **risktir**.
+
+| Ekin | Hız | Maliyet | Getiri | Bedeli |
+|---|---|---|---|---|
+| **Wheat** | ✓ hızlı | ✓ ucuz | ½ besleyici ama para etmez **[K]** | Satınca neredeyse hiç kazandırmaz |
+| **Potato** | ✗ yavaş | ✓ ucuz | ✓ en çok gıda | Sabır ister, kışa stok |
+| **Beet** (pancar) | ✓ hızlı | ✗ pahalı | ✓ çok para | Başta sermaye ister |
+| **Saffron** | ✓ hızlı | ✓ ucuz | ✓ çok para | **Risk:** çürür, sarmaşığa ilk hedef, usta çiftçi ister |
+
+**Wheat ile Beet'in farkı:** buğday doyurur, pancar zenginleştirir. Buğday gıda ekinidir (ucuz ve güvenli ama para getirmez). Pancar nakit ekindir (pahalı tohum, az gıda, ama satınca iyi para). Pancarın parası pazardan gıda almaya, bina dikmeye ya da asker beslemeye gider.
+
+### Değerler **[Ö]**
+
+| Ekin | Tohum (six) | Büyüme | Verim | Gıda/birim | Fiyat/birim | Hepsi yenirse gıda/tur | Hepsi satılırsa six/tur |
+|---|---|---|---|---|---|---|---|
+| **Wheat** | 2 | 2 tur | 8 | 2.5 | 0.75 | 10 | 2 |
+| **Potato** | 2 | 4 tur | 16 | 3 | 1 | 12 | 3.5 |
+| **Beet** | 7 | 2 tur | 6 | 1 | 4 | 3 | 8.5 |
+| **Saffron** | 3 | 2 tur | 4 | 0.5 | 8 | 1 | 14.5 |
+
+Hiçbir ekin bir başkasını her açıdan ezmiyor. Tasarım masası bunu her değişiklikte denetliyor.
+
+- Tarlanın ekini inşa ederken seçilir. Hasattan sonra **aynı ekin kendiliğinden tekrar ekilir** (tohum parası düşer). Ekini değiştirmek için tarlaya tıklayıp "Change crop".
+- **Para yoksa tohum ambardan ayrılır:** 1 six yerine 2 food. Bot testlerinde bulunan ölüm sarmalını önleyen kural.
+- **Kışın ekim yapılmaz.** Büyüyen ekin büyümeye devam eder.
+- **Hasat verimi** = verim × çiftçilerin ortalama verimi × tempo × mevsim × Kara Yıllar.
+- **Safran:** hasat zamanı geldiğinde tarlada en az 2 çiftçinin ortalama verimi %60'ın altındaysa hasat bekler. 1 turdan fazla beklerse çürür.
+
+---
+
+## 8. Köylüler
+
+### Yatkınlıklar **[K: 4 değer, rastgele]**
+
+| Yatkınlık | İşler |
+|---|---|
+| **Farming** | Çiftçi, Oduncu |
+| **Management** | Konsey üyesi (Elder) |
+| **Military** | Asker |
+| **Education** | Öğretmen, Rahip |
+
+- Her biri 1–5, **4'ünün toplamı 10 [Ö]**. "Her şeyi iyi yapan" köylü çıkmaz.
+- **Verim = 0.55 + 0.15 × yatkınlık [Ö]**: 1 → %70, 3 → %100, 5 → %130.
+
+### Karakter **[K: her köylünün karakteri var]**
+
+Her köylüye rastgele 1 karakter **[Ö]**:
+
+| Karakter | Etkisi |
+|---|---|
+| **Hardworking** | Verim +%10 |
+| **Lazy** | Verim -%15 |
+| **Devout** | Shrine varken kişisel psikoloji +1/tur. Rahipse tarikat +1/tur ek |
+| **Ambitious** | Askerse ordu nüfuzu +1/tur. Konseydeyse yönetim +1 |
+| **Loyal** | Tarikat reddinde firar etmez |
+| **Doubter** | "Ya para aslında öbür rakamsa?" Kişisel psikolojisi 30'un altına düşerse rakip köye kaçar |
+
+### İşler
+
+Çiftçi (tarla başına 2), Oduncu (sınırsız), Öğretmen (okul başına 2), Rahip (shrine başına 1), Asker (Barracks şart), Konsey (muhtarlık koltukları), Boşta.
+
+### Kişisel psikoloji
+
+- Her köylünün kendi psikolojisi var (başlangıç 60).
+- En yüksek yatkınlığının olduğu işteyse **+1/tur**.
+- Yatkınlığı 2 veya altı olan bir işteyken başka bir yatkınlığı 4 veya üstüyse **-2/tur** ("küçük insanlara büyük iş").
+- Boşta olan **-1/tur**.
+- **Köy psikolojisi** = kişisel psikolojilerin ortalaması, **en mutsuz %20 iki kat ağırlıklı [Ö]**.
+- Köy geneline gelen etkiler (açlık, tempo, kartlar) herkese aynı uygulanır.
+
+### Konsey ve "Let the elders decide"
+
+- Konsey koltukları muhtarlık seviyesine bağlı (1, 2, 3).
+- **Konseyin ortalama Management'ı** bütün köyün verimini etkiler: 1 → -%10, 3 → 0, 5 → +%10.
+- **"Let the elders decide"** atamaları konseye yaptırır:
+  - Yönetim 4–5: herkesi en uygun işe koyar.
+  - Yönetim 3: çoğunu doğru, her turda 1–2 hata.
+  - Yönetim 1–2: neredeyse rastgele.
+- Oyuncu her zaman elle de atayabilir (F katmanı). C katmanında atama sadece bu düğme ve iş sayısı panelinden yapılır.
+
+### Nüfus
+
+- Doğum: köy psikolojisi 55'in üstündeyse çift başına %6/tur, 40–55 arası %2, altında doğum yok.
+- Çocuğun yatkınlıkları ve karakteri rastgele. **8 turda** yetişkin olur.
+- Tüketim (tur başına): **yetişkin 1, asker 1.5, çocuk 0.5** gıda.
+- Gıda yarıdan fazla eksikse her tur yetişkinlerin %5'i ölür (en düşük psikolojiliden başlayarak).
+
+---
+
+## 9. Metrikler ve dengeler
+
+### Psikoloji (0–100)
+
+| Etki | Tur başına |
+|---|---|
+| Tempo Light / Normal / Heavy | +3 / 0 / -4 |
+| Gıda eksiği | -8 × eksik oranı |
+| Her Shrine | +4 |
+| Hane başına para 1'in altında | -1 |
+| Kışın odun yetmezse | -3 |
+| Ölen her asker | -2 (köy geneline) |
+| **Halk doyduysa ve psikoloji 50'nin altındaysa** | **+1 (alışma)** |
+
+**Neden toparlanma var:** tasarım masasının simülasyonu, psikolojinin normal tempoda sadece düşebildiğini gösterdi. Bir kez düşen psikoloji hiç geri gelmiyor ve köy er ya da geç isyanla bitiyordu. Doyan halk zamanla alışır: psikoloji 50'ye kadar kendiliğinden toparlanır, 50'nin üstüne ise ancak oyuncunun kararlarıyla çıkar.
+
+- **İsyan:** köy psikolojisi **3 tur üst üste 25'in altında** kalırsa. Sayaç ekranda görünür ("Unrest 2/3").
+
+### Tempo **[Ö]**
+
+| Tempo | Üretim | Psikoloji |
+|---|---|---|
+| Light | -%20 | +3/tur |
+| Normal | 0 | 0 |
+| Heavy | +%30 | -4/tur |
+
+### Ordu nüfuzu (0–100)
+
+- Her tur: **+ (asker / yetişkin) × 12 − 3**.
+- Maaş ödenemezse **+5**.
+- **Martial law (sıkıyönetim):** açıkken psikoloji düşmez, ordu nüfuzu **+8/tur**.
+- **75'te uyarı, 100'de darbe.**
+
+### Tarikat nüfuzu (0–100)
+
+- Her Shrine **+3/tur** (Devout rahip +1 ek).
+- **30, 50, 70'te talep** gelir (bkz. 12. bölüm).
+- **100'de tarikat köyü ele geçirir.**
+
+### Üç güç
+
+Psikolojiyi korumanın her yolu başka bir tehlikeyi besler: sıkıyönetim orduyu, Shrine tarikatı büyütür. **Sermon** kartı orduyu tarikat pahasına yumuşatır.
+
+---
+
+## 10. Askerlik ve savaş
+
+- **Asker almak:** Barracks şart. Tur başına en fazla 2. Asker başına **3 six**. Köylü işinden çıkar ve asker olur.
+- **Maaş:** asker başına **1 six/tur**. Gıda 1.5/tur.
+- **Saldırı:** "Attack" sayısı seçilir. Giden askerler o tur savunmaya katılmaz.
+
+**Formüller [Ö]:**
+- Asker gücü = Military verimi × (1 + 0.1 × Barracks sayısı)
+- **Saldırı** = gidenlerin gücü toplamı × (0.5 + psikoloji / 100)
+- **Savunma** = kalanların gücü toplamı × 1.2 + sur (muhtarlık seviyesine göre 5–20)
+- Saldırı savunmayı geçerse **muhtarlık hasarı = (saldırı − savunma) × 4**
+- Kayıplar: saldıran, gidenlerin en fazla %60'ını, savunma oranına göre kaybeder. Savunan, kalanların en fazla %60'ını, saldırı oranına göre kaybeder.
+- İki taraf aynı tur saldırırsa iki savaş aynı anda çözülür.
+- **Muhtarlık canı 0 → muhtar ölür [K].** Muhtarın tek ölüm yolu bu (jam).
+
+---
+
+## 11. Kartlar
+
+- **3 turda bir** 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
+
+| Kart | Tür | Bedel | Etkisi |
+|---|---|---|---|
+| **Vine** | Sabotaj | Yok | Rakibin en değerli ekili tarlasını sarar, bir sonraki hasadı yok olur |
+| **Gossip** | Karanlık | Yok | Rakibin köy psikolojisi -10 |
+| **Granary Fire** | Sabotaj | Yok | Rakibin gıdasının dörtte biri yanar |
+| **Tax Relief** | Yönetim | 8 six | Kendi psikolojin +10 |
+| **Mobilize** | Yönetim | Yok | Bu tur 3 ek savaşçı (saldırı ya da savunma), ordu nüfuzu +5 |
+| **Sermon** | Karanlık | Yok | Psikoloji +6, ordu nüfuzu -10, tarikat +8 |
+| **Upside Down** | Karanlık | 4 six | Rakibin parasını ters çevirir: bu tur rakibin satışları yarı fiyatına gider **[Ö, hikayeden]** |
+
+---
+
+## 12. Tarikat talepleri
+
+Tarikat nüfuzu eşiğe ulaştığında bir sonraki turun başında açılır pencere çıkar. **"Accept"** ya da **"Refuse"**.
+
+| Eşik | Talep (oyun metni) | Accept | Refuse **[K: huzursuzluk, ordu düzeni bozulur, isyan]** |
+|---|---|---|---|
+| 30 | "The Hooded Ones ask for a fifth of the harvest. For the coin, they say." | Gıdanın %20'si gider, tarikat +10 | Psikoloji -5 |
+| 50 | "They want a seat on the council." | Bir konsey koltuğu tarikata geçer (verim çarpanı ondan hesaplanır, yönetimi 1), tarikat +10 | Psikoloji -10, askerlerin %10'u firar eder (Loyal olanlar hariç) |
+| 70 | "One of yours has doubted the coin. They want him gone." | Bir köylü sürgün edilir (Doubter varsa o), tarikat +10 | Psikoloji -15, askerlerin %20'si firar eder, isyan sayacı +1 |
+
+---
+
+## 13. Mevsimler ve Kara Yıllar
+
+| Mevsim | Etki |
+|---|---|
+| Spring | Ekim yapılabilir, orman +4 |
+| Summer | Büyüme ×1.25, orman +4 |
+| Autumn | Hasat +%25 |
+| Winter | Ekim yok, gıda tüketimi +%25, ısınma odunu |
+
+**Kara Yıllar [K: tur sınırı yok, biri düşene kadar]:** 29. turdan (8. yılın başı) itibaren her yıl birikimli olarak hasat **-%5**, tüketim **+%5** (ilk taslakta %10'du, simülasyonda fazla sert çıktı). Ekranda "The Lean Years" yazısı çıkar. Maçın sonsuza uzamasını engeller.
+
+### Simülasyonun gösterdiği denge **[Ö]**
+
+Tek köy, rakipsiz, 60 tur (tasarım masası):
+
+| Köy | Sonuç |
+|---|---|
+| **Karışık: Wheat, Potato, Potato, Beet, %30 satış** | **60 tur ayakta**, 107 gıda, psikoloji 60, ordu nüfuzu 15 |
+| Sadece gıda ekinleri (Wheat ve Potato) | Doyuyor ama parasız kalıyor. Asker maaşı ödenemiyor, **50. turda darbe** |
+| Sadece Saffron ya da sadece Beet | 10–11. turda açlık. Nakit ekin tek başına köy doyurmaz |
+| Fazla satış (%50) | 56. turda isyan |
+| Heavy tempo sürekli | 13. turda isyan. Heavy bir kriz aracı, kalıcı politika değil |
+
+**Sonuç:** üçlü kural oyuncuyu ekinleri karıştırmaya zorluyor. Gıda ekinleri karnı, nakit ekinler orduyu ve binaları doyuruyor. Tek bir ekine yaslanan köy ya açlıktan ya darbeden düşüyor. Bu "iki yönlü ölüm" fikrinin tarladaki karşılığı.
+
+---
+
+## 14. Bitişler
+
+| Bitiş | Tetikleyici | Ekran başlığı | Muhtar animasyonu **[K: muhtar sadece bu anlarda görünür]** |
+|---|---|---|---|
+| Muhtar öldü | Muhtarlık canı 0 | "The Headman Fell" | Kapıdan son kez çıkar ve düşer |
+| Açlık | 2 tur üst üste gıda tamamen yetmezse | "The Empty Granary" | Boş ambarın önünde tek başına oturur |
+| İsyan | Psikoloji 3 tur 25'in altında | "The People Rose" | Kalabalık onu muhtarlıktan sürükleyerek çıkarır |
+| Darbe | Ordu nüfuzu 100 | "The General's Hat" | General muhtarın şapkasını alıp kendi takar |
+| Tarikat | Tarikat nüfuzu 100 | "The Hooded Ones" | Cübbeli figürler onu içeri alır, kapı kapanır |
+
+Rakip düşerse kazanırsın. İkisi aynı tur düşerse berabere: "Both brothers lost. The coin stayed where it was."
+
+**Kardeşin son sözü [Ö]** (kaybeden köyün muhtarı söyler):
+
+| Bitiş | Six kaybederse | Nine kaybederse |
+|---|---|---|
+| The Headman Fell | "It was a six. Write that on the stone." | "Nine. It was always nine." |
+| The Empty Granary | "We could have sold the coin." | "Nobody eats a number." |
+| The People Rose | "They never cared what it said." | "Fine. Call it a seven." |
+| The General's Hat | "At least the general agrees it's a six." | "The general says nine. I hate that he's right." |
+| The Hooded Ones | "They say it's neither. That's worse." | "They worship the coin now. Both sides of it." |
+
+**Kazanma ekranı:** "History will remember it as a six."
+
+---
+
+## 15. Director's Cut ekranı **[K]**
+
+Maç sonunda, bitiş animasyonundan sonra gelir. Temayla bağı burada kurulur: muhtar köyün yönetmeniydi, bu onun filmi.
+
+- Başlık: **"Director's Cut: The Tale of Six"**
+- **3 sahne** (yıl ve mevsimiyle), maçın en belirleyici anları. Seçim kuralı **[Ö]**:
+  1. Psikolojinin en çok düştüğü tur
+  2. En çok asker ya da köylünün kaybedildiği tur
+  3. Bitişi tetikleyen tur
+- Her sahne kısa bir cümle. Örnek: "Year 3, Spring. The general asked for more men. You gave them."
+- En altta bitişin başlığı ve kardeşin sözü. "Play again" düğmesi.
+
+Bunun için tur çözümlemesi her turda olayları (event) kaydetmeli: hasat, kayıp, metrik değişimi, kart, talep.
+
+---
+
+## 16. Bot
+
+Bot da aynı kurallarla oynar, sadece görünür bilgiyi kullanır (oyuncunun binaları ve askerleri). Maç başında 3 kişilikten biri rastgele seçilir **[Ö]**:
+
+| Kişilik | İnşa sırası | Davranış |
+|---|---|---|
+| **Farmer** | Field, Field, Granary, School, Field (Saffron), Hall 2 | Az asker (%15), Vine ve Tax Relief sever |
+| **Warlord** | Field, Field, School, Barracks, Hall 2 | Asker %30, rakipten 1.5 kat fazla askeri olunca saldırır, Mobilize sever |
+| **Zealot** | Field, Field, School, Shrine, Hall 2 | Tarikat taleplerini kabul eder, Sermon ve Gossip sever |
+
+Ortak kurallar:
+- Atamaları her tur "en uygun işe koy" mantığıyla yapar (iyi konsey gibi).
+- Gıda stoku 3 turluk tüketimin altına düşerse yeni tarla önceliklidir.
+- Odun 15'in altındaysa en az 3 oduncu tutar.
+- Her zaman tohum için 6 six yedek bırakır.
+- Psikoloji 40'ın altında: tempo Light. 30'un altında ve ordu nüfuzu 55'in altında: sıkıyönetim.
+
+**Not:** `core/` klasöründeki C++ çekirdek bu GDD'den önce yazıldı. Odun, köylüler ve yeni maliyetler orada yok. Formüller ve bot mantığı için referans olarak okunabilir, ama sayılar bu dokümana göre güncellenmeli.
+
+---
+
+## 17. Arayüz metinleri (İngilizce)
+
+| Yer | Metin |
+|---|---|
+| Ana menü | "Village Headman" · "Play" · "Quit" |
+| Tur düğmesi | "End Turn" |
+| İnşa menüsü | "Build" · "Field" · "Granary" · "School" · "Barracks" · "Shrine" · "Upgrade Hall" |
+| Tarla | "Choose crop" · "Wheat" · "Potato" · "Beet" · "Saffron" · "Change crop" · "Demolish" |
+| Köylüler | "Let the elders decide" · "Farmers" · "Woodcutters" · "Teachers" · "Priests" · "Soldiers" · "Elders" · "Idle" |
+| Politika | "Tempo" · "Light" · "Normal" · "Heavy" · "Sell" · "Sell wood" · "Martial law" |
+| Ordu | "Recruit" · "Attack" |
+| Uyarılar | "Unrest 2/3" · "The army grows restless." · "The Lean Years have begun." · "The granary overflowed." |
+| Rakip | "High" · "Medium" · "Low" |
+
+---
+
+## 18. Sanat (2D pixel art) **[K]**
+
+Referans: 9 Kings, **sadece ilham** (okunaklı küçük krallık, net siluetler). Görünüşü kopyalanmayacak, jam kuralları başkasının IP'sini yasaklıyor.
+
+### Sprite listesi **[Ö]**
+
+| Sprite | Boyut (px) | Not |
+|---|---|---|
+| Zemin karosu (çimen, toprak) | 64×32 | İzometrik elmas |
+| Muhtarlık (4 seviye) | 96×96 | Six ve Nine için iki renk varyantı |
+| Field (boş, ekili, olgun × 4 ekin) | 64×48 | Wheat, Potato, Beet, Saffron. Sarmaşıklı hali de |
+| Granary, School, Barracks, Shrine | 64×64 | İnşaat iskelesi ortak |
+| Ağaç kümesi ve kütük | 32×48 | |
+| Para (ortadaki taşın üstünde) | 32×32 | Büyük ve parlak, sahnenin odağı |
+| Köylü (yürüme 2 kare) | 16×24 | İş rengine göre şapka |
+| Asker | 16×24 | |
+| Cübbeli tarikat üyesi | 16×24 | |
+| Muhtar (animasyonlar için) | 24×32 | Sadece bitişlerde |
+| Arayüz ikonları (kaynaklar, metrikler, kartlar) | 16×16 | |
+| Kart çerçevesi | 64×96 | 3 tür rengi |
+
+**Renk:** soğuk, kasvetli bir zemin. Six için solgun kırmızı, Nine için solgun mavi bayrak rengi. Para altın sarısı ve sahnedeki en parlak şey.
+
+### Unreal'da pixel art ayarları
+
+- Dokular: **Texture Group "2D Pixels (unfiltered)"**, filtre **Nearest**, **mip map yok**, sıkıştırma **UserInterface2D**.
+- Kamera ortografik, ölçek tam sayı katlarında.
+
+---
+
+## 19. Ses (kullanıcı hazırlayacak **[K]**)
+
+| Ses | Ne zaman |
+|---|---|
+| Ana müzik (döngü) | Oyun boyunca |
+| Kış müziği ya da katmanı | Kış turlarında |
+| Tıklama | Arayüz |
+| İnşaat bitti | Bina açılınca |
+| Hasat | Hasat satırında |
+| Balta | Odun |
+| Savaş | Saldırı çözülürken |
+| Kart çekme ve oynama | Kartlar |
+| Tarikat talebi | Açılır pencere |
+| Bitiş (5 kısa melodi ya da tek ortak) | Bitiş ekranı |
+
+Müzik OGG ya da sıkıştırılmış olmalı (1 GB sınırı için).
+
+---
+
+## 20. Teknik
+
+### Katmanlar
+
+```
+Sunum (harita, arayüz, ses)  →  sadece durumu okur, olayları dinler
+Köprü                       →  durum fotoğrafı, olay listesi, emir girişi
+Kurallar                    →  tur çözücüsü, sistemler sabit sırayla
+Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
+```
+
+- **Kurallar ekranı bilmez, ekran kuralları bilmez.** Yeni bir özellik yeni bir olay türü ekler, eski ekranlar bozulmaz.
+- **Bütün sayılar tek bir ayar tablosunda** (Unreal'da DataTable ya da tek bir Data Asset). Denge değişikliği için koda dokunulmaz.
+- **Rakip arayüzü:** "Bu durumu görüyorsun, emirlerin ne?" Bot, Jev, ikinci oyuncu aynı yere takılır.
+
+### Build ve boyut **[K: 1 GB altı]**
+
+- Hedef zip **400 MB altı**. Starter Content yok, gereksiz eklentiler kapalı.
+- Paketleme: Use Pak File, Create compressed cooked packages, Exclude editor content when cooking.
+- Sadece oyun haritası paketlenir. Mümkünse Shipping build.
+- Zip adı: `TeamName_VillageHeadman`.
+
+---
+
+## 21. Yapım öncelikleri
+
+Bir katman bitmeden sonrakine geçilmez. Hangi saatte durulursa durulsun elde oynanabilir bir oyun kalır.
+
+| Katman | İçerik | Bitince |
+|---|---|---|
+| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot | Köy kurulup yaşatılabiliyor |
+| **B** | Psikoloji, ordu nüfuzu, Barracks ve asker, savaş, can barları, 5 bitiş | Kazanıp kaybedilebiliyor |
+| **C** | 10 rastgele köylü, yatkınlık, karakter, "Let the elders decide", iş sayısı paneli | Liyakat teması oyunda |
+| **D** | Kartlar, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
+| **E** | Açılış sahnesi, Director's Cut, muhtar animasyonları, ses | Jüri için cila |
+| **F** | Tek tek köylü atama, Doubter'ın kaçması | Tam liyakat |
+| **G** | Pazar, olaylar, suikast, Jev, iki kişilik mod | Jam sonrası |
+
+**Her durumda teslimden önce:** bitiş ekranı ve bir müzik (E'nin en küçük parçası).
+
+### Saat planı **[Ö]**
+
+| Saat (TR) | İş |
+|---|---|
+| 19:50–20:30 | Proje kurulumu, kamera, pixel art ayarları, boş harita |
+| 20:30–22:30 | Katman A |
+| 22:30–00:00 | Katman B |
+| 00:00–01:00 | Katman C |
+| 01:00–01:45 | Katman D |
+| 01:45–02:45 | Katman E |
+| 02:45–03:30 | Paketleme, başka bir bilgisayarda deneme, boyut kontrolü |
+| 03:30–04:15 | Video (30–60 sn), itch sayfası |
+| 04:15–04:40 | Jam'e teslim |
+| 04:40–04:59 | Yedek süre |
+
+Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saatleri kaydırılmaz.**
+
+---
+
+## 22. Teslim
+
+- **Video (30–60 sn):** ilk 5 saniyede bir bitiş anı ("The General's Hat"), sonra para ve kardeşler (3 sn), sonra hızlı oynanış: inşa, hasat, kart, saldırı, Director's Cut ekranı.
+- **itch sayfası:** tek cümlelik özet ("Two brothers found a coin. One says six. One says nine. Run your half of the village without starving, revolting, or getting couped."), 3 ekran görüntüsü, kontroller, takım, kullanılan araçlar ve asset listesi.
+- **Dev log (Glass Box ödülü için):** tasarımın yapay zekayla nasıl kurulduğu, bot simülasyonunun bulduğu hatalar (ölüm sarmalı, çok sık kartlar), kesilen özellikler.
+- **Form:** takım adı, iki üyenin adı ve Epic hesabı e-postası, oyun adı, video linki, kullanılan araçlar.
+
+---
+
+## 23. Hâlâ eksik olanlar
+
+| # | Eksik | Kimde | Engel mi? |
+|---|---|---|---|
+| 1 | **Sprite'ları kim çizecek / nereden gelecek?** (pixel art üretimi, araç ya da asset paketi) | Karar lazım | **Evet, A katmanı için zemin ve tarla şart** |
+| 2 | Ses dosyaları | Kullanıcı | E katmanına kadar hayır |
+| 3 | Takım adı | Karar lazım | Teslimde evet |
+| 4 | maybeno2906'nın GitHub erişimi | Sonra | Hayır |
+| 5 | Yeni ekonominin denge testi (odun, köylüler) | Oynanarak | Hayır, sayılar tabloda değiştirilebilir |
+| 6 | Tarikat talep metinlerinin onayı | Kullanıcı | Hayır |
+| 7 | Bitiş sözlerinin onayı | Kullanıcı | Hayır |
+| 8 | Hangi köyü oyuncu yönetiyor (öneri: Six) | Kullanıcı | Hayır |
+| 9 | Jev, iki kişilik mod, pazar, olaylar, suikast | Jam sonrası | Hayır |
