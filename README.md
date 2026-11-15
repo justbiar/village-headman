@@ -3,7 +3,7 @@
 İki düşman köyün karşı karşıya geldiği, izometrik görünümlü, tur bazlı bir strateji ve köy yönetimi oyunu.
 Oyunun özü: **köyü büyütmek değil, köyü dengede tutmak.** Ton ciddi ve karanlık.
 
-Teknoloji: tarayıcıda çalışan **Three.js** (ortografik izometrik kamera), modeller **Tripo AI** ile.
+Teknoloji: **Unreal Engine 5** (ortografik izometrik kamera, C++ simülasyon çekirdeği), modeller **Tripo AI** ile.
 
 Bu repo şimdilik sadece tasarım notlarını içeriyor. Kodlamaya tasarım netleşince başlanacak.
 
@@ -15,6 +15,8 @@ Bu repo şimdilik sadece tasarım notlarını içeriyor. Kodlamaya tasarım netl
 | [docs/02-oyun-tasarimi.md](docs/02-oyun-tasarimi.md) | Çekirdek oyun mimarisi: kaynaklar, denge metrikleri, mahsuller, nüfus, köylüler, kartlar |
 | [docs/03-kararlar-ve-sorular.md](docs/03-kararlar-ve-sorular.md) | Verilen kararlar, teknik kısıtlar, açık sorular |
 | [docs/04-acik-konular-onerileri.md](docs/04-acik-konular-onerileri.md) | Eksik kalan sistemler için somut öneriler: tur akışı, formüller, tarikat, savaş, pazar, LLM rakip |
+| [docs/05-tam-analiz.md](docs/05-tam-analiz.md) | Baştan sona eleştirel analiz: güçlü yanlar, riskler, eksikler, yapım sırası |
+| [workbench/tasarim-masasi.html](workbench/tasarim-masasi.html) | Tasarım masası: verileri girip denge denetimi ve kaba ekonomi simülasyonu yapan sayfa |
 | [docs/00-orijinal-fikir.md](docs/00-orijinal-fikir.md) | Fikrin ilk hali, olduğu gibi |
 
 ## Kısa özet

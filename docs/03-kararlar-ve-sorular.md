@@ -6,7 +6,7 @@
 |---|---|
 | Oyunun adı | **Village Headman** |
 | Hedef | Epic MegaJam 2026'ya girilmeyecek (Unreal kurulamadı). Oyun jam baskısı olmadan yapılacak |
-| Teknoloji | **Three.js** (web), modeller **Tripo AI** ile. İzometrik görünüm ortografik kamera ile |
+| Teknoloji | **Unreal Engine 5** (önce Three.js düşünüldü, sonra UE5 seçildi). Modeller **Tripo AI** ile. İzometrik görünüm ortografik kamera ile |
 | Rakip | Yapay zeka (ucuz LLM, oyuncu başına 1 ücretsiz hak, sonra kendi API anahtarı) + kural tabanlı bot |
 | İki kişilik mod | Zaman kalırsa en son |
 | Savaş | Basit, üstte can barları |
@@ -37,7 +37,7 @@
 
 ## Açık sorular
 
-- [x] Hangi seçenekle ilerlenecek? Jam yok, Three.js ile web.
+- [x] Motor: Unreal Engine 5.
 - [x] Oyunun adı: Village Headman.
 - [x] "jev": bir karar (decision) modeli. Rakip yapay zekası için kullanılacak.
 - [ ] Jev'in API'si, dokümanı ve fiyatı.

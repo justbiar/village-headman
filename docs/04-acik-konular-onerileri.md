@@ -197,10 +197,13 @@ Köyde üç güç var ve birbirini dengeliyor:
 
 ## 15. Teknik mimari
 
-- **Vite + TypeScript + Three.js**.
-- **Simülasyon çekirdeği ayrı ve saf TypeScript:** görüntüden bağımsız, tohumlu (seed) rastgelelikle deterministik.
-  - Böylece bot, LLM ve ileride iki kişilik mod aynı çekirdeği kullanır.
-  - Denge testi için binlerce maçı tarayıcı açmadan simüle edebiliriz (bot vs bot).
-- **Görüntü katmanı:** Three.js, ortografik kamera, izometrik açı. Tripo AI'dan low-poly GLB modeller.
-- **Arayüz:** HTML/CSS katmanı (kartlar, metrik barları, emir paneli).
-- **Sunucu:** sadece LLM proxy için küçük bir serverless fonksiyon.
+- **Motor: Unreal Engine 5** (karar verildi, Three.js'ten vazgeçildi).
+- **Simülasyon çekirdeği C++ ile, görüntüden ayrı:** tohumlu (seed) rastgelelikle deterministik.
+  - Bot, Jev/LLM ve ileride iki kişilik mod aynı çekirdeği kullanır.
+  - Denge testi için binlerce maç ekransız simüle edilebilir (bot vs bot).
+  - Neden C++: Blueprint'ler ikili (binary) dosya, yapay zeka ajanı onları doğrudan okuyup düzenleyemez. C++ metin olduğu için Claude yazabilir, okuyabilir, düzeltebilir. Blueprint sadece ince bir katman olarak (görsel bağlantılar) kullanılır.
+- **Görüntü:** ortografik kamera, izometrik açı. Tripo AI'dan low-poly modeller (FBX/GLB içe aktarma).
+- **Arayüz:** UMG (kartlar, metrik barları, emir paneli).
+- **Yapay zeka rakibi:** Unreal'ın HTTP modülü ile proxy sunucuya istek.
+- **Sunucu:** sadece LLM/Jev proxy'si için küçük bir serverless fonksiyon.
+- **Kurulum ihtiyacı (Mac):** UE5 (~35–60 GB) + Xcode (~15–35 GB). Şu an diskte ~17 GB boş.

@@ -1,0 +1,526 @@
+<title>Village Headman Tasarım Masası</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a war-table ledger. Sticky tab rail on top, one working sheet per tab, tables scroll inside their own frame. */
+:root {
+  --bg: #EEF0EA; --surface: #F8F9F5; --sunk: #E3E6DE; --fg: #1E221C; --muted: #5E6659; --line: #CDD2C6;
+  --accent: #8A6A1F; --accent-ink: #FFFFFF;
+  --ok: #3F6B3A; --warn: #8F6206; --danger: #A3322A;
+  --s-food: #3F6B3A; --s-gold: #A57E1E; --s-psy: #3E6CA3; --s-huz: #2F8075; --s-army: #A3322A; --s-cult: #6D4E9C;
+  --f-display: "Spectral SC", Georgia, "Times New Roman", serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #13150F; --surface: #1B1E16; --sunk: #10120C; --fg: #E4E2D6; --muted: #9B9F8E; --line: #2E3227;
+  --accent: #D2A84A; --accent-ink: #1B1407;
+  --ok: #84B26F; --warn: #E2A93B; --danger: #E0645A;
+  --s-food: #84B26F; --s-gold: #D2A84A; --s-psy: #7FA7D9; --s-huz: #5CC0B0; --s-army: #E0645A; --s-cult: #B596E0;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #13150F; --surface: #1B1E16; --sunk: #10120C; --fg: #E4E2D6; --muted: #9B9F8E; --line: #2E3227;
+  --accent: #D2A84A; --accent-ink: #1B1407;
+  --ok: #84B26F; --warn: #E2A93B; --danger: #E0645A;
+  --s-food: #84B26F; --s-gold: #D2A84A; --s-psy: #7FA7D9; --s-huz: #5CC0B0; --s-army: #E0645A; --s-cult: #B596E0;
+  color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 14px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; }
+header.top .wrap { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 4px 24px; padding-block: 14px 0; }
+.brand { display: flex; flex-direction: column; gap: 0; padding-bottom: 10px; }
+.brand small { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { font-family: var(--f-display); font-weight: 700; font-size: 24px; margin: 0; line-height: 1.1; text-wrap: balance; }
+nav.tabs { display: flex; gap: 2px; overflow-x: auto; flex: 1 1 400px; min-width: 0; scrollbar-width: thin; }
+nav.tabs a { color: var(--muted); text-decoration: none; padding: 9px 12px 10px; border-bottom: 2px solid transparent; white-space: nowrap; font-weight: 500; }
+nav.tabs a:hover { color: var(--fg); }
+nav.tabs a[aria-current="page"] { color: var(--fg); border-bottom-color: var(--accent); }
+nav.tabs a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.status { font-family: var(--f-mono); font-size: 11px; color: var(--muted); padding-bottom: 12px; margin-left: auto; }
+.status.err { color: var(--danger); }
+
+main .wrap { padding-block: 24px 64px; display: flex; flex-direction: column; gap: 20px; }
+h2 { font-family: var(--f-display); font-weight: 500; font-size: 22px; margin: 0; text-wrap: balance; }
+h3 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0; font-weight: 600; }
+p.lead { margin: 0; color: var(--muted); max-width: 70ch; }
+.sheet-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+.tile b { font-family: var(--f-mono); font-size: 26px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.tile span { color: var(--muted); font-size: 12px; }
+.tile.danger b { color: var(--danger); } .tile.warn b { color: var(--warn); } .tile.ok b { color: var(--ok); }
+
+.checks { display: flex; flex-direction: column; gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.check { display: grid; grid-template-columns: 84px 110px 1fr; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--line); align-items: baseline; }
+.check:first-child { border-top: 0; }
+.check .area { color: var(--muted); font-size: 12px; }
+.pill { font-family: var(--f-mono); font-size: 11px; padding: 1px 8px; border-radius: 99px; border: 1px solid currentColor; justify-self: start; white-space: nowrap; }
+.pill.kritik { color: var(--danger); } .pill.uyari { color: var(--warn); } .pill.bilgi { color: var(--muted); } .pill.iyi { color: var(--ok); }
+@media (max-width: 560px) { .check { grid-template-columns: 1fr; gap: 4px; } }
+
+.frame { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: .04em; background: var(--sunk); position: sticky; top: 0; white-space: nowrap; }
+th.calc, td.calc { background: color-mix(in srgb, var(--accent) 7%, transparent); font-family: var(--f-mono); }
+td.calc { padding-top: 11px; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td input, td select, td textarea { width: 100%; min-width: 4.5rem; background: transparent; color: var(--fg); border: 1px solid transparent; border-radius: 4px; padding: 4px 6px; font: inherit; }
+td textarea { resize: vertical; min-height: 30px; line-height: 1.4; }
+td input[type=number] { font-family: var(--f-mono); min-width: 4rem; }
+td input:hover, td select:hover, td textarea:hover { border-color: var(--line); }
+td input:focus, td select:focus, td textarea:focus { border-color: var(--accent); background: var(--bg); outline: none; }
+.empty { padding: 28px 16px; color: var(--muted); text-align: center; }
+
+button { font: inherit; cursor: pointer; border-radius: 4px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); padding: 6px 12px; }
+button:hover { border-color: var(--muted); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+button.ghost { border-color: transparent; background: transparent; color: var(--muted); padding: 4px 8px; }
+button.ghost:hover { color: var(--danger); }
+button.ghost.armed { color: var(--danger); border-color: var(--danger); }
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.filter { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter button[aria-pressed="true"] { border-color: var(--accent); color: var(--fg); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+
+.grid2 { display: grid; grid-template-columns: minmax(0, 330px) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.field { display: grid; grid-template-columns: 1fr 96px; gap: 8px; align-items: center; }
+.field label { color: var(--muted); font-size: 13px; }
+.field input, .field select { width: 100%; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 4px; padding: 5px 6px; font: inherit; font-family: var(--f-mono); }
+.fields-list { display: flex; flex-direction: column; gap: 6px; }
+.fields-list .row { display: grid; grid-template-columns: 52px 1fr 30px; gap: 6px; align-items: center; }
+.fields-list .row span { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.fields-list select { width: 100%; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 4px; padding: 5px 6px; font: inherit; }
+.verdict { border-left: 3px solid var(--ok); padding: 8px 12px; background: var(--sunk); border-radius: 0 4px 4px 0; }
+.verdict.bad { border-left-color: var(--danger); }
+.verdict strong { font-family: var(--f-display); font-size: 18px; font-weight: 500; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font-family: var(--f-mono); font-size: 10px; }
+.note { font-size: 12px; color: var(--muted); max-width: 75ch; }
+.mono { font-family: var(--f-mono); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><small>Tasarım masası</small><h1>Village Headman</h1></div>
+    <nav class="tabs" aria-label="Bölümler" id="tabs"></nav>
+    <div class="status" id="status" role="status">Bağlanıyor…</div>
+  </div>
+</header>
+<main><div class="wrap" id="view"></div></main>
+
+<script>
+(() => {
+const SECTIONS = {
+  proscons: { doc: "design/proscons", title: "Artılar ve eksiler", cols: [
+    { k: "kind", l: "Tür", t: "sel", o: ["Artı", "Eksi", "Risk"] },
+    { k: "area", l: "Alan", t: "text" },
+    { k: "text", l: "Açıklama", t: "area" } ] },
+  crops: { doc: "design/crops", title: "Mahsuller", cols: [
+    { k: "name", l: "Ürün", t: "text" },
+    { k: "cost", l: "Ekim (altın)", t: "num" },
+    { k: "turns", l: "Büyüme (tur)", t: "num" },
+    { k: "yield", l: "Verim (birim)", t: "num" },
+    { k: "food", l: "Gıda/birim", t: "num" },
+    { k: "price", l: "Fiyat/birim", t: "num" },
+    { k: "rot", l: "Çürüme (tur, 0=yok)", t: "num" },
+    { k: "risk", l: "Sabotaj riski %", t: "num" },
+    { k: "note", l: "Not", t: "area" } ] },
+  buildings: { doc: "design/buildings", title: "Binalar", cols: [
+    { k: "name", l: "Bina", t: "text" },
+    { k: "branch", l: "Dal", t: "sel", o: ["Genel", "Tarım", "Eğitim", "Askeri", "İnanç"] },
+    { k: "gold", l: "Altın", t: "num" },
+    { k: "ep", l: "EP", t: "num" },
+    { k: "turns", l: "Yapım (tur)", t: "num" },
+    { k: "effect", l: "Etkisi", t: "area" } ] },
+  metrics: { doc: "design/metrics", title: "Denge metrikleri", cols: [
+    { k: "name", l: "Metrik", t: "text" },
+    { k: "low", l: "Alt eşik", t: "num" },
+    { k: "high", l: "Üst eşik", t: "num" },
+    { k: "lowEffect", l: "Çok düşükse", t: "area" },
+    { k: "highEffect", l: "Çok yüksekse", t: "area" },
+    { k: "fatal", l: "Ölümcül mü", t: "sel", o: ["Ölümcül", "Ölümcül değil"] } ] },
+  cards: { doc: "design/cards", title: "Güç kartları", cols: [
+    { k: "name", l: "Kart", t: "text" },
+    { k: "type", l: "Tür", t: "sel", o: ["Sabotaj", "Yönetim", "Karanlık"] },
+    { k: "cost", l: "Bedel", t: "text" },
+    { k: "effect", l: "Etkisi", t: "area" },
+    { k: "counter", l: "Karşı hamle", t: "area" } ] },
+  questions: { doc: "design/questions", title: "Açık sorular", cols: [
+    { k: "area", l: "Alan", t: "text" },
+    { k: "question", l: "Soru", t: "area" },
+    { k: "answer", l: "Cevap / öneri", t: "area" },
+    { k: "status", l: "Durum", t: "sel", o: ["Açık", "Öneri var", "Karar verildi"] } ] },
+};
+const VIEWS = [
+  { id: "ozet", l: "Özet" }, { id: "mahsuller", l: "Mahsuller", s: "crops" }, { id: "binalar", l: "Binalar", s: "buildings" },
+  { id: "metrikler", l: "Metrikler", s: "metrics" }, { id: "kartlar", l: "Kartlar", s: "cards" },
+  { id: "simulasyon", l: "Simülasyon" }, { id: "sorular", l: "Açık sorular", s: "questions" },
+];
+const INTRO = {
+  crops: "Hız, maliyet ve getiriden ancak ikisi bir arada olmalı. Sağdaki hesaplanan sütunlar ve Özet'teki denetim, bir ürünün diğerini tamamen ezip ezmediğini gösterir.",
+  buildings: "Bina listesi, maliyetleri ve yapım süreleri. Maliyeti boş kalan binalar Özet'te uyarı olarak görünür.",
+  metrics: "Tasarımın ana kuralı: her metriğin hem altında hem üstünde bir tehlike olmalı. Tek yönlü kalan metrikler Özet'te işaretlenir.",
+  cards: "Her kartın bir karşı hamlesi olmalı, yoksa satranç hissi bozulur. Tür dağılımı Özet'te sayılır.",
+  questions: "Tasarımda hâlâ cevabı olmayan her şey. Durumu 'Karar verildi' yapınca sayaçtan düşer.",
+};
+const SIM_DEFAULT = { startGold: 30, startFood: 40, adults: 10, soldiers: 2, sellPct: 40, tempo: "Normal", faith: "Kapalı", martial: "Kapalı", wage: 1, eatAdult: 2, eatSoldier: 3, eatChild: 1, turns: 48, fields: [] };
+
+const state = { rows: {}, sim: null, loaded: {}, db: null, canWrite: true, filter: "Hepsi" };
+for (const k in SECTIONS) state.rows[k] = [];
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (v) => String(v ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const num = (v) => { const n = parseFloat(v); return Number.isFinite(n) ? n : 0; };
+const fmt = (n, d = 1) => Number.isFinite(n) ? (Math.round(n * 10 ** d) / 10 ** d).toLocaleString("tr-TR") : "·";
+const uid = () => Math.random().toString(36).slice(2, 9);
+
+/* ---------- status ---------- */
+function setStatus(t, err) { const el = $("#status"); el.textContent = t; el.classList.toggle("err", !!err); }
+
+/* ---------- persistence ---------- */
+const writers = {};
+function save(path, body) {
+  if (!state.db || !state.canWrite) return;
+  const w = writers[path] || (writers[path] = { busy: false, next: null, timer: 0 });
+  w.next = body; clearTimeout(w.timer);
+  w.timer = setTimeout(() => flush(path), 500);
+  setStatus("Kaydediliyor…");
+}
+async function flush(path) {
+  const w = writers[path];
+  if (w.busy || !w.next) return;
+  const body = w.next; w.next = null; w.busy = true;
+  try { await state.db.doc(path).set(body); setStatus("Kaydedildi"); }
+  catch (e) {
+    if (e && e.code === "invalid_argument") { state.canWrite = false; setStatus("Bu görünümde düzenleme kapalı (sadece okuma)", true); }
+    else if (e && e.code === "unavailable") { w.next = w.next || body; setTimeout(() => flush(path), 800 + Math.random() * 800); }
+    else setStatus("Kaydedilemedi: " + (e && e.message || "bilinmeyen hata"), true);
+  } finally { w.busy = false; if (w.next) flush(path); }
+}
+function saveSection(key) { save(SECTIONS[key].doc, { rows: state.rows[key] }); }
+function saveSim() { save("design/sim", state.sim); }
+
+function editingInside(sel) { const a = document.activeElement; return a && a.closest && a.closest(sel); }
+
+async function connect() {
+  let db = null;
+  try { db = await window.claude?.use?.("db"); } catch (e) { db = null; }
+  if (!db) { state.canWrite = false; state.sim = { ...SIM_DEFAULT }; setStatus("Veri deposuna ulaşılamıyor: değişiklikler kaydedilmez", true); render(); return; }
+  state.db = db;
+  const timer = setTimeout(() => setStatus("Veriler henüz gelmedi, bağlantı bekleniyor", true), 10000);
+  let pending = Object.keys(SECTIONS).length + 1;
+  const done = () => { if (--pending === 0) { clearTimeout(timer); setStatus("Güncel"); } };
+  for (const key in SECTIONS) {
+    let first = true;
+    db.doc(SECTIONS[key].doc).onSnapshot((snap) => {
+      if (snap.metadata.hasPendingWrites) return;
+      const w = writers[SECTIONS[key].doc];
+      if (w && (w.busy || w.next)) return;
+      state.rows[key] = snap.exists && Array.isArray(snap.data().rows) ? structuredClone(snap.data().rows) : [];
+      state.loaded[key] = true;
+      if (first && !snap.metadata.fromCache) { first = false; done(); }
+      if (!editingInside("#view")) render();
+    }, (e) => { setStatus("Bağlantı koptu: " + e.code, true); });
+  }
+  let firstSim = true;
+  db.doc("design/sim").onSnapshot((snap) => {
+    if (snap.metadata.hasPendingWrites) return;
+    const w = writers["design/sim"]; if (w && (w.busy || w.next)) return;
+    state.sim = { ...SIM_DEFAULT, ...(snap.exists ? structuredClone(snap.data()) : {}) };
+    if (firstSim && !snap.metadata.fromCache) { firstSim = false; done(); }
+    if (!editingInside("#view")) render();
+  }, (e) => { setStatus("Bağlantı koptu: " + e.code, true); });
+}
+
+/* ---------- derived values and checks ---------- */
+function cropCalc(c) {
+  const t = Math.max(1, num(c.turns));
+  return { goldPerTurn: (num(c.yield) * num(c.price) - num(c.cost)) / t, foodPerTurn: (num(c.yield) * num(c.food)) / t };
+}
+const median = (a) => { if (!a.length) return 0; const s = [...a].sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+
+function runChecks() {
+  const out = [];
+  const crops = state.rows.crops.filter((c) => c.name);
+  const calc = crops.map((c) => ({ c, ...cropCalc(c) }));
+  for (const a of calc) for (const b of calc) {
+    if (a === b) continue;
+    const ge = a.goldPerTurn >= b.goldPerTurn && a.foodPerTurn >= b.foodPerTurn && num(a.c.risk) <= num(b.c.risk) && num(a.c.cost) <= num(b.c.cost) && num(a.c.turns) <= num(b.c.turns);
+    const gt = a.goldPerTurn > b.goldPerTurn || a.foodPerTurn > b.foodPerTurn || num(a.c.risk) < num(b.c.risk) || num(a.c.cost) < num(b.c.cost) || num(a.c.turns) < num(b.c.turns);
+    if (ge && gt) out.push({ sev: "kritik", area: "Mahsuller", text: `${a.c.name}, ${b.c.name} ürününü her açıdan eziyor. ${b.c.name} ekmek için hiçbir sebep kalmıyor.` });
+  }
+  if (calc.length >= 3) {
+    const mc = median(calc.map((x) => num(x.c.cost))), mt = median(calc.map((x) => num(x.c.turns))), mg = median(calc.map((x) => x.goldPerTurn));
+    for (const x of calc) if (num(x.c.cost) <= mc && num(x.c.turns) <= mt && x.goldPerTurn > mg && num(x.c.risk) === 0 && num(x.c.rot) === 0)
+      out.push({ sev: "uyari", area: "Mahsuller", text: `${x.c.name} hem ucuz, hem hızlı, hem kârlı ama hiç riski yok. Üçlü kuralı gereği bir risk eklenmeli.` });
+  }
+  for (const b of state.rows.buildings) if (b.name && !num(b.gold) && !num(b.ep)) out.push({ sev: "uyari", area: "Binalar", text: `${b.name} için maliyet girilmemiş.` });
+  for (const m of state.rows.metrics) {
+    if (!m.name) continue;
+    if (!String(m.highEffect || "").trim() || /sorun yok/i.test(m.highEffect)) out.push({ sev: "bilgi", area: "Metrikler", text: `${m.name} tek yönlü: üst tarafında bir tehlike yok. Bilinçli bir seçim değilse bir bedel eklenebilir.` });
+    if (!String(m.lowEffect || "").trim()) out.push({ sev: "uyari", area: "Metrikler", text: `${m.name} için düşük değerin sonucu yazılmamış.` });
+  }
+  for (const c of state.rows.cards) if (c.name && !String(c.counter || "").trim()) out.push({ sev: "uyari", area: "Kartlar", text: `${c.name} kartının karşı hamlesi yok.` });
+  const types = { Sabotaj: 0, Yönetim: 0, Karanlık: 0 };
+  for (const c of state.rows.cards) if (types[c.type] !== undefined) types[c.type]++;
+  const tv = Object.values(types); if (state.rows.cards.length >= 3 && Math.max(...tv) > 2 * Math.max(1, Math.min(...tv)))
+    out.push({ sev: "bilgi", area: "Kartlar", text: `Kart türleri dengesiz: Sabotaj ${types.Sabotaj}, Yönetim ${types.Yönetim}, Karanlık ${types.Karanlık}.` });
+  const sim = state.sim && simulate(state.sim, state.rows.crops);
+  if (sim && sim.end) out.push({ sev: "kritik", area: "Simülasyon", text: `Mevcut ayarlarla köy ${sim.end.turn}. turda düşüyor: ${sim.end.reason}.` });
+  else if (sim && state.sim.fields.length) out.push({ sev: "iyi", area: "Simülasyon", text: `Mevcut ayarlarla köy ${state.sim.turns} tur ayakta kalıyor.` });
+  const order = { kritik: 0, uyari: 1, bilgi: 2, iyi: 3 };
+  return out.sort((a, b) => order[a.sev] - order[b.sev]);
+}
+
+/* ---------- simulation ---------- */
+function simulate(p, cropRows) {
+  const crops = {}; for (const c of cropRows) if (c.name) crops[c.name] = c;
+  const tempoMul = { Hafif: 0.8, Normal: 1, Ağır: 1.3 }[p.tempo] ?? 1;
+  const tempoPsy = { Hafif: 3, Normal: 0, Ağır: -6 }[p.tempo] ?? 0;
+  const tempoHuz = { Hafif: 2, Normal: 0, Ağır: -3 }[p.tempo] ?? 0;
+  const faith = p.faith === "Açık", martial = p.martial === "Açık";
+  let gold = num(p.startGold), food = num(p.startFood), adults = num(p.adults), soldiers = Math.min(num(p.soldiers), adults);
+  let psy = 60, huz = 60, army = 10, cult = 0, lowPsy = 0, starve = 0;
+  const kids = []; const fields = (p.fields || []).map((name) => ({ crop: crops[name], left: null }));
+  const rows = []; let end = null;
+  const T = Math.min(80, Math.max(4, num(p.turns) || 48));
+  for (let t = 1; t <= T; t++) {
+    const season = (t - 1) % 4, dark = t > 28 ? Math.floor((t - 29) / 4) + 1 : 0;
+    const workers = Math.max(0, adults - soldiers), need = fields.length * 2;
+    const labor = need ? Math.min(1, workers / need) : 0;
+    let harvested = 0;
+    for (const f of fields) {
+      if (!f.crop) continue;
+      if (f.left === null) { if (season !== 3 && gold >= num(f.crop.cost)) { gold -= num(f.crop.cost); f.left = Math.max(1, num(f.crop.turns)); } continue; }
+      f.left -= season === 1 ? 1.25 : 1;
+      if (f.left <= 0) {
+        const rotLoss = num(f.crop.rot) > 0 && labor < 0.6 ? 0.5 : 0;
+        const sabotage = (num(f.crop.risk) / 100) * 0.5;
+        const units = num(f.crop.yield) * labor * tempoMul * (season === 2 ? 1.25 : 1) * Math.max(0, 1 - 0.1 * dark) * (1 - rotLoss) * (1 - sabotage);
+        const sell = units * Math.min(1, Math.max(0, num(p.sellPct) / 100));
+        gold += sell * num(f.crop.price); food += (units - sell) * num(f.crop.food); harvested += units; f.left = null;
+      }
+    }
+    const kidsN = kids.reduce((s, k) => s + k.n, 0);
+    const cons = ((adults - soldiers) * num(p.eatAdult) + soldiers * num(p.eatSoldier) + kidsN * num(p.eatChild)) * (season === 3 ? 1.25 : 1) * (1 + 0.1 * dark);
+    food -= cons;
+    const shortage = food < 0 && cons > 0 ? Math.min(1, -food / cons) : 0;
+    if (food < 0) food = 0;
+    gold -= soldiers * num(p.wage);
+    if (gold < 0) { army += 5; gold = 0; }
+    const perCap = gold / Math.max(1, adults + kidsN);
+    let dPsy = tempoPsy - 8 * shortage + (faith ? 4 : 0);
+    let dHuz = tempoHuz - 8 * shortage - (perCap < 1 ? 2 : 0);
+    if (martial) { dPsy = Math.max(dPsy, 0); dHuz -= 4; army += 8; }
+    psy = Math.max(0, Math.min(100, psy + dPsy)); huz = Math.max(0, Math.min(100, huz + dHuz));
+    army = Math.max(0, army + (adults ? (soldiers / adults) * 12 : 0) - 3);
+    if (faith) cult += 3;
+    const couples = Math.floor(adults / 2);
+    const births = huz > 60 ? couples * 0.08 : huz > 40 ? couples * 0.03 : 0;
+    if (births > 0) kids.push({ age: 0, n: births });
+    for (const k of kids) k.age++;
+    while (kids.length && kids[0].age >= 8) adults += kids.shift().n;
+    if (shortage > 0.5) adults = Math.max(0, adults - adults * shortage * 0.05);
+    soldiers = Math.min(soldiers, adults);
+    lowPsy = psy < 25 ? lowPsy + 1 : 0; starve = shortage >= 0.99 ? starve + 1 : 0;
+    rows.push({ t, season, dark, food, gold, psy, huz, army, cult, pop: adults + kidsN, harvested });
+    if (lowPsy >= 3) end = { turn: t, reason: "psikoloji 3 tur 25'in altında kaldı, isyan çıktı" };
+    else if (starve >= 2) end = { turn: t, reason: "gıda 2 tur üst üste tamamen bitti, açlık isyanı" };
+    else if (army >= 100) end = { turn: t, reason: "ordu nüfuzu 100'e ulaştı, darbe" };
+    else if (cult >= 100) end = { turn: t, reason: "tarikat nüfuzu 100'e ulaştı, köy tarikatın eline geçti" };
+    else if (adults < 2) end = { turn: t, reason: "köy boşaldı" };
+    if (end) break;
+  }
+  return { rows, end };
+}
+
+/* ---------- chart ---------- */
+const SEASONS = ["İlkbahar", "Yaz", "Sonbahar", "Kış"];
+function chart(rows, series, yMax, label) {
+  const W = 760, H = 220, L = 40, R = 12, Tp = 12, B = 26;
+  const n = Math.max(rows.length, 2), maxT = rows.length ? rows[rows.length - 1].t : 1;
+  const x = (t) => L + ((t - 1) / Math.max(1, maxT - 1)) * (W - L - R);
+  const y = (v) => Tp + (1 - Math.min(1, v / yMax)) * (H - Tp - B);
+  let g = "";
+  for (const r of rows) if (r.season === 3) g += `<rect x="${x(r.t) - (W - L - R) / Math.max(1, maxT - 1) / 2}" y="${Tp}" width="${(W - L - R) / Math.max(1, maxT - 1)}" height="${H - Tp - B}" fill="var(--sunk)"/>`;
+  const steps = 4;
+  for (let i = 0; i <= steps; i++) { const v = (yMax / steps) * i; g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L - 6}" y="${y(v) + 3}" text-anchor="end">${Math.round(v)}</text>`; }
+  for (let t = 1; t <= maxT; t += 4) g += `<text x="${x(t)}" y="${H - 8}" text-anchor="middle">Y${Math.floor((t - 1) / 4) + 1}</text>`;
+  if (maxT >= 29) g += `<line x1="${x(29)}" x2="${x(29)}" y1="${Tp}" y2="${H - B}" stroke="var(--danger)" stroke-dasharray="3 3"/><text x="${x(29) + 4}" y="${Tp + 10}" style="fill:var(--danger)">Kara Yıllar</text>`;
+  for (const s of series) {
+    const pts = rows.map((r) => `${x(r.t).toFixed(1)},${y(r[s.k]).toFixed(1)}`).join(" ");
+    if (rows.length) { const last = rows[rows.length - 1]; g += `<polyline points="${pts}" fill="none" stroke="var(${s.c})" stroke-width="2" stroke-linejoin="round"/><circle cx="${x(last.t)}" cy="${y(last[s.k])}" r="3.5" fill="var(${s.c})"/>`; }
+  }
+  const leg = series.map((s) => `<span><i style="background:var(${s.c})"></i>${s.l}</span>`).join("");
+  return `<div class="chart" role="img" aria-label="${esc(label)}"><div class="legend">${leg}</div><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}</svg></div>`;
+}
+
+/* ---------- table editor ---------- */
+function cell(col, row, i) {
+  const v = row[col.k] ?? "";
+  const id = `f-${col.k}-${row.id || i}`;
+  const lab = `aria-label="${esc(col.l)}"`;
+  if (col.t === "num") return `<input id="${id}" ${lab} type="number" step="any" data-k="${col.k}" data-i="${i}" value="${esc(v)}">`;
+  if (col.t === "sel") return `<select id="${id}" ${lab} data-k="${col.k}" data-i="${i}">${col.o.map((o) => `<option${o === v ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+  if (col.t === "area") return `<textarea id="${id}" ${lab} rows="1" data-k="${col.k}" data-i="${i}">${esc(v)}</textarea>`;
+  return `<input id="${id}" ${lab} type="text" data-k="${col.k}" data-i="${i}" value="${esc(v)}">`;
+}
+function tableHTML(key, rows, extraHead = "", extraCells = () => "") {
+  const sec = SECTIONS[key];
+  if (!rows.length) return `<div class="frame"><div class="empty">${state.loaded[key] ? "Henüz satır yok. Aşağıdaki “Satır ekle” ile ilk kaydı oluştur." : "Kayıtlar yükleniyor…"}</div></div>`;
+  const head = sec.cols.map((c) => `<th scope="col">${esc(c.l)}</th>`).join("") + extraHead + `<th scope="col"><span hidden>Sil</span></th>`;
+  const body = rows.map((r) => { const i = state.rows[key].indexOf(r); return `<tr>${sec.cols.map((c) => `<td>${cell(c, r, i)}</td>`).join("")}${extraCells(r)}<td><button class="ghost del" data-i="${i}" type="button" aria-label="Satırı sil">Sil</button></td></tr>`; }).join("");
+  return `<div class="frame"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+function bindTable(root, key) {
+  root.addEventListener("input", (e) => {
+    const el = e.target; if (!el.dataset || el.dataset.k === undefined || !el.closest(`[data-sec="${key}"]`)) return;
+    const row = state.rows[key][+el.dataset.i]; if (!row) return;
+    const col = SECTIONS[key].cols.find((c) => c.k === el.dataset.k);
+    row[el.dataset.k] = col && col.t === "num" ? (el.value === "" ? "" : num(el.value)) : el.value;
+    saveSection(key);
+    if (key === "crops") refreshCropCalc(root);
+  });
+  root.addEventListener("change", () => { if (key === "questions") renderTiles(); });
+  root.addEventListener("click", (e) => {
+    const b = e.target.closest("button.del"); if (!b || !b.closest(`[data-sec="${key}"]`)) return;
+    if (!b.classList.contains("armed")) { b.classList.add("armed"); b.textContent = "Emin misin?"; setTimeout(() => { b.classList.remove("armed"); b.textContent = "Sil"; }, 3000); return; }
+    state.rows[key].splice(+b.dataset.i, 1); saveSection(key); render();
+  });
+}
+function refreshCropCalc(root) {
+  root.querySelectorAll("tr[data-calc]").forEach((tr) => {});
+  state.rows.crops.forEach((c, i) => {
+    const k = cropCalc(c);
+    const g = root.querySelector(`[data-gpt="${i}"]`), f = root.querySelector(`[data-fpt="${i}"]`);
+    if (g) g.textContent = fmt(k.goldPerTurn); if (f) f.textContent = fmt(k.foodPerTurn);
+  });
+}
+function addRow(key) {
+  const r = { id: uid() }; for (const c of SECTIONS[key].cols) r[c.k] = c.t === "sel" ? c.o[0] : c.t === "num" ? 0 : "";
+  state.rows[key].push(r); state.loaded[key] = true; saveSection(key); render();
+  const ins = document.querySelectorAll(`[data-sec="${key}"] tbody tr:last-child input, [data-sec="${key}"] tbody tr:last-child textarea`);
+  if (ins[0]) ins[0].focus();
+}
+
+/* ---------- views ---------- */
+function sectionView(key) {
+  const sec = SECTIONS[key];
+  let rows = state.rows[key];
+  let filter = "";
+  if (key === "questions") {
+    const opts = ["Hepsi", ...sec.cols.find((c) => c.k === "status").o];
+    filter = `<div class="filter" role="group" aria-label="Duruma göre süz">${opts.map((o) => `<button type="button" data-filter="${esc(o)}" aria-pressed="${state.filter === o}">${esc(o)} <span class="mono">${o === "Hepsi" ? rows.length : rows.filter((r) => r.status === o).length}</span></button>`).join("")}</div>`;
+    if (state.filter !== "Hepsi") rows = rows.filter((r) => r.status === state.filter);
+  }
+  const extraHead = key === "crops" ? `<th scope="col" class="calc">Altın/tur</th><th scope="col" class="calc">Gıda/tur</th>` : "";
+  const extraCells = key === "crops" ? (r) => { const i = state.rows.crops.indexOf(r), k = cropCalc(r); return `<td class="calc" data-gpt="${i}">${fmt(k.goldPerTurn)}</td><td class="calc" data-fpt="${i}">${fmt(k.foodPerTurn)}</td>`; } : () => "";
+  return `<section data-sec="${key}" style="display:flex;flex-direction:column;gap:14px">
+    <div class="sheet-head"><h2>${esc(sec.title)}</h2>${filter}</div>
+    <p class="lead">${esc(INTRO[key] || "")}</p>
+    ${tableHTML(key, rows, extraHead, extraCells)}
+    <div class="toolbar"><button class="primary add" type="button" data-add="${key}" ${state.canWrite ? "" : "disabled"}>Satır ekle</button>
+    ${key === "crops" ? `<span class="note">Altın/tur = (verim × fiyat − ekim maliyeti) ÷ büyüme. Gıda/tur = verim × gıda ÷ büyüme. Hepsini satsan ya da hepsini yesen ne kazanırdın, onu gösterir.</span>` : ""}</div>
+  </section>`;
+}
+
+function tilesHTML() {
+  const q = state.rows.questions, open = q.filter((r) => r.status !== "Karar verildi").length;
+  const checks = runChecks(), crit = checks.filter((c) => c.sev === "kritik").length, warn = checks.filter((c) => c.sev === "uyari").length;
+  const pros = state.rows.proscons.filter((r) => r.kind === "Artı").length, cons = state.rows.proscons.filter((r) => r.kind !== "Artı").length;
+  return `<div class="tiles" id="tiles">
+    <div class="tile ${open ? "warn" : "ok"}"><b>${open}</b><span>açık soru (${q.length} sorudan)</span></div>
+    <div class="tile ${crit ? "danger" : "ok"}"><b>${crit}</b><span>kritik denge sorunu</span></div>
+    <div class="tile ${warn ? "warn" : "ok"}"><b>${warn}</b><span>uyarı</span></div>
+    <div class="tile"><b>${pros}<span class="mono" style="font-size:16px;color:var(--muted)"> / ${cons}</span></b><span>artı / eksi ve risk</span></div>
+  </div>`;
+}
+function renderTiles() { const t = $("#tiles"); if (t) t.outerHTML = tilesHTML(); }
+
+function overview() {
+  const checks = runChecks();
+  const list = checks.length ? checks.map((c) => `<div class="check"><span class="pill ${c.sev}">${{ kritik: "kritik", uyari: "uyarı", bilgi: "bilgi", iyi: "iyi" }[c.sev]}</span><span class="area">${esc(c.area)}</span><span>${esc(c.text)}</span></div>`).join("")
+    : `<div class="empty">Denetim bir sorun bulmadı. Mahsul, metrik ve kart ekledikçe burada otomatik kontroller çalışır.</div>`;
+  return `<div class="sheet-head"><h2>Özet</h2></div>
+    <p class="lead">Tasarımın şu anki sağlığı. Denetimler, diğer sekmelere girdiğin verilerden ve simülasyondan her değişiklikte yeniden hesaplanır.</p>
+    ${tilesHTML()}
+    <h3>Denge denetimi</h3><div class="checks">${list}</div>
+    ${sectionView("proscons")}`;
+}
+
+function simView() {
+  const p = state.sim || { ...SIM_DEFAULT };
+  const names = state.rows.crops.filter((c) => c.name).map((c) => c.name);
+  const res = simulate(p, state.rows.crops);
+  const last = res.rows[res.rows.length - 1];
+  const verdict = res.end ? `<div class="verdict bad"><strong>${res.end.turn}. turda düştü</strong>${esc(res.end.reason)} (${SEASONS[res.rows[res.rows.length - 1].season]}, ${Math.floor((res.end.turn - 1) / 4) + 1}. yıl).</div>`
+    : `<div class="verdict"><strong>${res.rows.length} tur ayakta kaldı</strong>${last ? `Son durum: ${fmt(last.food, 0)} gıda, ${fmt(last.gold, 0)} altın, nüfus ${fmt(last.pop, 1)}, psikoloji ${fmt(last.psy, 0)}.` : "Henüz tarla yok."}</div>`;
+  const numF = (k, l, step = 1) => `<div class="field"><label for="s-${k}">${l}</label><input id="s-${k}" type="number" step="${step}" data-s="${k}" value="${esc(p[k])}"></div>`;
+  const selF = (k, l, o) => `<div class="field"><label for="s-${k}">${l}</label><select id="s-${k}" data-s="${k}">${o.map((x) => `<option${x === p[k] ? " selected" : ""}>${x}</option>`).join("")}</select></div>`;
+  const fieldRows = (p.fields || []).map((f, i) => `<div class="row"><span>Tarla ${i + 1}</span><select id="s-field-${i}" data-field="${i}" aria-label="Tarla ${i + 1} ürünü">${names.map((n) => `<option${n === f ? " selected" : ""}>${esc(n)}</option>`).join("")}${names.includes(f) ? "" : `<option selected>${esc(f || "Ürün seç")}</option>`}</select><button class="ghost" type="button" data-rmfield="${i}" aria-label="Tarla ${i + 1} kaldır">×</button></div>`).join("");
+  return `<div class="sheet-head"><h2>Simülasyon</h2></div>
+    <p class="lead">Tek köyün kaba ekonomi testi. Mahsuller sekmesindeki değerlerle çalışır, rakip yok. Kartlar ve savaş yok, sabotaj sadece ortalama kayıp olarak hesaba katılır. Amaç dengeyi kırılmadan önce görmek.</p>
+    <div class="grid2">
+      <div class="panel" id="simform">
+        <h3>Başlangıç</h3>
+        ${numF("startGold", "Başlangıç altını")}${numF("startFood", "Başlangıç gıdası")}${numF("adults", "Yetişkin köylü")}${numF("soldiers", "Asker")}
+        <h3>Politika</h3>
+        ${numF("sellPct", "Hasadın satılan kısmı %", 5)}${selF("tempo", "Çalışma temposu", ["Hafif", "Normal", "Ağır"])}${selF("faith", "İnanç binası", ["Kapalı", "Açık"])}${selF("martial", "Sıkıyönetim", ["Kapalı", "Açık"])}
+        <h3>Kurallar</h3>
+        ${numF("wage", "Asker maaşı (altın/tur)", 0.5)}${numF("eatAdult", "Yetişkin gıdası/tur", 0.5)}${numF("eatSoldier", "Asker gıdası/tur", 0.5)}${numF("eatChild", "Çocuk gıdası/tur", 0.5)}${numF("turns", "Simüle edilecek tur")}
+        <h3>Tarlalar</h3>
+        <div class="fields-list">${fieldRows || `<span class="note">Henüz tarla yok.</span>`}</div>
+        <div class="toolbar"><button type="button" id="addfield" ${names.length ? "" : "disabled"}>Tarla ekle</button>${names.length ? "" : `<span class="note">Önce Mahsuller sekmesine ürün gir.</span>`}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+        ${verdict}
+        <div class="panel"><h3>Gıda ve altın</h3>${chart(res.rows, [{ k: "food", l: "Gıda", c: "--s-food" }, { k: "gold", l: "Altın", c: "--s-gold" }], Math.max(50, ...res.rows.map((r) => Math.max(r.food, r.gold))) * 1.1, "Gıda ve altın stoku, tur tur")}</div>
+        <div class="panel"><h3>Metrikler (0–100)</h3>${chart(res.rows, [{ k: "psy", l: "Psikoloji", c: "--s-psy" }, { k: "huz", l: "Huzur", c: "--s-huz" }, { k: "army", l: "Ordu nüfuzu", c: "--s-army" }, { k: "cult", l: "Tarikat nüfuzu", c: "--s-cult" }], 100, "Psikoloji, huzur, ordu ve tarikat nüfuzu, tur tur")}
+        <p class="note">Gri sütunlar kış. Y1, Y2 yılları gösterir. Kesikli çizgiden sonra Kara Yıllar başlar (tarım −%10, tüketim +%10, her yıl birikerek).</p></div>
+      </div>
+    </div>`;
+}
+
+function render() {
+  const id = (location.hash || "#ozet").slice(1);
+  const view = VIEWS.find((v) => v.id === id) || VIEWS[0];
+  $("#tabs").innerHTML = VIEWS.map((v) => `<a href="#${v.id}" ${v === view ? 'aria-current="page"' : ""}>${v.l}${v.s === "questions" ? ` <span class="mono">${state.rows.questions.filter((r) => r.status !== "Karar verildi").length}</span>` : ""}</a>`).join("");
+  const root = $("#view");
+  const scroll = window.scrollY;
+  root.innerHTML = view.id === "ozet" ? overview() : view.id === "simulasyon" ? simView() : sectionView(view.s);
+  window.scrollTo(0, scroll);
+}
+
+/* ---------- events (bound once) ---------- */
+const root = $("#view");
+for (const key in SECTIONS) bindTable(root, key);
+root.addEventListener("click", (e) => {
+  const a = e.target.closest("[data-add]"); if (a) { addRow(a.dataset.add); return; }
+  const f = e.target.closest("[data-filter]"); if (f) { state.filter = f.dataset.filter; render(); return; }
+  if (e.target.closest("#addfield")) { const names = state.rows.crops.filter((c) => c.name).map((c) => c.name); state.sim.fields = [...(state.sim.fields || []), names[0]]; saveSim(); render(); return; }
+  const rm = e.target.closest("[data-rmfield]"); if (rm) { state.sim.fields.splice(+rm.dataset.rmfield, 1); saveSim(); render(); }
+});
+let simTimer = 0;
+root.addEventListener("input", (e) => {
+  const el = e.target;
+  if (el.dataset.s || el.dataset.field !== undefined) {
+    if (!state.sim) state.sim = { ...SIM_DEFAULT };
+    if (el.dataset.s) { const isNum = el.type === "number"; state.sim[el.dataset.s] = isNum ? num(el.value) : el.value; }
+    else state.sim.fields[+el.dataset.field] = el.value;
+    saveSim();
+    clearTimeout(simTimer);
+    simTimer = setTimeout(() => { const active = document.activeElement && document.activeElement.id; render(); if (active) { const n = document.getElementById(active); if (n) n.focus(); } }, 350);
+  }
+});
+window.addEventListener("hashchange", render);
+render();
+connect();
+})();
+</script>
