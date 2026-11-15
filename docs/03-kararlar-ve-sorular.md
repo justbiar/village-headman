@@ -5,14 +5,20 @@
 | Konu | Karar |
 |---|---|
 | Oyunun adı | **Village Headman** |
-| Hedef | Epic MegaJam 2026'ya girilmeyecek (Unreal kurulamadı). Oyun jam baskısı olmadan yapılacak |
+| Hedef | **Epic MegaJam 2026'ya yetiştirilecek.** Unreal tarafı bu Mac'te değil, başka bir bilgisayarda yapılacak. Bu Mac plan ve tasarım içindir |
+| Arayüz dili | **İngilizce** |
+| Köyler | **Six** ve **Nine** (hikayeden geliyor, bkz. 06 dosyası) |
+| Hikaye tonu | Komik bir sebep (6 mı 9 mu?), karanlık sonuçlar: kara mizah |
+| Ses | Kullanıcı hazırlayacak |
+| Görsel referans | 9 Kings (sadece ilham: okunaklı küçük krallık, net siluetler. Görünüşü kopyalanmayacak) |
+| Mimari | Jam'de yapılabilenler şimdi, gerisi sonradan takılabilecek şekilde katmanlı (bkz. 06 dosyası) |
 | Teknoloji | **Unreal Engine 5** (önce Three.js düşünüldü, sonra UE5 seçildi). Modeller **Tripo AI** ile. İzometrik görünüm ortografik kamera ile |
 | Rakip | Yapay zeka (ucuz LLM, oyuncu başına 1 ücretsiz hak, sonra kendi API anahtarı) + kural tabanlı bot |
 | İki kişilik mod | Zaman kalırsa en son |
 | Savaş | Basit, üstte can barları |
 | Maç süresi | 15–25 dakika (öneri kabul edildi) |
 | Slotlar | Tanımlı slotlar, başta 3, muhtarlık seviyesiyle artar |
-| Ton | Ciddi ve karanlık |
+| Ton | Önce "ciddi ve karanlık", sonra kara mizaha döndü (komik sebep, karanlık sonuçlar) |
 | Motor deneyimi | Genelde Godot, Unreal az. Unreal'a Claude bağlanarak geliştirilecekti |
 
 ## Teknik kısıtlar (15 Kasım 2026, 17:49 TR)

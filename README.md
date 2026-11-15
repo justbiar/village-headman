@@ -16,6 +16,7 @@ Bu repo şimdilik sadece tasarım notlarını içeriyor. Kodlamaya tasarım netl
 | [docs/03-kararlar-ve-sorular.md](docs/03-kararlar-ve-sorular.md) | Verilen kararlar, teknik kısıtlar, açık sorular |
 | [docs/04-acik-konular-onerileri.md](docs/04-acik-konular-onerileri.md) | Eksik kalan sistemler için somut öneriler: tur akışı, formüller, tarikat, savaş, pazar, LLM rakip |
 | [docs/05-tam-analiz.md](docs/05-tam-analiz.md) | Baştan sona eleştirel analiz: güçlü yanlar, riskler, eksikler, yapım sırası |
+| [docs/06-hikaye-ve-buyuyen-mimari.md](docs/06-hikaye-ve-buyuyen-mimari.md) | Six ve Nine hikayesi, katmanlı mimari, kilometre taşları |
 | [workbench/tasarim-masasi.html](workbench/tasarim-masasi.html) | Tasarım masası: verileri girip denge denetimi ve kaba ekonomi simülasyonu yapan sayfa |
 | [docs/00-orijinal-fikir.md](docs/00-orijinal-fikir.md) | Fikrin ilk hali, olduğu gibi |
 
