@@ -6,6 +6,8 @@ Two brothers found a coin. One says six. One says nine. Run your half of the vil
 
 ## Önce bunu oku
 
+**Canlı GDD sayfası (hesap gerekmez):** https://raw.githack.com/justbiar/village-headman/main/index.html
+
 **[GDD.md](GDD.md) tek doğru kaynaktır.** Oyunu yapan kişi sadece onu okusun. Aşağıdaki diğer dosyalar tasarımın nasıl oluştuğunun geçmişidir ve içlerinde artık geçersiz sayılar var.
 
 ## Diğer dosyalar
