@@ -39,8 +39,11 @@
 
 - [x] Hangi seçenekle ilerlenecek? Jam yok, Three.js ile web.
 - [x] Oyunun adı: Village Headman.
-- [ ] "jev" ile kastedilen model / sağlayıcı hangisi?
+- [x] "jev": bir karar (decision) modeli. Rakip yapay zekası için kullanılacak.
+- [ ] Jev'in API'si, dokümanı ve fiyatı.
 - [ ] Muhtar nasıl ölür? (öneri: 04 dosyasında)
-- [ ] Tarikat mekaniğinin detayı (öneri: 04 dosyasında)
+- [x] Tarikat talebi reddedilirse: huzursuzluk artar, ordu düzeni bozulur (firar), isyan riski doğar.
+- [x] Kazanma: tur sınırı yok, biri düşene kadar sürer ("Kara Yıllar" önerisiyle).
+- [x] Rakibin metrikleri gizli, kurduğu binalar görünür.
 - [ ] Düşmanlığın hikayesi (kullanıcı yazacak).
 - [ ] Köylülerin istek ve yetenek seçimi oyunun başında mı, yoksa her doğumda da mı?

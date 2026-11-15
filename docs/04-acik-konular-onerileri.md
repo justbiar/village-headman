@@ -6,7 +6,7 @@ Sayılar ilk denge tahminleri, oynanış testinde değişecek.
 ## 1. Zaman ve mevsimler
 
 - 1 tur = 1 mevsim, 4 tur = 1 yıl.
-- Maç en fazla **28 tur** (7 yıl).
+- Tur sınırı yok. 28. turdan (7. yıl) sonra "Kara Yıllar" başlar (bkz. 13. bölüm).
 
 | Mevsim | Etki |
 |---|---|
@@ -97,7 +97,14 @@ Köyde üç güç var ve birbirini dengeliyor:
   - "Tarlaların birinin ürünü bize." (ekonomik)
   - "Konseyde bir koltuk." (aza yerlerinden biri tarikat üyesine geçer)
   - "Şüpheli birini sürgün et." (bir köylü kaybedilir)
-- **Kabul:** tarikat nüfuzu +10. **Red:** köy psikolojisi -15.
+- **Kabul:** tarikat nüfuzu +10.
+- **Red (onaylandı):** tarikat tek bir değeri değil, köyün tamamını sarsar. Talebin seviyesi yükseldikçe sonuç ağırlaşır:
+
+| Talep seviyesi | Huzur | Psikoloji | Ordu düzeni | İsyan |
+|---|---|---|---|---|
+| 30 | -5 | -5 | Yok | Yok |
+| 50 | -8 | -10 | Askerlerin %10'u firar eder (tarikat kışkırtır) | Yok |
+| 70 | -12 | -15 | Askerlerin %20'si firar eder, ordu moralı 2 tur yarıya düşer | İsyan sayacı +1 |
 - **100'e ulaşırsa tarikat köyü ele geçirir, oyun biter.**
 
 ### Dengenin kendisi
@@ -146,7 +153,9 @@ Köyde üç güç var ve birbirini dengeliyor:
 
 ## 11. Bilgi ve gizlilik
 
-- Rakibin **binaları ve ordusu** haritada görünür.
+(onaylandı)
+
+- Rakibin **kurduğu binalar ve ordusu** haritada görünür.
 - Rakibin **metrikleri gizli**, sadece tahmini gösterilir: "Yüksek", "Orta", "Düşük".
 - **Casus** kartı bir tur boyunca kesin değerleri ve gizli emri gösterir.
 
@@ -165,11 +174,18 @@ Köyde üç güç var ve birbirini dengeliyor:
 
 ## 13. Kazanma
 
-- Rakip bir bitiş koşuluna düşerse kazanırsın.
-- 28 tur sonunda ikisi de ayaktaysa **Hüküm puanı** ile karar verilir: nüfus + altın + bina seviyeleri + metriklerin dengesi.
-- (Alternatif: süre sınırı olmasın, biri düşene kadar sürsün.)
+(onaylandı: süre sınırı yok)
+
+- **Tur sınırı yok. Oyun, köylerden biri bir bitiş koşuluna düşene kadar sürer.**
+- Kilitlenmeyi (iki tarafın sonsuza kadar savunmada beklemesini) önlemek için öneri: **Kara Yıllar.**
+  - 7. yıldan (28. tur) sonra her yıl toprak yorulur: tarım verimi -%10 (birikimli).
+  - Gıda tüketimi her yıl +%10 artar.
+  - Böylece maç uzadıkça baskı artar ve biri mutlaka düşer. Hikayeye de uyar: kıtlık yılları iki köyün düşmanlığını büyütür.
 
 ## 14. Yapay zeka rakibi (LLM)
+
+- Kullanılacak model: **Jev** (bir karar / decision modeli). API detayları ve fiyatı henüz netleşmedi.
+- Oyun tarafındaki arayüz modelden bağımsız olacak: "durum girer, emirler çıkar". Jev, başka bir LLM veya kural tabanlı bot aynı arayüze takılır.
 
 - Her tur LLM'e oyunun durumu JSON olarak gönderilir (kendi metrikleri, rakip hakkında bildikleri, eli, slotlar).
 - LLM, sabit bir şemada emirleri JSON olarak döner.
