@@ -81,6 +81,7 @@ Jam kuralı: masaüstü build'in zip'i **1 GB'ın altında** olmalı (büyükse 
 - [x] Oyunun adı: Village Headman.
 - [x] "jev": bir karar (decision) modeli. Rakip yapay zekası için kullanılacak.
 - [ ] Jev'in API'si, dokümanı ve fiyatı.
+- [ ] Takım arkadaşının (maybeno2906) GitHub kullanıcı adı: repoya erişim sonra verilecek.
 - [ ] Muhtar nasıl ölür? (öneri: 04 dosyasında)
 - [x] Tarikat talebi reddedilirse: huzursuzluk artar, ordu düzeni bozulur (firar), isyan riski doğar.
 - [x] Kazanma: tur sınırı yok, biri düşene kadar sürer ("Kara Yıllar" önerisiyle).
