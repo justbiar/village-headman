@@ -54,8 +54,8 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).
    3. İnşaatlar ilerler ve biten binalar açılır
    4. Üretim (tarla, orman, eğitim merkezi)
    5. Savaş (iki saldırı aynı anda)
-   6. Satış ve depo (kapasite, bozulma)
-   7. Tüketim ve metrikler (gıda, maaş, ısınma, psikoloji, ordu nüfuzu)
+   6. Satış ve depo (satış oranı, kapasite, bozulma)
+   7. Tüketim ve metrikler (gıda, maaş, ısınma, psikoloji, ordu nüfuzu). Gıda yetmezse pazar eksik kısmı **bu adımda, tüketimden hemen sonra** otomatik satın alır (eksik ancak tüketimden sonra bilinir)
    8. Tarikat
    9. Nüfus (doğum, büyüme, açlıktan ölüm)
    10. Bitiş kontrolü
