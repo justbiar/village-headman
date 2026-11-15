@@ -138,7 +138,7 @@ Tek ekran, 16:9. **[Ö]**
 
 - Her tur bir **satış oranı** seçilir (0, 20, 40, 60, 80, 100%). Hasadın o kadarı satılır, kalanı ambara girer. Varsayılan %40.
 - **Odun satışı:** "Sell wood" düğmesi, **2 wood = 1 six**. Erken oyunda para kazanmanın tek güvenli yolu bu. Olmazsa ilk turlarda açlık sarmalı oluşuyor.
-- **Gıda alımı:** "Buy food" düğmesi, **1 food = 1.25 six**. Ayrıca gıda tur sonunda yetmezse pazar eksik kısmı kendiliğinden satar (6 six tohum parası her zaman kesede kalır). Bu olmadan nakit ekinler (pancar, safran) anlamsızdı: zengin ama aç köyler ölüyordu.
+- **Gıda alımı:** "Buy food" düğmesi, **1 food = 1.25 six**. Ayrıca gıda tur sonunda yetmezse pazar eksik kısmı kendiliğinden **satın alır** (6 six tohum parası her zaman kesede kalır). Bu olmadan nakit ekinler (pancar, safran) anlamsızdı: zengin ama aç köyler ölüyordu.
 
 ### Depo **[Ö]**
 
@@ -197,6 +197,8 @@ Her bina bir slot kaplar. **Tarlalar da slotlara dahil [K].** Maliyet ve sürele
 | 4 | 60 | 60 | 45 | 3 | 9 | 3 | 20 |
 
 Seviye atlayınca **+5 EP** ve can barı **+20** (en fazla 100).
+
+**Repair hall [Ö]:** 5 six + 10 wood ile can barı +15, tur başına bir kez. Yoksa uzun maçta can barı sadece azalır.
 
 ---
 
@@ -258,7 +260,7 @@ Hiçbir ekin bir başkasını her açıdan ezmiyor. Tasarım masası bunu her de
 - **Para yoksa tohum ambardan ayrılır:** 1 six yerine 2 food. Bot testlerinde bulunan ölüm sarmalını önleyen kural.
 - **Kışın ekim yapılmaz.** Büyüyen ekin büyümeye devam eder.
 - **Hasat verimi** = verim × çiftçilerin ortalama verimi × tempo × mevsim × Kara Yıllar.
-- **Safran:** hasat zamanı geldiğinde tarlada en az 2 çiftçinin ortalama verimi %60'ın altındaysa hasat bekler. 1 turdan fazla beklerse çürür.
+- **Safran:** "usta çiftçi ister". Hasat zamanı geldiğinde tarladaki 2 çiftçinin ortalama **Farming yatkınlığı 3'ün altındaysa** ya da tarlada 2 çiftçi yoksa hasat bekler. 1 turdan fazla beklerse çürür. (İlk taslaktaki "verim %60'ın altında" kuralı hiç tetiklenmiyordu, çünkü en düşük verim %70.)
 
 ---
 
@@ -314,7 +316,9 @@ Her köylüye rastgele 1 karakter **[Ö]**:
 
 ### Nüfus
 
-- Doğum: köy psikolojisi 55'in üstündeyse çift başına %6/tur, 40–55 arası %2, altında doğum yok. Düğünle yeni evlenen çiftin ilk yıl ihtimali ayrıca %50 (bkz. Düğün).
+- **Çift = evli çift.** Başlangıçta 10 kişiden **2 çift evli**, 6 kişi bekar **[Ö]**. Yeni çiftler sadece düğünle oluşur.
+- Doğum: köy psikolojisi 55'in üstündeyse evli çift başına %6/tur, 40–55 arası %2, altında doğum yok. Düğünle yeni evlenen çiftin ilk yıl ihtimali ayrıca %50 (bkz. Düğün).
+- C katmanından önce (köylüler sadece sayıyken) bekar sayısı basit bir sayaçtır.
 - Çocuğun yatkınlıkları ve karakteri rastgele. **8 turda** yetişkin olur.
 - Tüketim (tur başına): **yetişkin 1, asker 1.5, çocuk 0.5** gıda.
 - Gıda yarıdan fazla eksikse her tur yetişkinlerin %5'i ölür (en düşük psikolojiliden başlayarak).
@@ -338,6 +342,8 @@ Her köylüye rastgele 1 karakter **[Ö]**:
 | **Düğün** (bkz. aşağısı) | **+8** |
 
 Bütün metrikler **0 ile 100** arasındadır **[K]**.
+
+**50 sınırı kime uygulanır:** sadece **yemek** 50'de durur. Düğün, kartlar (Tax Relief, Sermon) ve tempo 50'nin üstüne çıkarabilir. **Shrine** ve **Light tempo** ise en fazla **65**'e kadar çıkarır **[Ö]**, yoksa her tur bedava artış veren bu iki yol düğünü gereksiz kılar.
 
 ### Psikolojinin iki yarısı **[K]**
 
@@ -437,7 +443,7 @@ Psikolojiyi korumanın her yolu başka bir tehlikeyi besler: sıkıyönetim ordu
 
 ## 11. Kartlar
 
-- **8 kart.** **3 turda bir** 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
+- **8 kart.** **İlk seçim 4. turda**, sonra **3 turda bir** (4, 7, 10...) 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
 - **Her kartın bir karşı hamlesi var.** Böylece kartlar şans değil, hazırlık meselesi olur.
 
 | Kart | Tür | Bedel | Etkisi | Karşı hamle |
@@ -449,7 +455,7 @@ Psikolojiyi korumanın her yolu başka bir tehlikeyi besler: sıkıyönetim ordu
 | **Tax Relief** | Yönetim | 8 six | Kendi psikolojin +10 | Yok (kendine oynanır) |
 | **Mobilize** | Yönetim | Yok | Bu tur 3 ek savaşçı (saldırı ya da savunma), ordu nüfuzu +5 | Rakip saldırıyı görünce bu tur saldırmamak. Sur seviyesi |
 | **Sermon** | Karanlık | Yok | Psikoloji +6, ordu nüfuzu -10, tarikat +8 | Yok (kendine oynanır, bedeli tarikat) |
-| **Upside Down** | Karanlık | 4 six | Rakibin parasını ters çevirir: bu tur rakibin satışları yarı fiyatına gider **[Ö, hikayeden]** | Satış oranını o tur 0 yapmak (kart oynandığında satışlar henüz yapılmamışsa uyarı çıkar: "Your coin looks... upside down.") |
+| **Upside Down** | Karanlık | 4 six | Rakibin parasını ters çevirir: **bir sonraki tur** rakibin satışları yarı fiyatına gider. Rakibe tur raporunda duyurulur: "Your coin looks... upside down." **[Ö, hikayeden]** | O tur satış oranını 0 yapmak (etki bir sonraki tura kaydırıldı, çünkü kartlar aynı tur çözülünce karşı hamle imkansızdı) |
 
 ### Remedy (ilaç) **[K]**
 
@@ -713,10 +719,10 @@ Bir katman bitmeden sonrakine geçilmez. Hangi saatte durulursa durulsun elde oy
 
 | Katman | İçerik | Bitince |
 |---|---|---|
-| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **yol seçimi (sadece bonuslar)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
-| **B** | Psikoloji, ordu nüfuzu, Barracks ve asker, savaş, can barları, 5 bitiş | Kazanıp kaybedilebiliyor |
+| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **yol seçimi (sadece bonuslar)**, **pazar (Sell wood, Buy food, satış oranı)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
+| **B** | Psikoloji, **düğün**, tempo, ordu nüfuzu, Barracks ve asker, savaş, can barları, Repair hall, 5 bitiş | Kazanıp kaybedilebiliyor |
 | **C** | 10 rastgele köylü, yatkınlık, karakter, "Let the elders decide", iş sayısı paneli | Liyakat teması oyunda |
-| **D** | Kartlar ve karşı hamleleri (Remedy, Fire Brigade), yola özel binalar, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
+| **D** | Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
 | **E** | Açılış sahnesi, Director's Cut, muhtar animasyonları, ses | Jüri için cila |
 | **F** | Tek tek köylü atama, Doubter'ın kaçması | Tam liyakat |
 | **G** | Pazar, olaylar, suikast, Jev, iki kişilik mod | Jam sonrası |
@@ -758,7 +764,7 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 
 | # | Eksik | Kimde | Engel mi? |
 |---|---|---|---|
-| 1 | **Sprite'ları kim çizecek / nereden gelecek?** Seçenek: jam partneri **fal**'ın 30 $ kredisiyle görsel modellerden pixel art üretmek (kredi jam e-postasında, 30 Kasım'a kadar). Ya da lisanslı hazır pixel art paketi (teslimde listelenmeli) | Karar lazım | **Evet, A katmanı için zemin ve tarla şart** |
+| 1 | **Sprite'ları kim çizecek / nereden gelecek?** Seçenekler: (a) **fal** kredisiyle görsel modeller, (b) **Scenario skills** (Claude Code'a bağlanır, Scenario hesabı ve kredisi ister), (c) **gpt-image-2d-assets** (Codex ve GPT-image ister). Üçü de yapay zeka çıktısı verir, pixel art'ı oyuna girmeden önce temizlemek gerekir (bkz. 24.4). Ya da lisanslı hazır pixel art paketi | Karar lazım | **Evet, A katmanı için zemin ve tarla şart** |
 | 2 | Ses dosyaları. Seçenek: jam partneri **WeLoveIndies** ücretsiz ses ve müzik (sadece ticari olmayan kullanım, oyun satılırsa lisans gerekir) | Kullanıcı | E katmanına kadar hayır |
 | 3 | Takım adı | Karar lazım | Teslimde evet |
 | 4 | maybeno2906'nın GitHub erişimi | Sonra | Hayır |
@@ -767,3 +773,58 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 | 7 | Bitiş sözlerinin onayı | Kullanıcı | Hayır |
 | 8 | Hangi köyü oyuncu yönetiyor (öneri: Six) | Kullanıcı | Hayır |
 | 9 | Jev, iki kişilik mod, pazar, olaylar, suikast | Jam sonrası | Hayır |
+
+---
+
+## 24. Uyarılar ve zayıf yönler
+
+15 Kasım 20:15 itibarıyla GDD'nin eleştirel okuması. Kesin hatalar dokümanda düzeltildi (24.3), büyük kararlar kullanıcıya soruldu (24.1).
+
+### 24.1 Kritik: jam'i tehlikeye atanlar
+
+| # | Sorun | Neden tehlikeli | Öneri |
+|---|---|---|---|
+| K1 | **Sprite yok** | A katmanı zemin, tarla, ağaç ve muhtarlık olmadan başlayamaz | İlk saat sadece bu 4 sprite'a. Gerisi için düz renkli yer tutucu kutular |
+| K2 | **Saat planı geride** | Plan 19:50'de kurulumla başlıyordu. Yapımcı başlamadıysa her saat bir katman yer | A ve B'ye odaklan, C ve D'yi kısalt. Paketleme saati (02:45) kaymaz |
+| K3 | **Jüri muhtemelen hiçbir bitişi görmeyecek** | Hedef maç 25–40 dakika, bir tur 1–2 dakika sürebilir. Jüri 5–10 dakika oynar. Oyunun en güçlü anları (bitiş animasyonu, kardeşin sözü, Director's Cut) maç sonunda | Ana menüye **"Short match"** (jam için varsayılan): Kara Yıllar 3. yılda başlar, bot 8. turdan sonra daha saldırgan. Hedef 12–15 dakika. Karar lazım |
+| K4 | **Arayüz kalabalık** | Tempo, satış, odun sat, gıda al, düğün, sıkıyönetim, saldırı, asker, kartlar, ilaç, köpek, yol... İlk açışta 15+ kontrol | **Kademeli açılma:** kontrol, ilgili şey ilk kez mümkün olduğunda görünür (Recruit sadece Barracks'tan sonra, Cure sadece sarmaşıktan sonra) |
+| K5 | **Denge, gerçek kurallarla hiç test edilmedi** | Tasarım masasının simülasyonunda odun, köylüler, kartlar, savaş, depo sınırı ve rakip yok. "60 tur ayakta" sonucu kısmi | Yapımcı ilk oynanabilir sürümde 2–3 tam maç oynasın, sayılar ayar tablosundan değiştirilsin |
+
+### 24.2 Denge riskleri (oynayınca kontrol edilmeli)
+
+| # | Risk | Belirti | İlk ayar |
+|---|---|---|---|
+| D1 | Depo sınırı simülasyonda yok | 4 tarlalı köy 107 gıda biriktiriyordu, gerçek oyunda 60'ta taşar | Granary erken lazım olabilir. Taşma çok sinir bozucuysa başlangıç kapasitesi 80 |
+| D2 | Savaş formülleri hiç denenmedi | Tek saldırıda muhtar ölebilir ya da hiç hasar çıkmayabilir | Hasar çarpanı 4 ile başla, ilk maçta muhtarlık 3 saldırıdan önce düşüyorsa 3'e indir |
+| D3 | Shrine ve Light tempo bedava psikoloji | Düğünü gereksiz kılabilirdi | 65 tavanı eklendi (24.3). Yine de baskınsa Shrine +4'ü +3'e indir |
+| D4 | Bot zayıf kalabilir | Kural tabanlı bot, oyuncu bir açık bulunca hep aynı şekilde kaybeder | 3 kişilik rastgele seçiliyor. Jam için yeterli |
+| D5 | Kartopu | Önde olan köy hızla büyür | Tarikat ve darbe riski büyük köyü zaten frenliyor. Ek önlem jam sonrası |
+| D6 | Sword yolu ile Fire Brigade asimetrisi | Diğer yollar yangına karşı tamamen savunmasız | Bilinçli bir seçim **[K]**, ama oyunda hissedilirse Granary yangın kaybını %20'ye indirebilir |
+
+### 24.3 Bu okumada düzeltilen hatalar
+
+| Hata | Düzeltme |
+|---|---|
+| "Pazar eksik gıdayı kendiliğinden **satar**" (yanlış fiil) | **Satın alır** |
+| Safran kuralı hiç tetiklenmiyordu (verim %60 altı, ama en düşük verim %70) | Çiftçilerin ortalama Farming yatkınlığı 3'ün altındaysa ya da 2 çiftçi yoksa |
+| Upside Down'un karşı hamlesi imkansızdı (kartlar aynı tur çözülüyor) | Etki bir sonraki tura kaydırıldı ve rakibe duyuruluyor |
+| "Çift" tanımsızdı (doğum çift başına, düğün bekarları evlendiriyor) | Başlangıçta 2 evli çift ve 6 bekar. Yeni çift sadece düğünle |
+| İlk kart turu çelişkiliydi | İlk seçim 4. tur, sonra 3 turda bir |
+| "Sadece düğün 50'yi geçirir" ile Shrine, Light tempo ve kartlar çelişiyordu | Sadece yemek 50'de durur. Shrine ve Light tempo 65'e kadar, düğün ve kartlar 100'e kadar |
+| Muhtarlık canı hiç iyileşmiyordu | "Repair hall": 5 six + 10 wood ile +15 |
+| Pazar, düğün, köpek ve Guild hiçbir katmana atanmamıştı | Pazar A'ya, düğün B'ye, köpek ve Guild D'ye |
+
+### 24.4 Yapay zeka sprite araçları için uyarılar
+
+Kullanıcının bulduğu araçlar (15 Kasım):
+
+| Araç | Ne | Gerekenler | Not |
+|---|---|---|---|
+| [scenario-labs/skills](https://github.com/scenario-labs/skills) | Claude Code'a görsel, ses, 3D üretimi öğreten skill'ler (MIT). `scenario-game-assets`, `scenario-sprite-animation` gibi oyun skill'leri var | Scenario MCP sunucusu, Scenario hesabı ve kredisi (ücretli olabilir) | Ayrıca **Unreal skill'leri** var (Claude'un Unreal'ı sürmesi), ama kendi README'leri "Unreal içinde hiç çalıştırılmadı" diyor. Bu gece güvenilecek bir şey değil |
+| [gpt-image-2d-assets](https://github.com/Harrison0223-svg/gpt-image-2d-assets) | Codex için 2D asset skill'i (MIT): stil seçimi, sprite sayfası, GIF önizleme | Codex ve GPT-image erişimi, Python ve Pillow | Küçük ve yeni bir proje. Kendi README'si pixel stilinin "pixel-perfect olarak kontrol edilmediğini" söylüyor |
+
+**Hangisi seçilirse seçilsin:**
+1. Yapay zeka "pixel art" çıktısı gerçek piksel ızgarasına oturmaz. Her sprite oyuna girmeden önce: büyük üret, **en yakın komşu** ile hedef boyuta küçült (64×64 gibi), renk sayısını sabit bir palete indir. Yoksa Unreal'daki "2D Pixels" ayarı bile bulanık görünümü kurtarmaz.
+2. **Tutarlılık:** her sprite'ı aynı stil tarifi ve aynı referans görselle üret. Yoksa her bina başka bir oyundan gelmiş gibi durur.
+3. Üçüncü parti bir skill kurmadan önce içindeki script'lere bakılmalı (kurulum kod çalıştırır).
+4. Kullanılan araç teslimde **"Tools you used"** listesine yazılır. GPT-image kullanılırsa jam'in **OpenAI ödülleri** için de aday olunur (formda OpenAI sorusu var).
