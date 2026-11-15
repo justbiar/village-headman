@@ -16,7 +16,8 @@
 | Ses | Kullanıcı hazırlayacak |
 | Görsel referans | 9 Kings (sadece ilham: okunaklı küçük krallık, net siluetler. Görünüşü kopyalanmayacak) |
 | Mimari | Jam'de yapılabilenler şimdi, gerisi sonradan takılabilecek şekilde katmanlı (bkz. 06 dosyası) |
-| Teknoloji | **Unreal Engine 5** (önce Three.js düşünüldü, sonra UE5 seçildi). Modeller **Tripo AI** ile. İzometrik görünüm ortografik kamera ile |
+| Teknoloji | **Unreal Engine 5** (önce Three.js düşünüldü, sonra UE5 seçildi). İzometrik görünüm ortografik kamera ile |
+| Görsel stil | **2D pixel art** (izometrik). Daha önce Tripo ile low-poly 3D düşünülmüştü, pixel art'a geçildi |
 | Rakip | Yapay zeka (ucuz LLM, oyuncu başına 1 ücretsiz hak, sonra kendi API anahtarı) + kural tabanlı bot |
 | İki kişilik mod | Zaman kalırsa en son |
 | Savaş | Basit, üstte can barları |
@@ -24,6 +25,35 @@
 | Slotlar | Tanımlı slotlar, başta 3, muhtarlık seviyesiyle artar |
 | Ton | Önce "ciddi ve karanlık", sonra kara mizaha döndü (komik sebep, karanlık sonuçlar) |
 | Motor deneyimi | Genelde Godot, Unreal az. Unreal'a Claude bağlanarak geliştirilecekti |
+
+## Kural: build boyutu en fazla 1 GB
+
+Jam kuralı: masaüstü build'in zip'i **1 GB'ın altında** olmalı (büyükse butler gibi ayrı araçlar gerekir, bunu istemiyoruz). Hedefimiz bunun çok altında kalmak.
+
+### Boyut bütçesi (hedef: zip 400 MB altı)
+
+| Parça | Tahmini | Not |
+|---|---|---|
+| Unreal motoru (paketlenmiş, Windows) | 150–300 MB | Boş bir proje bile bu kadar tutar. Development build Shipping'den büyüktür |
+| Pixel art sprite ve arayüz | 10–40 MB | Küçük çözünürlüklü PNG'ler, sorun değil |
+| Ses ve müzik | 20–60 MB | En büyük risk burası. Müziği OGG/sıkıştırılmış tut, uzun WAV koyma |
+| Toplam | ~200–400 MB | 1 GB'ın rahat altında |
+
+### Boyutu küçük tutma kuralları
+
+1. **Starter Content ekleme**, kullanılmayan eklentileri (plugins) kapat.
+2. Paketleme ayarlarında: **Use Pak File** açık, **Create compressed cooked packages** açık, **Exclude editor content when cooking** açık.
+3. Sadece kullanılan haritayı paketle ("List of maps to include in a packaged build").
+4. Mümkünse **Shipping** build. Jam Windows ve macOS için Shipping'i kabul ediyor.
+5. Teslimden önce zip'in boyutuna bak. 1 GB'a yaklaşırsa önce sesleri kontrol et.
+
+### Pixel art için Unreal ayarları (görüntünün bulanık çıkmaması için)
+
+- Sprite dokularında **Texture Group: 2D Pixels (unfiltered)**, filtre **Nearest**.
+- **Mip map yok** (Mip Gen Settings: NoMipmaps).
+- Sıkıştırma: **UserInterface2D (RGBA)** ya da kayıpsız. Normal sıkıştırma pixel art'ı bozar.
+- Kamera ortografik, sprite ölçeği tam sayı katlarında (piksel kaymasını önler).
+- Arayüz fontu pixel font ise UMG'de de filtre kapalı olmalı.
 
 ## Teknik kısıtlar (15 Kasım 2026, 17:49 TR)
 
