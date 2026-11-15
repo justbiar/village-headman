@@ -73,7 +73,7 @@ pre code { background: none; padding: 0; }
       <dt>Takım</dt><dd>Arfdev</dd>
       <dt>Motor</dt><dd>Unreal Engine 5</dd>
       <dt>Teslim</dt><dd>16.11.2026 04:59 TR</dd>
-      <dt>Güncelleme</dt><dd>15.11.2026 22:01</dd>
+      <dt>Güncelleme</dt><dd>15.11.2026 22:14</dd>
     </dl>
   </header>
   <div class="legend">
@@ -112,6 +112,7 @@ pre code { background: none; padding: 0; }
 <li><a href="#22-teslim">22. Teslim</a></li>
 <li><a href="#23-h-l-eksik-olanlar">23. Hâlâ eksik olanlar</a></li>
 <li><a href="#24-uyar-lar-ve-zay-f-y-nler">24. Uyarılar ve zayıf yönler</a></li>
+<li><a href="#25-satran-ilkeleri-k-her-eyde-l-kural-st-nl-k-sadece-se-imlerle">25. Satranç ilkeleri</a></li>
     </ol></details>
   </nav>
   <main>
@@ -612,8 +613,8 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <td>15</td>
 <td>0</td>
 <td>1 tur</td>
-<td>0</td>
-<td>Tohum yarı fiyatına. Safran 1 tur daha geç çürür</td>
+<td><strong>1 çiftçi</strong></td>
+<td>Tohum yarı fiyatına. Safran 1 tur daha geç çürür. (İşçi şartı üçlü kural gereği eklendi: ucuz + güçlü + bedava bina olmaz)</td>
 </tr>
 <tr>
 <td><strong>Fire Brigade</strong> (itfaiye) <span class="tag k">Karar</span></td>
@@ -719,21 +720,21 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <tr>
 <td><strong>Tarım</strong></td>
 <td><strong>The Plough</strong></td>
-<td>Bütün hasatlar +%15</td>
+<td>Bütün hasatlar +%15. <strong>Deep Roots:</strong> Kara Yıllar ve Drought etkisi yarıya iner</td>
 <td>Seed Barn</td>
 <td>"Full bellies never started a war. Probably."</td>
 </tr>
 <tr>
 <td><strong>Savaş</strong></td>
 <td><strong>The Sword</strong></td>
-<td>Barracks %30 ucuz, askerler +%10 güçlü</td>
+<td>Barracks %30 ucuz, askerler +%10 güçlü. <strong>Plunder:</strong> yağma payı %15 yerine %25</td>
 <td>Fire Brigade</td>
 <td>"Peace is a six. Strength is a nine. Or the other way."</td>
 </tr>
 <tr>
 <td><strong>Eğitim</strong></td>
 <td><strong>The Book</strong></td>
-<td>Her bina tamamlanınca +3 EP (normalde 2), School %30 ucuz</td>
+<td>Her bina tamamlanınca +3 EP (normalde 2), School %30 ucuz. <strong>Insight:</strong> School varken rakibin bu turki saldırı emrini görür, savunanları +%15 güçlü</td>
 <td>Apothecary</td>
 <td>"Learn enough and you'll know which way is up."</td>
 </tr>
@@ -964,6 +965,7 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 </table></div>
 <ul>
 <li>Her biri 1–5, <strong>4'ünün toplamı 10 [Ö]</strong>. "Her şeyi iyi yapan" köylü çıkmaz.</li>
+<li><strong>Ayna başlangıç [Ö]:</strong> iki köyün 10 köylüsü <strong>aynı</strong> rastgele zarla üretilir: Six'in köylüleri ile Nine'ın köylüleri birebir aynı yatkınlık ve karakterlerde (sadece isimleri farklı). Şans başlangıçta kimseye üstünlük vermez.</li>
 <li><strong>Verim = 0.55 + 0.15 × yatkınlık [Ö]</strong>: 1 → %70, 3 → %100, 5 → %130.</li>
 </ul>
 <h3 id="karakter-k-her-k-yl-n-n-karakteri-var">Karakter <span class="tag k">Karar</span><span class="tag-note">her köylünün karakteri var</span></h3>
@@ -1058,6 +1060,7 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <ul>
 <li><strong>Çift = evli çift.</strong> Başlangıçta 10 kişiden <strong>2 çift evli</strong>, 6 kişi bekar <span class="tag o">Öneri</span>. Yeni çiftler sadece düğünle oluşur.</li>
 <li>Doğum: köy psikolojisi 55'in üstündeyse evli çift başına %6/tur, 40–55 arası %2, altında doğum yok. Düğünle yeni evlenen çiftin ilk yıl ihtimali ayrıca %50 (bkz. Düğün).</li>
+<li><strong>Doğum şansa bırakılmaz [Ö]:</strong> oranlar her tur bir <strong>doğum sayacına</strong> eklenir. Sayaç 1'i geçince bir çocuk doğar ve sayaç 1 azalır. Aynı kararları veren iki köy aynı turda çocuk sahibi olur.</li>
 <li>C katmanından önce (köylüler sadece sayıyken) bekar sayısı basit bir sayaçtır.</li>
 <li>Çocuğun yatkınlıkları ve karakteri rastgele. <strong>8 turda</strong> yetişkin olur.</li>
 <li>Tüketim (tur başına): <strong>yetişkin 1, asker 1.5, çocuk 0.5</strong> gıda.</li>
@@ -1320,12 +1323,14 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 - <strong>Saldırı</strong> = gidenlerin gücü toplamı × (0.5 + psikoloji / 100)
 - <strong>Savunma</strong> = kalanların gücü toplamı × 1.2 + sur (muhtarlık seviyesine göre 5–20)
 - Saldırı savunmayı geçerse <strong>muhtarlık hasarı = (saldırı − savunma) × 4</strong>
+- <strong>Yağma [Ö]:</strong> savunmayı geçen saldırı rakibin gıdasının ve parasının <strong>%15</strong>'ini alır (Sword yolu %25). Böylece savaş sadece yıkmak değil, beslenmek için de yapılır. Zengin ama zayıf köy cazip hedeftir.
 - Kayıplar: saldıran, gidenlerin en fazla %60'ını, savunma oranına göre kaybeder. Savunan, kalanların en fazla %60'ını, saldırı oranına göre kaybeder.
 - İki taraf aynı tur saldırırsa iki savaş aynı anda çözülür.
 - <strong>Muhtarlık canı 0 → muhtar ölür [K].</strong> Muhtarın tek ölüm yolu bu (jam).</p>
 <hr />
 <h2 id="11-kartlar">11. Kartlar</h2>
 <ul>
+<li><strong>Ayna kart seçimi [Ö]:</strong> her seçimde <strong>iki köye aynı 3 kart</strong> sunulur. Fark sadece hangisinin seçildiğinde.</li>
 <li><strong>8 kart.</strong> Short match'te ilk seçim <strong>3. turda</strong>, sonra <strong>2 turda bir</strong> (3, 5, 7...). Long match'te 4. turda, sonra 3 turda bir. Her seçimde 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.</li>
 <li><strong>Her kartın bir karşı hamlesi var.</strong> Böylece kartlar şans değil, hazırlık meselesi olur.</li>
 </ul>
@@ -1364,7 +1369,7 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <tr>
 <td><strong>Granary Fire</strong></td>
 <td>Sabotaj</td>
-<td>Yok</td>
+<td><strong>5 six</strong></td>
 <td>Rakibin gıdasının dörtte biri yanar</td>
 <td><strong>Fire Brigade</strong> (sadece Sword yolu) <span class="tag k">Karar</span>: kayıp %5'e iner. Diğer yollar için: gıdayı fazla biriktirmemek, satmak</td>
 </tr>
@@ -1445,11 +1450,11 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 </tr>
 <tr>
 <td>En fazla</td>
-<td>2 köpek</td>
+<td>1 köpek</td>
 </tr>
 <tr>
 <td>Etkisi</td>
-<td>Rakip Spy oynarsa: 1 köpekle <strong>%70</strong>, 2 köpekle <strong>%90</strong> ihtimalle casus yakalanır</td>
+<td>Köpek varsa rakibin Spy'ı <strong>her zaman</strong> yakalanır (şans yok). En fazla 1 köpek yeter, ikinci köpek alınamaz</td>
 </tr>
 <tr>
 <td>Casus yakalanırsa</td>
@@ -1577,7 +1582,7 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 </tr>
 <tr>
 <td>Hangisi</td>
-<td>Rastgele, aynı olay üst üste gelmez</td>
+<td>Rastgele, aynı olay üst üste gelmez. Olay <strong>iki köye aynı anda ve aynı şiddette</strong> gelir, yani şans değil hazırlık fark yaratır</td>
 <td>Aynı</td>
 </tr>
 </tbody>
@@ -1601,7 +1606,7 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <tr>
 <td><strong>Plague</strong> (salgın)</td>
 <td>"A cough travels the road from Nine." (Nine'da: "...from Six.")</td>
-<td>Her yetişkin %15 ihtimalle hastalanır: <strong>2 tur çalışmaz</strong>. Gıda eksikse hasta ölür</td>
+<td>Yetişkinlerin <strong>%15'i</strong> (aşağı yuvarlanır) hastalanır: <strong>2 tur çalışmaz</strong>. Hastalananlar kişisel psikolojisi en düşük olanlardır (şans yok). Gıda eksikse hasta ölür</td>
 <td><strong>Remedy</strong> bir hastayı anında iyileştirir. Apothecary'si olan Book yolu avantajlı</td>
 </tr>
 <tr>
@@ -2523,6 +2528,169 @@ Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
 2. <strong>Tutarlılık:</strong> her sprite'ı aynı stil tarifi ve aynı referans görselle üret. Yoksa her bina başka bir oyundan gelmiş gibi durur.
 3. Üçüncü parti bir skill kurmadan önce içindeki script'lere bakılmalı (kurulum kod çalıştırır).
 4. Kullanılan araç teslimde <strong>"Tools you used"</strong> listesine yazılır. GPT-image kullanılırsa jam'in <strong>OpenAI ödülleri</strong> için de aday olunur (formda OpenAI sorusu var).</p>
+<hr />
+<h2 id="25-satran-ilkeleri-k-her-eyde-l-kural-st-nl-k-sadece-se-imlerle">25. Satranç ilkeleri <span class="tag k">Karar</span><span class="tag-note">her şeyde üçlü kural, üstünlük sadece seçimlerle</span></h2>
+<p>Oyunun her sistemi iki kurala uyar. Yeni bir şey eklenirken önce bu iki kurala bakılır.</p>
+<h3 id="kural-1-l-kural-her-yerde">Kural 1: üçlü kural her yerde</h3>
+<p>Her seçeneğin üç özelliği var ve <strong>en fazla ikisinde iyi</strong> olabilir. Üçünde iyi olanın bedeli <strong>risktir</strong>. Hiçbir seçenek başka bir seçeneği her açıdan ezemez.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Sistem</th>
+<th>Üç özellik</th>
+<th>Örnek</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ekinler</strong></td>
+<td>Hız · Maliyet · Getiri</td>
+<td>Safran üçünde iyi, bedeli çürüme ve sarmaşık</td>
+</tr>
+<tr>
+<td><strong>Binalar</strong></td>
+<td>Maliyet · Etki · Bakım (işçi ya da para)</td>
+<td>Shrine ucuz, güçlü, tek rahiple çalışır: bedeli tarikat. Seed Barn'a bu yüzden işçi şartı eklendi</td>
+</tr>
+<tr>
+<td><strong>Kartlar</strong></td>
+<td>Bedel · Güç · Karşılanabilirlik</td>
+<td>Güçlü ve bedava kartın mutlaka bir karşı hamlesi var. Granary Fire'ın karşılığı sadece Sword'da olduğu için artık <strong>5 six</strong></td>
+</tr>
+<tr>
+<td><strong>Ordu</strong></td>
+<td>Büyüklük · Güç · Sadakat</td>
+<td>Büyük ve güçlü ordu darbe yapar. Büyük ve sadık ordu zayıftır (eğitimsiz). Güçlü ve sadık ordu küçük ve pahalıdır</td>
+</tr>
+<tr>
+<td><strong>Psikoloji</strong></td>
+<td>Hangi yol olursa olsun bedava mutluluk yok</td>
+<td>Yemek tarla ister, düğün para ve emek, Shrine tarikat, sıkıyönetim ordu nüfuzu, Light tempo üretim, vergi psikoloji</td>
+</tr>
+<tr>
+<td><strong>Köylüler</strong></td>
+<td>4 yatkınlığın toplamı 10</td>
+<td>Her şeyi iyi yapan köylü yok</td>
+</tr>
+<tr>
+<td><strong>Konsey</strong></td>
+<td>Yönetim · Üretim · Halkla ilişki</td>
+<td>Sadece yöneten üye üretmez. Çalışan üye yönetimin yarısını kaybeder ama halk onu sever</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="kural-2-yollar-aras-nda-ta-ka-t-makas">Kural 2: yollar arasında taş-kağıt-makas</h3>
+<p>Hiçbir yol en iyi yol değildir. Her yol birini yener, birine yenilir. Rakibin yolu haritada görünür, yani <strong>karşı hamle bir seçimdir.</strong></p>
+<div class="frame"><pre><code>          SWORD
+         ↗     ↘
+   yener         yenilir
+   (yağma)       (Insight)
+     ↗               ↘
+PLOUGH  ←── yener ───  BOOK
+        (dayanıklılık)
+</code></pre></div>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Eşleşme</th>
+<th>Neden</th>
+<th>Mekanik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sword &gt; Plough</strong></td>
+<td>Tarım köyü zengin ama zayıf, yağma için ideal hedef</td>
+<td>Yağma: Sword %25 gıda ve para alır</td>
+</tr>
+<tr>
+<td><strong>Book &gt; Sword</strong></td>
+<td>Eğitimli köy saldırıyı önceden görür ve hazırlanır</td>
+<td>Insight: rakibin saldırı emri görünür, savunanlar +%15. Levy kumar olmaktan çıkar</td>
+</tr>
+<tr>
+<td><strong>Plough &gt; Book</strong></td>
+<td>Uzun maçta tok köy kazanır. Book'un pahalı projeleri kıtlıkta durur</td>
+<td>Deep Roots: Kara Yıllar ve kuraklık Plough'a yarı etki eder</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Aynı yolu seçen iki köy için zaten barış kapısı var (14b): ayna maç kazanmak için değil, <strong>anlaşmak</strong> için bir fırsat.</li>
+<li>Yol 2. turda seçilir ve rakibin yolu o tur görünür. Muhtarlık 2'ye kadar yol değiştirilebildiği için, rakibe göre karşı yola geçmek gerçek bir satranç hamlesidir (bedeli var).</li>
+</ul>
+<h3 id="kural-3-ans-kimseye-st-nl-k-vermez">Kural 3: şans kimseye üstünlük vermez</h3>
+<p>Şans oyunda sadece <strong>çeşitlilik</strong> için var, <strong>üstünlük</strong> için yok. Şansın dokunduğu her yer iki köye eşit davranır.</p>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Şansın olduğu yer</th>
+<th>Nasıl adil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Köylülerin yatkınlık ve karakterleri</td>
+<td><strong>Ayna başlangıç:</strong> iki köye aynı 10 köylü</td>
+</tr>
+<tr>
+<td>Kart seçimleri</td>
+<td><strong>Ayna seçim:</strong> iki köye aynı 3 kart</td>
+</tr>
+<tr>
+<td>Olaylar</td>
+<td>İki köye aynı anda, aynı şiddette, bir tur önceden duyurularak</td>
+</tr>
+<tr>
+<td>Köpek ve casus</td>
+<td>Şans yok: köpek varsa casus her zaman yakalanır</td>
+</tr>
+<tr>
+<td>Salgın</td>
+<td>Şans yok: en mutsuz %15 hastalanır</td>
+</tr>
+<tr>
+<td>Doğum</td>
+<td>Şans yok: doğum sayacı</td>
+</tr>
+<tr>
+<td>Savaş</td>
+<td>Zaten formül: aynı ordular aynı sonucu verir</td>
+</tr>
+<tr>
+<td>Bot kişiliği</td>
+<td>Rastgele, ama yolu 2. turda görünür ve oyuncu buna göre oynar</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Sonuç:</strong> iki oyuncu aynı kararları verirse aynı yerde olur. Birinin önde olmasının tek sebebi <strong>daha iyi bir karar</strong> vermiş olmasıdır.</p>
+<h3 id="oyunu-daha-da-derinle-tirecek-fikirler-jam-sonras-m1">Oyunu daha da derinleştirecek fikirler (jam sonrası, M1+)</h3>
+<div class="frame"><table>
+<thead>
+<tr>
+<th>Fikir</th>
+<th>Neye hizmet eder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tahmin turu:</strong> her turun başında rakibin geçen tur ne yaptığı kısa bir "istihbarat özeti"yle gösterilir</td>
+<td>Okuma ve tahmin, satrancın kalbi</td>
+</tr>
+<tr>
+<td><strong>Geri alınamaz hamleler:</strong> bazı kararlar (yol, ustalık projesi) iptal edilemez</td>
+<td>Taahhüt ve blöf</td>
+</tr>
+<tr>
+<td><strong>Blöf:</strong> inşaat iskelesi neyin yapıldığını göstermez, sadece "bir şey yapılıyor" der (Insight olan görür)</td>
+<td>Book'un bilgi avantajı büyür, Sword için sis olur</td>
+</tr>
+<tr>
+<td><strong>Tempo üstünlüğü:</strong> aynı turda iki köy aynı hamleyi yaparsa önce bitiren küçük bir bonus alır</td>
+<td>Zamanlama da bir karar olur</td>
+</tr>
+</tbody>
+</table></div>
   </main>
 </div>
 <script>

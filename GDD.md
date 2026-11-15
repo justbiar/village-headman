@@ -228,7 +228,7 @@ Her bina bir slot kaplar. **Tarlalar da slotlara dahil [K].** Maliyet ve sürele
 
 | Bina | Yol | six | wood | EP | Süre | İşçi | Etkisi |
 |---|---|---|---|---|---|---|---|
-| **Seed Barn** | Plough | 12 | 15 | 0 | 1 tur | 0 | Tohum yarı fiyatına. Safran 1 tur daha geç çürür |
+| **Seed Barn** | Plough | 12 | 15 | 0 | 1 tur | **1 çiftçi** | Tohum yarı fiyatına. Safran 1 tur daha geç çürür. (İşçi şartı üçlü kural gereği eklendi: ucuz + güçlü + bedava bina olmaz) |
 | **Fire Brigade** (itfaiye) **[K]** | Sword | 15 | 20 | 5 | 2 tur | 1 asker | Granary Fire'ın etkisi %25'ten %5'e düşer **[K: sadece savaş yolu]** |
 | **Apothecary** (ilaç merkezi) **[K]** | Book | 15 | 15 | 8 | 2 tur | 1 eczacı | 2 turda bir **Remedy** üretir (verimle). Eczacı Education yatkınlığını kullanır **[K: eğitim kolunda]** |
 
@@ -259,9 +259,9 @@ Köye 10 kişi gelir. **Önce tarla kurulur, sonra köyün nasıl yönetileceği
 
 | Yol | Ad (oyunda) | Bonus | Açtığı özel bina | Tek cümle (oyunda) |
 |---|---|---|---|---|
-| **Tarım** | **The Plough** | Bütün hasatlar +%15 | Seed Barn | "Full bellies never started a war. Probably." |
-| **Savaş** | **The Sword** | Barracks %30 ucuz, askerler +%10 güçlü | Fire Brigade | "Peace is a six. Strength is a nine. Or the other way." |
-| **Eğitim** | **The Book** | Her bina tamamlanınca +3 EP (normalde 2), School %30 ucuz | Apothecary | "Learn enough and you'll know which way is up." |
+| **Tarım** | **The Plough** | Bütün hasatlar +%15. **Deep Roots:** Kara Yıllar ve Drought etkisi yarıya iner | Seed Barn | "Full bellies never started a war. Probably." |
+| **Savaş** | **The Sword** | Barracks %30 ucuz, askerler +%10 güçlü. **Plunder:** yağma payı %15 yerine %25 | Fire Brigade | "Peace is a six. Strength is a nine. Or the other way." |
+| **Eğitim** | **The Book** | Her bina tamamlanınca +3 EP (normalde 2), School %30 ucuz. **Insight:** School varken rakibin bu turki saldırı emrini görür, savunanları +%15 güçlü | Apothecary | "Learn enough and you'll know which way is up." |
 
 İnanç bir yol değil. Shrine her yolda kurulabilir, çünkü inanç bir yönetim tercihi değil bir kriz cevabıdır.
 
@@ -341,6 +341,7 @@ Hiçbir ekin bir başkasını her açıdan ezmiyor. Tasarım masası bunu her de
 | **Education** | Öğretmen, Rahip, Eczacı |
 
 - Her biri 1–5, **4'ünün toplamı 10 [Ö]**. "Her şeyi iyi yapan" köylü çıkmaz.
+- **Ayna başlangıç [Ö]:** iki köyün 10 köylüsü **aynı** rastgele zarla üretilir: Six'in köylüleri ile Nine'ın köylüleri birebir aynı yatkınlık ve karakterlerde (sadece isimleri farklı). Şans başlangıçta kimseye üstünlük vermez.
 - **Verim = 0.55 + 0.15 × yatkınlık [Ö]**: 1 → %70, 3 → %100, 5 → %130.
 
 ### Karakter **[K: her köylünün karakteri var]**
@@ -393,6 +394,7 @@ Her köylüye rastgele 1 karakter **[Ö]**:
 
 - **Çift = evli çift.** Başlangıçta 10 kişiden **2 çift evli**, 6 kişi bekar **[Ö]**. Yeni çiftler sadece düğünle oluşur.
 - Doğum: köy psikolojisi 55'in üstündeyse evli çift başına %6/tur, 40–55 arası %2, altında doğum yok. Düğünle yeni evlenen çiftin ilk yıl ihtimali ayrıca %50 (bkz. Düğün).
+- **Doğum şansa bırakılmaz [Ö]:** oranlar her tur bir **doğum sayacına** eklenir. Sayaç 1'i geçince bir çocuk doğar ve sayaç 1 azalır. Aynı kararları veren iki köy aynı turda çocuk sahibi olur.
 - C katmanından önce (köylüler sadece sayıyken) bekar sayısı basit bir sayaçtır.
 - Çocuğun yatkınlıkları ve karakteri rastgele. **8 turda** yetişkin olur.
 - Tüketim (tur başına): **yetişkin 1, asker 1.5, çocuk 0.5** gıda.
@@ -526,6 +528,7 @@ Savaş anında kurallar esneyebilir, ama her esnetmenin bir bedeli var:
 - **Saldırı** = gidenlerin gücü toplamı × (0.5 + psikoloji / 100)
 - **Savunma** = kalanların gücü toplamı × 1.2 + sur (muhtarlık seviyesine göre 5–20)
 - Saldırı savunmayı geçerse **muhtarlık hasarı = (saldırı − savunma) × 4**
+- **Yağma [Ö]:** savunmayı geçen saldırı rakibin gıdasının ve parasının **%15**'ini alır (Sword yolu %25). Böylece savaş sadece yıkmak değil, beslenmek için de yapılır. Zengin ama zayıf köy cazip hedeftir.
 - Kayıplar: saldıran, gidenlerin en fazla %60'ını, savunma oranına göre kaybeder. Savunan, kalanların en fazla %60'ını, saldırı oranına göre kaybeder.
 - İki taraf aynı tur saldırırsa iki savaş aynı anda çözülür.
 - **Muhtarlık canı 0 → muhtar ölür [K].** Muhtarın tek ölüm yolu bu (jam).
@@ -534,6 +537,7 @@ Savaş anında kurallar esneyebilir, ama her esnetmenin bir bedeli var:
 
 ## 11. Kartlar
 
+- **Ayna kart seçimi [Ö]:** her seçimde **iki köye aynı 3 kart** sunulur. Fark sadece hangisinin seçildiğinde.
 - **8 kart.** Short match'te ilk seçim **3. turda**, sonra **2 turda bir** (3, 5, 7...). Long match'te 4. turda, sonra 3 turda bir. Her seçimde 3 kart sunulur, 1'i seçilir. Elde en fazla 3 kart. Tur başına en fazla 1 kart oynanır.
 - **Her kartın bir karşı hamlesi var.** Böylece kartlar şans değil, hazırlık meselesi olur.
 
@@ -542,7 +546,7 @@ Savaş anında kurallar esneyebilir, ama her esnetmenin bir bedeli var:
 | **Vine** | Sabotaj | Yok | Rakibin en değerli ekili tarlasını sarar, bir sonraki hasadı yok olur | **Remedy** (ilaç) **[K]**, bkz. aşağısı |
 | **Gossip** | Karanlık | Yok | Rakibin köy psikolojisi -10 | **Yes-Men's Guild** (yancılar birliği) **[K]**: dedikoduyu tamamen durdurur ve geri teper. Guild yoksa: psikoloji 75'in üstündeyse etkisi yarıya iner |
 | **Spy** (casus) | Yönetim | 5 six | 2 tur boyunca rakibin kesin metriklerini, stoklarını ve **bu turki gizli emrini** (saldırı sayısı, oynayacağı kart) gösterir | **Guard Dog** (köpek) **[K]**: casusu yakalar, bkz. aşağısı |
-| **Granary Fire** | Sabotaj | Yok | Rakibin gıdasının dörtte biri yanar | **Fire Brigade** (sadece Sword yolu) **[K]**: kayıp %5'e iner. Diğer yollar için: gıdayı fazla biriktirmemek, satmak |
+| **Granary Fire** | Sabotaj | **5 six** | Rakibin gıdasının dörtte biri yanar | **Fire Brigade** (sadece Sword yolu) **[K]**: kayıp %5'e iner. Diğer yollar için: gıdayı fazla biriktirmemek, satmak |
 | **Tax Relief** | Yönetim | 8 six | Kendi psikolojin +10 | Yok (kendine oynanır) |
 | **Mobilize** | Yönetim | Yok | Bu tur 3 ek savaşçı (saldırı ya da savunma), ordu nüfuzu +5 | Rakip saldırıyı görünce bu tur saldırmamak. Sur seviyesi |
 | **Sermon** | Karanlık | Yok | Psikoloji +6, ordu nüfuzu -10, tarikat +8 | Yok (kendine oynanır, bedeli tarikat) |
@@ -572,8 +576,8 @@ Pazardan satın alınır, her yol alabilir. Maliyetler **[Ö]**:
 |---|---|
 | Fiyat | **6 six** |
 | Bakım | **0.5 food/tur** (köpek de yer) |
-| En fazla | 2 köpek |
-| Etkisi | Rakip Spy oynarsa: 1 köpekle **%70**, 2 köpekle **%90** ihtimalle casus yakalanır |
+| En fazla | 1 köpek |
+| Etkisi | Köpek varsa rakibin Spy'ı **her zaman** yakalanır (şans yok). En fazla 1 köpek yeter, ikinci köpek alınamaz |
 | Casus yakalanırsa | Kart boşa gider, rakip hiçbir şey öğrenmez. Üstüne, yakalanan casus konuşur: **sen 1 tur boyunca rakibin kesin metriklerini görürsün** |
 
 Tur raporunda: "The dog caught Nine's spy. He talked." Haritada muhtarlığın önünde küçük bir köpek sprite'ı yatar.
@@ -627,12 +631,12 @@ Satranç hissini bozmamak için olaylar sürpriz değildir: **bir tur önceden**
 |---|---|---|
 | İlk olay | 5. tur (4. turda duyurulur) | 7. tur |
 | Sıklık | 4 turda bir (5, 9, 13, 17...) | 6 turda bir |
-| Hangisi | Rastgele, aynı olay üst üste gelmez | Aynı |
+| Hangisi | Rastgele, aynı olay üst üste gelmez. Olay **iki köye aynı anda ve aynı şiddette** gelir, yani şans değil hazırlık fark yaratır | Aynı |
 
 | Olay | Duyuru (oyunda) | Etkisi **[Ö]** | Hazırlık / karşı hamle |
 |---|---|---|---|
 | **Drought** (kuraklık) | "The wells are low. Next season will be dry." | O tur bütün hasatlar **-%30**, orman yenilenmez | **Potato etkilenmez** (kökler derinde). Gıda almak, satışı azaltmak |
-| **Plague** (salgın) | "A cough travels the road from Nine." (Nine'da: "...from Six.") | Her yetişkin %15 ihtimalle hastalanır: **2 tur çalışmaz**. Gıda eksikse hasta ölür | **Remedy** bir hastayı anında iyileştirir. Apothecary'si olan Book yolu avantajlı |
+| **Plague** (salgın) | "A cough travels the road from Nine." (Nine'da: "...from Six.") | Yetişkinlerin **%15'i** (aşağı yuvarlanır) hastalanır: **2 tur çalışmaz**. Hastalananlar kişisel psikolojisi en düşük olanlardır (şans yok). Gıda eksikse hasta ölür | **Remedy** bir hastayı anında iyileştirir. Apothecary'si olan Book yolu avantajlı |
 | **Wandering Merchant** (gezgin tüccar) | "A merchant's cart is on the road. He haggles badly." | O tur satış fiyatları **+%50**, gıda alış fiyatı **1 six**, Remedy **5 six**, köpek **4 six** | Satılacak stok biriktirmek. Nakit ekin eken köy kazanır |
 
 - Hasta köylüler haritada gri ve oturur halde görünür.
@@ -1021,3 +1025,72 @@ Kullanıcının bulduğu araçlar (15 Kasım):
 2. **Tutarlılık:** her sprite'ı aynı stil tarifi ve aynı referans görselle üret. Yoksa her bina başka bir oyundan gelmiş gibi durur.
 3. Üçüncü parti bir skill kurmadan önce içindeki script'lere bakılmalı (kurulum kod çalıştırır).
 4. Kullanılan araç teslimde **"Tools you used"** listesine yazılır. GPT-image kullanılırsa jam'in **OpenAI ödülleri** için de aday olunur (formda OpenAI sorusu var).
+
+---
+
+## 25. Satranç ilkeleri **[K: her şeyde üçlü kural, üstünlük sadece seçimlerle]**
+
+Oyunun her sistemi iki kurala uyar. Yeni bir şey eklenirken önce bu iki kurala bakılır.
+
+### Kural 1: üçlü kural her yerde
+
+Her seçeneğin üç özelliği var ve **en fazla ikisinde iyi** olabilir. Üçünde iyi olanın bedeli **risktir**. Hiçbir seçenek başka bir seçeneği her açıdan ezemez.
+
+| Sistem | Üç özellik | Örnek |
+|---|---|---|
+| **Ekinler** | Hız · Maliyet · Getiri | Safran üçünde iyi, bedeli çürüme ve sarmaşık |
+| **Binalar** | Maliyet · Etki · Bakım (işçi ya da para) | Shrine ucuz, güçlü, tek rahiple çalışır: bedeli tarikat. Seed Barn'a bu yüzden işçi şartı eklendi |
+| **Kartlar** | Bedel · Güç · Karşılanabilirlik | Güçlü ve bedava kartın mutlaka bir karşı hamlesi var. Granary Fire'ın karşılığı sadece Sword'da olduğu için artık **5 six** |
+| **Ordu** | Büyüklük · Güç · Sadakat | Büyük ve güçlü ordu darbe yapar. Büyük ve sadık ordu zayıftır (eğitimsiz). Güçlü ve sadık ordu küçük ve pahalıdır |
+| **Psikoloji** | Hangi yol olursa olsun bedava mutluluk yok | Yemek tarla ister, düğün para ve emek, Shrine tarikat, sıkıyönetim ordu nüfuzu, Light tempo üretim, vergi psikoloji |
+| **Köylüler** | 4 yatkınlığın toplamı 10 | Her şeyi iyi yapan köylü yok |
+| **Konsey** | Yönetim · Üretim · Halkla ilişki | Sadece yöneten üye üretmez. Çalışan üye yönetimin yarısını kaybeder ama halk onu sever |
+
+### Kural 2: yollar arasında taş-kağıt-makas
+
+Hiçbir yol en iyi yol değildir. Her yol birini yener, birine yenilir. Rakibin yolu haritada görünür, yani **karşı hamle bir seçimdir.**
+
+```
+          SWORD
+         ↗     ↘
+   yener         yenilir
+   (yağma)       (Insight)
+     ↗               ↘
+PLOUGH  ←── yener ───  BOOK
+        (dayanıklılık)
+```
+
+| Eşleşme | Neden | Mekanik |
+|---|---|---|
+| **Sword > Plough** | Tarım köyü zengin ama zayıf, yağma için ideal hedef | Yağma: Sword %25 gıda ve para alır |
+| **Book > Sword** | Eğitimli köy saldırıyı önceden görür ve hazırlanır | Insight: rakibin saldırı emri görünür, savunanlar +%15. Levy kumar olmaktan çıkar |
+| **Plough > Book** | Uzun maçta tok köy kazanır. Book'un pahalı projeleri kıtlıkta durur | Deep Roots: Kara Yıllar ve kuraklık Plough'a yarı etki eder |
+
+- Aynı yolu seçen iki köy için zaten barış kapısı var (14b): ayna maç kazanmak için değil, **anlaşmak** için bir fırsat.
+- Yol 2. turda seçilir ve rakibin yolu o tur görünür. Muhtarlık 2'ye kadar yol değiştirilebildiği için, rakibe göre karşı yola geçmek gerçek bir satranç hamlesidir (bedeli var).
+
+### Kural 3: şans kimseye üstünlük vermez
+
+Şans oyunda sadece **çeşitlilik** için var, **üstünlük** için yok. Şansın dokunduğu her yer iki köye eşit davranır.
+
+| Şansın olduğu yer | Nasıl adil |
+|---|---|
+| Köylülerin yatkınlık ve karakterleri | **Ayna başlangıç:** iki köye aynı 10 köylü |
+| Kart seçimleri | **Ayna seçim:** iki köye aynı 3 kart |
+| Olaylar | İki köye aynı anda, aynı şiddette, bir tur önceden duyurularak |
+| Köpek ve casus | Şans yok: köpek varsa casus her zaman yakalanır |
+| Salgın | Şans yok: en mutsuz %15 hastalanır |
+| Doğum | Şans yok: doğum sayacı |
+| Savaş | Zaten formül: aynı ordular aynı sonucu verir |
+| Bot kişiliği | Rastgele, ama yolu 2. turda görünür ve oyuncu buna göre oynar |
+
+**Sonuç:** iki oyuncu aynı kararları verirse aynı yerde olur. Birinin önde olmasının tek sebebi **daha iyi bir karar** vermiş olmasıdır.
+
+### Oyunu daha da derinleştirecek fikirler (jam sonrası, M1+)
+
+| Fikir | Neye hizmet eder |
+|---|---|
+| **Tahmin turu:** her turun başında rakibin geçen tur ne yaptığı kısa bir "istihbarat özeti"yle gösterilir | Okuma ve tahmin, satrancın kalbi |
+| **Geri alınamaz hamleler:** bazı kararlar (yol, ustalık projesi) iptal edilemez | Taahhüt ve blöf |
+| **Blöf:** inşaat iskelesi neyin yapıldığını göstermez, sadece "bir şey yapılıyor" der (Insight olan görür) | Book'un bilgi avantajı büyür, Sword için sis olur |
+| **Tempo üstünlüğü:** aynı turda iki köy aynı hamleyi yaparsa önce bitiren küçük bir bonus alır | Zamanlama da bir karar olur |
