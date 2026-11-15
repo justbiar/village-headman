@@ -100,7 +100,23 @@ Her rakip aynı soruya cevap verir: "Bu durumu görüyorsun, emirlerin ne?"
 | M3 | Jev rakip, kişilikli muhtar mektupları |
 | M4 | İki kişilik mod, öğretici, Türkçe dil |
 
-## 3. Jam'de kesilenler ve geri dönüş yolu
+## 3. Plan tam, yapım öncelik sırasıyla (karar)
+
+Plan bütün sistemleri tam detayıyla anlatır. Oyunu kodlayan kişi yetişebildiği kadarını yapar. Neyin önce yapılacağı aşağıdaki sırayla belli: bir katman bitmeden sonrakine geçilmez, böylece hangi anda durulursa durulsun elde oynanabilir bir oyun olur.
+
+| Katman | İçerik | Bu katman bitince oyun ne yapabiliyor |
+|---|---|---|
+| **A. Çekirdek döngü** | Slotlar, tarla ve ekinler, odun ve orman, gıda tüketimi, mevsimler, tur düğmesi, bot | Köy kurup yaşatabiliyorsun |
+| **B. Tehlike** | Psikoloji, ordu nüfuzu, kışla ve asker, savaş, can barları, 5 bitiş | Kazanıp kaybedebiliyorsun |
+| **C. Köylüler (hafif)** | Rastgele 10 köylü, 4 yatkınlık, karakterler, "Let the elders decide" | Liyakat teması oyunda |
+| **D. Kartlar ve tarikat** | 6 kart, 3 turda bir seçim, inanç evi, tarikat talepleri | Rakiple etkileşim ve üç güç dengesi |
+| **E. Sunum** | Director's Cut ekranı, muhtar animasyonları, açılış sahnesi (para), ses | Jüri için cila |
+| **F. Köylüler (tam)** | Tek tek köylü kartları, elle atama, Doubter'ın kaçması | Tam liyakat sistemi |
+| **G. Sonrası** | Ortak pazar, olaylar, suikast, Jev, iki kişilik mod | M2 ve sonrası |
+
+Öneri: E katmanının bir kısmı (en azından bitiş ekranı ve tek bir müzik) hangi katmanda durulursa durulsun teslimden önce yapılmalı, çünkü jüri ilk ve son ekranı mutlaka görür.
+
+## 4. Jam'de kesilenler ve geri dönüş yolu
 
 | Kesilen | Neden | Hangi taşta geri gelir |
 |---|---|---|
