@@ -12,7 +12,7 @@ Two brothers found a coin. One says six. One says nine. Run your half of the vil
 
 | Dosya | İçerik | Durum |
 |---|---|---|
-| [GDD.md](GDD.md) | Bütün oyun: kurallar, sayılar, ekran, sanat, ses, teknik, yapım sırası, teslim | **Güncel** |
+| [GDD.md](GDD.md) | Bütün oyun: kurallar, sayılar, ekran, sanat, ses, teknik, yapım sırası, teslim | **Güncel** ([okunaklı web sayfası](https://claude.ai/artifact/E2PkYt15F8MSP4KcvwqmVw), `tools/build_gdd_page.py` ile üretilir) |
 | [workbench/tasarim-masasi.html](workbench/tasarim-masasi.html) | Tasarım masası: veri girişi, denge denetimi, ekonomi simülasyonu | Güncel ([canlı sayfa](https://claude.ai/artifact/4ihHVnny12mPr3NtRxnRB2), sadece sahibi açabilir) |
 | [core/](core/) | C++ kural çekirdeği ve bot-bot denge testi | **Eski:** odun, köylüler ve yeni ekin değerleri yok. Formül ve bot mantığı için referans |
 | [docs/03-kararlar-ve-sorular.md](docs/03-kararlar-ve-sorular.md) | Kararların geçmişi, build boyutu kuralı | Kısmen güncel |
