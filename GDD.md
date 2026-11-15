@@ -845,7 +845,10 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 | 6 | Tarikat talep metinlerinin onayı | Kullanıcı | Hayır |
 | 7 | Bitiş sözlerinin onayı | Kullanıcı | Hayır |
 | 8 | Hangi köyü oyuncu yönetiyor (öneri: Six) | Kullanıcı | Hayır |
-| 9 | Jev, iki kişilik mod, pazar, olaylar, suikast | Jam sonrası | Hayır |
+| 9 | Jev, iki kişilik mod, pazar, suikast | Jam sonrası | Hayır |
+| 10 | ~~Dal seviye ağacı~~ Jam'de sadece yol seçimi, seviye ağacı M1 **[K]** | Karar verildi | |
+| 11 | ~~Ek rakip etkileşimi~~ Jam'de yok (savaş, kartlar, Doubter yeterli), sınır tarlaları ve su jam sonrası **[K]** | Karar verildi | |
+| 12 | ~~Platform~~ Yapımcının bilgisayarına göre Windows ya da macOS development build. Kayıt/yükleme yok **[K]** | Karar verildi | |
 
 ---
 
