@@ -6,6 +6,9 @@
 |---|---|
 | Oyunun adı | **Village Headman** |
 | Hedef | **Epic MegaJam 2026'ya yetiştirilecek.** Unreal tarafı bu Mac'te değil, başka bir bilgisayarda yapılacak. Bu Mac plan ve tasarım içindir |
+| Katılım | **Solo.** Unreal'ı kullanıcı kendisi kullanacak (yapay zeka ekipte sayılmıyor). Arkadaş sadece bilgisayarını verecek, oyuna emek vermeyecek |
+| Muhtarın ölümü (jam) | Sadece savaşta muhtarlık can barının sıfırlanması. Suikast kartı M2'ye kaldı |
+| Tema ekranı | Maç sonunda **"Director's Cut"** özeti: hangi kararlar köyü batırdı ya da kurtardı |
 | Arayüz dili | **İngilizce** |
 | Köyler | **Six** ve **Nine** (hikayeden geliyor, bkz. 06 dosyası) |
 | Hikaye tonu | Komik bir sebep (6 mı 9 mu?), karanlık sonuçlar: kara mizah |

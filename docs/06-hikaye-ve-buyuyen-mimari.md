@@ -26,6 +26,18 @@ Sebep gülünç, sonuçlar karanlık. İnsanlar bir rakam yüzünden aç kalıyo
 | Bitiş metinleri | Her bitişin sonunda kardeşlerin tek satırlık bir sözü. Örnek (darbe): "At least the general agrees it's a six." |
 | Kazanma ekranı | "History will remember it as a nine." (Nine kazanırsa) |
 
+### Director's Cut ekranı (onaylandı)
+
+Maç bitince oyuncuya maçın "son kurgusu" gösterilir. Temayla bağlantı burada kurulur: muhtar köyün yönetmeniydi, bu da onun filmi.
+
+- **Başlık:** "Director's Cut: The Tale of Six" (ya da Nine)
+- **3 sahne:** maçın en belirleyici 3 anı, tur numarası ve mevsimiyle. Örnek:
+  - "Year 2, Winter. You sold the last of the potatoes. The granary stood empty."
+  - "Year 3, Spring. The general asked for more men. You gave them."
+  - "Year 4, Summer. The general agreed it was a six. You did not."
+- **Son satır:** bitişin adı ve kardeşin tek satırlık sözü.
+- Sahneler, tur sırasında oluşan olaylardan seçilir (en büyük metrik düşüşü, en büyük kayıp, bitişi tetikleyen olay). Mimarideki olay akışı bunun için yeterli.
+
 ### Telif notu
 9 Kings sadece ilham. Görsel dili, karakterleri ve arayüzü kopyalanmayacak. Jam kuralları da başkasının IP'sini yasaklıyor. "Nine" adı kendi hikayemizden geliyor.
 
@@ -82,7 +94,7 @@ Her rakip aynı soruya cevap verir: "Bu durumu görüyorsun, emirlerin ne?"
 
 | Taş | İçerik |
 |---|---|
-| **M0 (jam, bu gece)** | Tek ekran, bota karşı. 3 slot, 3 mahsul, okul, kışla, inanç evi, 6 kart, savaş, tarikat talepleri, 5 bitiş. İngilizce arayüz. |
+| **M0 (jam, bu gece)** | Tek ekran, bota karşı. 3 slot, 3 mahsul, okul, kışla, inanç evi, 6 kart, savaş (muhtarın tek ölüm yolu can barı), tarikat talepleri, 5 bitiş, Director's Cut özet ekranı. İngilizce arayüz. Solo giriş. |
 | M1 | Köylüler ve azalar (liyakat sistemi), huzur |
 | M2 | Ortak pazar, rastgele olaylar, sınır tarlaları |
 | M3 | Jev rakip, kişilikli muhtar mektupları |
