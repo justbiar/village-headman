@@ -73,7 +73,7 @@ pre code { background: none; padding: 0; }
       <dt>Takım</dt><dd>Arfdev</dd>
       <dt>Motor</dt><dd>Unreal Engine 5</dd>
       <dt>Teslim</dt><dd>16.11.2026 04:59 TR</dd>
-      <dt>Güncelleme</dt><dd>15.11.2026 22:00</dd>
+      <dt>Güncelleme</dt><dd>15.11.2026 22:01</dd>
     </dl>
   </header>
   <div class="legend">
@@ -168,7 +168,12 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).</p>
 <h2 id="1-hikaye-ve-ton">1. Hikaye ve ton</h2>
 <p>İki kardeş aynı köyün muhtarlığını paylaşıyordu. Yolda üzerinde tek rakam yazan bir para buldular. Biri "Six" dedi, öbürü "Nine". Tartışma bir gün sürdü, sonra bir ömür. Köy ikiye bölündü. <span class="tag k">Karar</span></p>
 <ul>
-<li>Köyler: <strong>Six</strong> ve <strong>Nine</strong>. Oyuncu Six'i yönetir, bot Nine'ı <span class="tag o">Öneri</span>.</li>
+<li>Köyler: <strong>Six</strong> ve <strong>Nine</strong>.</li>
+<li><strong>Oyuncu kardeşini seçer [K].</strong> Açılış sahnesinden sonra: <strong>"Which brother are you?"</strong> İki düğme: <strong>"Six"</strong> (solgun kırmızı) ve <strong>"Nine"</strong> (solgun mavi). Bot öbür köyü yönetir.</li>
+<li>Kurallar iki köy için birebir aynı. Fark sadece renk, para birimi adı, harita tarafı ve metinler.</li>
+<li>Bütün metinler köy adını ve para birimini değişkenden alır: "How will {Village} be ruled?", "{Enemy}'s vine is choking your Saffron.", "History will remember it as a {village}."</li>
+<li>Bitiş sözleri tablosunda (14) iki köyün de satırı zaten var. Oyuncu hangi köyse, kaybedince o köyün kardeşi konuşur.</li>
+<li>Kamera ve arayüz oyuncunun köyünü her zaman <strong>solda</strong> gösterir (Nine seçilirse harita aynalanır), böylece arayüz düzeni değişmez.</li>
 <li>Para birimi: Six köyünde <strong>six</strong>, Nine köyünde <strong>nine</strong>. Arayüzde "14 six" yazar <span class="tag k">Karar</span>.</li>
 <li>Ton: <strong>kara mizah [K]</strong>. Sebep gülünç, sonuçlar karanlık.</li>
 <li>Haritanın tam ortasında, iki köyün arasındaki taşın üstünde <strong>o para</strong> durur. Dekor, ama açılış ve kapanış sahnesinin merkezi <span class="tag o">Öneri</span>.</li>
@@ -1834,6 +1839,10 @@ The armies went home together. The headmen were informed later."</p>
 <td>"Village Headman" · "Short match" · "Long match" · "Skip tutorial" · "Quit"</td>
 </tr>
 <tr>
+<td>Kardeş seçimi</td>
+<td>"Which brother are you?" · "Six" · "Nine"</td>
+</tr>
+<tr>
 <td>Tur düğmesi</td>
 <td>"End Turn"</td>
 </tr>
@@ -2136,7 +2145,7 @@ Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
 <tbody>
 <tr>
 <td><strong>A</strong></td>
-<td>Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, <strong>Short match kuralları, zorluk seçimi</strong>, <strong>yol seçimi (sadece bonuslar)</strong>, <strong>pazar (Sell wood, Buy food, satış oranı)</strong>, ilk 5 dakika ipuçları</td>
+<td>Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, <strong>Short match kuralları, zorluk seçimi, kardeş seçimi</strong>, <strong>yol seçimi (sadece bonuslar)</strong>, <strong>pazar (Sell wood, Buy food, satış oranı)</strong>, ilk 5 dakika ipuçları</td>
 <td>Köy kurulup yaşatılabiliyor</td>
 </tr>
 <tr>
@@ -2315,9 +2324,9 @@ Rakip                       →  bot (sonra Jev, sonra ikinci oyuncu)
 </tr>
 <tr>
 <td>8</td>
-<td>Oyuncu Nine'ı da seçebilsin mi? (Şu an hep Six, öneri: başta "Which brother are you?")</td>
-<td>Kullanıcı</td>
-<td>Hayır</td>
+<td>~~Oyuncu Nine'ı seçebilsin mi?~~ Evet, başta "Which brother are you?" <span class="tag k">Karar</span></td>
+<td>Karar verildi</td>
+<td></td>
 </tr>
 <tr>
 <td>9</td>

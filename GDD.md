@@ -28,7 +28,12 @@ Son güncelleme: 15 Kasım 2026, 19:50 (TR).
 
 İki kardeş aynı köyün muhtarlığını paylaşıyordu. Yolda üzerinde tek rakam yazan bir para buldular. Biri "Six" dedi, öbürü "Nine". Tartışma bir gün sürdü, sonra bir ömür. Köy ikiye bölündü. **[K]**
 
-- Köyler: **Six** ve **Nine**. Oyuncu Six'i yönetir, bot Nine'ı **[Ö]**.
+- Köyler: **Six** ve **Nine**.
+- **Oyuncu kardeşini seçer [K].** Açılış sahnesinden sonra: **"Which brother are you?"** İki düğme: **"Six"** (solgun kırmızı) ve **"Nine"** (solgun mavi). Bot öbür köyü yönetir.
+  - Kurallar iki köy için birebir aynı. Fark sadece renk, para birimi adı, harita tarafı ve metinler.
+  - Bütün metinler köy adını ve para birimini değişkenden alır: "How will {Village} be ruled?", "{Enemy}'s vine is choking your Saffron.", "History will remember it as a {village}."
+  - Bitiş sözleri tablosunda (14) iki köyün de satırı zaten var. Oyuncu hangi köyse, kaybedince o köyün kardeşi konuşur.
+  - Kamera ve arayüz oyuncunun köyünü her zaman **solda** gösterir (Nine seçilirse harita aynalanır), böylece arayüz düzeni değişmez.
 - Para birimi: Six köyünde **six**, Nine köyünde **nine**. Arayüzde "14 six" yazar **[K]**.
 - Ton: **kara mizah [K]**. Sebep gülünç, sonuçlar karanlık.
 - Haritanın tam ortasında, iki köyün arasındaki taşın üstünde **o para** durur. Dekor, ama açılış ve kapanış sahnesinin merkezi **[Ö]**.
@@ -771,6 +776,7 @@ Ortak kurallar:
 | Yer | Metin |
 |---|---|
 | Ana menü | "Village Headman" · "Short match" · "Long match" · "Skip tutorial" · "Quit" |
+| Kardeş seçimi | "Which brother are you?" · "Six" · "Nine" |
 | Tur düğmesi | "End Turn" |
 | İnşa menüsü | "Build" · "Field" · "Granary" · "School" · "Barracks" · "Shrine" · "Upgrade Hall" |
 | Tarla | "Choose crop" · "Wheat" · "Potato" · "Beet" · "Saffron" · "Change crop" · "Demolish" |
@@ -899,7 +905,7 @@ Bir katman bitmeden sonrakine geçilmez. Hangi saatte durulursa durulsun elde oy
 
 | Katman | İçerik | Bitince |
 |---|---|---|
-| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **Short match kuralları, zorluk seçimi**, **yol seçimi (sadece bonuslar)**, **pazar (Sell wood, Buy food, satış oranı)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
+| **A** | Harita, slotlar, Field ve ekinler, orman ve odun, gıda, mevsimler, End Turn, basit bot, **Short match kuralları, zorluk seçimi, kardeş seçimi**, **yol seçimi (sadece bonuslar)**, **pazar (Sell wood, Buy food, satış oranı)**, ilk 5 dakika ipuçları | Köy kurulup yaşatılabiliyor |
 | **B** | Psikoloji, **düğün**, **vergi**, tempo, ordu nüfuzu, Barracks ve asker (eğitim süresi, dinlenme), savaş, can barları, Repair hall, 5 bitiş | Kazanıp kaybedilebiliyor |
 | **C** | 10 rastgele köylü, yatkınlık, karakter, "Let the elders decide", iş sayısı paneli | Liyakat teması oyunda |
 | **D** | Kartlar ve karşı hamleleri (Remedy, Guard Dog, Yes-Men's Guild, Fire Brigade), yola özel binalar, **ustalık projeleri ve barış sonları (metin ekranı)**, Shrine ve tarikat talepleri | Rakiple etkileşim, üç güç |
@@ -955,7 +961,7 @@ Bir katman geç kalırsa sonraki katman kısaltılır, **paketleme ve teslim saa
 | 16 | `core/` C++ çekirdeği GDD'nin gerisinde (odun, köylü, vergi, olay yok) | Yapımcı GDD'yi esas alır | Hayır |
 | 6 | ~~Tarikat talep metinleri~~ Onaylandı **[K]** | Karar verildi | |
 | 7 | ~~Bitiş sözleri~~ Onaylandı **[K]** | Karar verildi | |
-| 8 | Oyuncu Nine'ı da seçebilsin mi? (Şu an hep Six, öneri: başta "Which brother are you?") | Kullanıcı | Hayır |
+| 8 | ~~Oyuncu Nine'ı seçebilsin mi?~~ Evet, başta "Which brother are you?" **[K]** | Karar verildi | |
 | 9 | Jev, iki kişilik mod, pazar, suikast | Jam sonrası | Hayır |
 | 10 | ~~Dal seviye ağacı~~ Jam'de sadece yol seçimi, seviye ağacı M1 **[K]** | Karar verildi | |
 | 11 | ~~Ek rakip etkileşimi~~ Jam'de yok (savaş, kartlar, Doubter yeterli), sınır tarlaları ve su jam sonrası **[K]** | Karar verildi | |
